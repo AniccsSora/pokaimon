@@ -3,7 +3,7 @@
 #include <string>
 #include <fstream>
 #include "rlutil.h"
-
+#include "GameMap.h"
 using std::cout;
 using std::endl;
 
@@ -12,9 +12,11 @@ namespace myutil {
 	//測試  // inline can resolve error LNK2005
 	void inline helloMother(); 
 	// 讀取 Map，並show在終端
-	void inline loadMap(std::string filename);
+	GameMap inline loadMap(std::string filename);
     // 請使用者校正 console。
     void inline correctionConsole();
+	// 允許玩家移動並依照 map 的邏輯去限制移動範圍
+	// void inline playerService();
 }
 
 
@@ -22,7 +24,7 @@ void myutil::helloMother(){
 		std::cout << "hello" << std::endl;
 }
 
-void myutil::loadMap(std::string filename)
+GameMap myutil::loadMap(std::string filename)
 {
     std::string line;
     std::ifstream mapfile(filename);
@@ -69,7 +71,7 @@ void myutil::loadMap(std::string filename)
     else { 
         std::cout << "Unable to open file: " << "\"" << filename << "\"" << std::endl;
     }
-
+	return GameMap(filename);
 }
 
 void myutil::correctionConsole()
