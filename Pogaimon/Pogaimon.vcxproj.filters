@@ -1,0 +1,151 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="來源檔案">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;c++;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="標頭檔">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hh;hpp;hxx;h++;hm;inl;inc;ipp;xsd</Extensions>
+    </Filter>
+    <Filter Include="資源檔">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+    <Filter Include="資源檔\assests">
+      <UniqueIdentifier>{7e7cdfbb-1a9e-4d8e-9db1-5157cf496959}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="資源檔\assests\icons">
+      <UniqueIdentifier>{caa59720-589d-464a-814e-4625d25e2d62}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="資源檔\assests\icons\color">
+      <UniqueIdentifier>{e0cbf58e-c1e2-435b-8fc7-55a2c4be9bab}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="assets\icons\color\001.txt">
+      <Filter>資源檔\assests\icons\color</Filter>
+    </Text>
+    <Text Include="assets\icons\color\002.txt">
+      <Filter>資源檔\assests\icons\color</Filter>
+    </Text>
+    <Text Include="assets\icons\color\003.txt">
+      <Filter>資源檔\assests\icons\color</Filter>
+    </Text>
+    <Text Include="assets\icons\color\004.txt">
+      <Filter>資源檔\assests\icons\color</Filter>
+    </Text>
+    <Text Include="assets\icons\color\005.txt">
+      <Filter>資源檔\assests\icons\color</Filter>
+    </Text>
+    <Text Include="assets\icons\color\006.txt">
+      <Filter>資源檔\assests\icons\color</Filter>
+    </Text>
+    <Text Include="assets\icons\color\007.txt">
+      <Filter>資源檔\assests\icons\color</Filter>
+    </Text>
+    <Text Include="assets\icons\color\008.txt">
+      <Filter>資源檔\assests\icons\color</Filter>
+    </Text>
+    <Text Include="assets\icons\color\009.txt">
+      <Filter>資源檔\assests\icons\color</Filter>
+    </Text>
+    <Text Include="assets\icons\color\010.txt">
+      <Filter>資源檔\assests\icons\color</Filter>
+    </Text>
+    <Text Include="assets\icons\color\011.txt">
+      <Filter>資源檔\assests\icons\color</Filter>
+    </Text>
+    <Text Include="assets\icons\color\012.txt">
+      <Filter>資源檔\assests\icons\color</Filter>
+    </Text>
+    <Text Include="assets\icons\color\013.txt">
+      <Filter>資源檔\assests\icons\color</Filter>
+    </Text>
+    <Text Include="assets\icons\color\014.txt">
+      <Filter>資源檔\assests\icons\color</Filter>
+    </Text>
+    <Text Include="assets\icons\color\015.txt">
+      <Filter>資源檔\assests\icons\color</Filter>
+    </Text>
+    <Text Include="assets\icons\color\016.txt">
+      <Filter>資源檔\assests\icons\color</Filter>
+    </Text>
+    <Text Include="assets\icons\color\017.txt">
+      <Filter>資源檔\assests\icons\color</Filter>
+    </Text>
+    <Text Include="assets\icons\color\018.txt">
+      <Filter>資源檔\assests\icons\color</Filter>
+    </Text>
+    <Text Include="assets\icons\color\019.txt">
+      <Filter>資源檔\assests\icons\color</Filter>
+    </Text>
+    <Text Include="assets\icons\color\020.txt">
+      <Filter>資源檔\assests\icons\color</Filter>
+    </Text>
+    <Text Include="assets\icons\color\021.txt">
+      <Filter>資源檔\assests\icons\color</Filter>
+    </Text>
+    <Text Include="assets\icons\color\022.txt">
+      <Filter>資源檔\assests\icons\color</Filter>
+    </Text>
+    <Text Include="assets\icons\color\023.txt">
+      <Filter>資源檔\assests\icons\color</Filter>
+    </Text>
+    <Text Include="assets\icons\color\024.txt">
+      <Filter>資源檔\assests\icons\color</Filter>
+    </Text>
+    <Text Include="assets\icons\color\025.txt">
+      <Filter>資源檔\assests\icons\color</Filter>
+    </Text>
+    <Text Include="assets\icons\color\026.txt">
+      <Filter>資源檔\assests\icons\color</Filter>
+    </Text>
+    <Text Include="assets\icons\color\027.txt">
+      <Filter>資源檔\assests\icons\color</Filter>
+    </Text>
+    <Text Include="assets\icons\color\028.txt">
+      <Filter>資源檔\assests\icons\color</Filter>
+    </Text>
+    <Text Include="assets\icons\color\029.txt">
+      <Filter>資源檔\assests\icons\color</Filter>
+    </Text>
+    <Text Include="assets\icons\color\030.txt">
+      <Filter>資源檔\assests\icons\color</Filter>
+    </Text>
+    <Text Include="assets\icons\color\031.txt">
+      <Filter>資源檔\assests\icons\color</Filter>
+    </Text>
+    <Text Include="assets\icons\color\032.txt">
+      <Filter>資源檔\assests\icons\color</Filter>
+    </Text>
+    <Text Include="assets\yzumap.txt">
+      <Filter>資源檔\assests</Filter>
+    </Text>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="assets\pokemons.csv">
+      <Filter>資源檔\assests</Filter>
+    </None>
+    <None Include="assets\type.csv">
+      <Filter>資源檔\assests</Filter>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\..\termproj\rlutil\rlutil.h">
+      <Filter>標頭檔</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\..\termproj\rlutil\test.cpp">
+      <Filter>來源檔案</Filter>
+    </ClCompile>
+    <ClCompile Include="Main.cpp">
+      <Filter>來源檔案</Filter>
+    </ClCompile>
+    <ClCompile Include="Myutil.h">
+      <Filter>來源檔案</Filter>
+    </ClCompile>
+  </ItemGroup>
+</Project>
