@@ -178,14 +178,17 @@
     <None Include="assets\type.csv" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\..\termproj\rlutil\rlutil.h" />
-  </ItemGroup>
-  <ItemGroup>
-    <ClCompile Include="..\..\..\termproj\rlutil\test.cpp">
+    <ClCompile Include="example.c">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
     </ClCompile>
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="Myutil.h" />
+    <ClCompile Include="test.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="rlutil.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

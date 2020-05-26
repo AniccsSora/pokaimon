@@ -4,6 +4,10 @@
 #include <fstream>
 #include "rlutil.h"
 
+using std::cout;
+using std::endl;
+
+
 namespace myutil {
 	//測試  // inline can resolve error LNK2005
 	void inline helloMother(); 
@@ -22,11 +26,43 @@ void myutil::loadMap(std::string filename)
 {
     std::string line;
     std::ifstream mapfile(filename);
+    // 先記錄 預設的顏色，不用 handle 變數沒關係。
+    rlutil::saveDefaultColor();
     if (mapfile.is_open())
     {
         while (getline(mapfile, line))
         {
-            std::cout << line << '\n';
+            // 處理 一行資料。
+            for (auto i = 0; i < line.length(); i++) {
+                {
+                    if ('*' == line[i]) {// * 牆壁,無法穿越
+                        ;
+                    }
+                    else if (';' == line[i]) {//; 草地, green,可以穿越
+                        rlutil::setColor(rlutil::GREEN);
+
+                    }
+                    else if ('!' == line[i]) {// ! 樹木, brown,無法穿越
+                        rlutil::setColor(rlutil::BROWN);
+                    }
+                    else if ('~' == line[i]) {// ~ 水池, blue,可以穿越
+                        rlutil::setColor(rlutil::BLUE);
+                    }
+                    /*else if (';' == line[i]) {
+                        // 字元
+                    }*/
+                    else if ('#' == line[i]) {// # 建築入口, yellow,可以穿越
+                        rlutil::setColor(rlutil::YELLOW);
+                    }
+                    else {
+                        //cout << "有多餘的字元尚未handle" << endl;
+                    }
+                }
+                // 上方會決定 COLOR。
+                cout << line[i];
+                rlutil::resetColor();
+            }cout << "\n";
+            // GOTO next line
         }
         mapfile.close();
     }
@@ -42,15 +78,16 @@ void myutil::correctionConsole()
     using std::endl;
     cout << "*************************************************"\
          << "**************************************************" << endl;
-    for (int i = 0; i < 32; i++) {
+    for (int i = 0; i < 31; i++) {
         cout << "*";
-        for (int i = 0; i < 96; i++) {
+        for (int i = 0; i < 97; i++) {
             cout << " ";
         } cout << "*" << endl;
-
     }
+    cout << "*************************************************"\
+        << "**************************************************" << endl;
 
-    cout << "Please make this line to \"ONE\" row." << endl;
+    cout << "Please make \"****\" line to be \"retangle\"." << endl;
     rlutil::anykey("\n\nPress any key to continue...\n");
     rlutil::cls();
 }

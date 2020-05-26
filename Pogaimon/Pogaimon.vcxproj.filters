@@ -133,19 +133,22 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\..\termproj\rlutil\rlutil.h">
-      <Filter>標頭檔</Filter>
-    </ClInclude>
-  </ItemGroup>
-  <ItemGroup>
-    <ClCompile Include="..\..\..\termproj\rlutil\test.cpp">
-      <Filter>來源檔案</Filter>
-    </ClCompile>
     <ClCompile Include="Main.cpp">
       <Filter>來源檔案</Filter>
     </ClCompile>
     <ClCompile Include="Myutil.h">
       <Filter>來源檔案</Filter>
     </ClCompile>
+    <ClCompile Include="example.c">
+      <Filter>來源檔案</Filter>
+    </ClCompile>
+    <ClCompile Include="test.cpp">
+      <Filter>來源檔案</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="rlutil.h">
+      <Filter>標頭檔</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

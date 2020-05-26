@@ -1,6 +1,6 @@
 [Dd]ebug/
 # tmp file
-.vs/
+.vs/*
 # User-specific files
 *.rsuser
 *.suo
