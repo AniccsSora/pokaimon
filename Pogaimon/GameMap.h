@@ -5,6 +5,7 @@
 #include "Player.h"
 #include "Mydefine.h"
 
+using namespace MySpace;
 
 class GameMap
 {

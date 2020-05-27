@@ -1,24 +1,17 @@
 #pragma once
 #include <string>
-
-namespace MySpace {
-	// 保持簡單結構
-	struct COORD {
-		short x;
-		short y;
-	};
-}
+#include "Mydefine.h"
 
 class Player
 {
 public:
 	Player(std::string name,int x,int y);
-	struct MySpace::COORD getPlayerPosition();
+	struct MySpace::Coordi getPlayerPosition();
 	char getNotation();
-	void setPosition(MySpace::COORD newPosition);
+	void setPosition(MySpace::Coordi newPosition);
 private:
 	// 玩家在地圖的位置
-	struct MySpace::COORD position;
+	struct MySpace::Coordi position;
 	// 玩家名稱
 	std::string playerName;
 	// 玩家符號

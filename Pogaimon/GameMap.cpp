@@ -65,13 +65,13 @@ void GameMap::movePlayer(Player &player, int tar_x, int tar_y)
 	// 紀錄 移動目的地的方塊。
 	if (canStand(tar_x, tar_y)) {
 		// 玩家原始位置
-		MySpace::COORD p_pos = player.getPlayerPosition();
+		MySpace::Coordi p_pos = player.getPlayerPosition();
 		rlutil::locate(p_pos.x, p_pos.y); // 原本玩家位置
 		std::cout << " ";// erease player notation.
 		rlutil::locate(tar_x, tar_y); // 玩家欲移動位置
 		std::cout << player.getNotation();// show player notation.
 		// update player position
-		MySpace::COORD newPos; newPos.x = tar_x; newPos.y = tar_y;
+		MySpace::Coordi newPos; newPos.x = tar_x; newPos.y = tar_y;
 		rlutil::locate(1, 37);
 		cout << "玩家位置應該在的位置 : x: " << newPos.x
 			<< ", y: " << newPos.y << endl;

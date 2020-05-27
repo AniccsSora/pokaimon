@@ -1,4 +1,5 @@
 #include "Player.h"
+#include "Mydefine.h"
 
 Player::Player(std::string name, int x, int y)
 {
@@ -7,7 +8,7 @@ Player::Player(std::string name, int x, int y)
 	position.y = y;
 }
 
-MySpace::COORD Player::getPlayerPosition()
+MySpace::Coordi Player::getPlayerPosition()
 {
 	return position;
 }
@@ -17,7 +18,7 @@ char Player::getNotation()
 	return notation;
 }
 
-void Player::setPosition(MySpace::COORD newPosition)
+void Player::setPosition(MySpace::Coordi newPosition)
 {
 	position = newPosition;
 }
