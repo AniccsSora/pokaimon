@@ -3,9 +3,8 @@
 #include <fstream>
 #include <vector>
 #include "Player.h"
+#include "Mydefine.h"
 
-typedef std::vector<std::vector<std::string>> Vec_2D;
-typedef std::vector<char> Vec_CH;
 
 class GameMap
 {
@@ -23,9 +22,8 @@ public:
 	char returnCubeBy(int x, int y);
 private:
 	// 紀錄地形
-	Vec_2D terrain;
+	Vec_2D_<std::string> terrain;
 	// 定義可站立地形字元，如某字元未定義在內則都認為不可站立。
-	Vec_CH canStandCubes;
-
+	Vec_1D_<char> canStandCubes;
 };
 

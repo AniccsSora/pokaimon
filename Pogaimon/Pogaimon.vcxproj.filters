@@ -151,6 +151,9 @@
     <ClCompile Include="Player.cpp">
       <Filter>來源檔案</Filter>
     </ClCompile>
+    <ClCompile Include="Displayer.cpp">
+      <Filter>來源檔案</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="rlutil.h">
@@ -161,6 +164,12 @@
     </ClInclude>
     <ClInclude Include="Player.h">
       <Filter>標頭檔</Filter>
+    </ClInclude>
+    <ClInclude Include="Displayer.h">
+      <Filter>標頭檔</Filter>
+    </ClInclude>
+    <ClInclude Include="Mydefine.h">
+      <Filter>來源檔案</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

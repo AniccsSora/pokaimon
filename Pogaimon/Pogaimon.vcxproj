@@ -178,6 +178,7 @@
     <None Include="assets\type.csv" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Displayer.cpp" />
     <ClCompile Include="example.c">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
     </ClCompile>
@@ -190,7 +191,9 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Displayer.h" />
     <ClInclude Include="GameMap.h" />
+    <ClInclude Include="Mydefine.h" />
     <ClInclude Include="Player.h" />
     <ClInclude Include="rlutil.h" />
   </ItemGroup>

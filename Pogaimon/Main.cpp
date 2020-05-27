@@ -38,31 +38,27 @@ int main() {
 	/*rlutil::locate(x, y);
 	cout << tony->getNotation() << endl;*/
 	while (1) {
+
+		// ÁôÂÃ´å¼Ð
 		rlutil::hidecursor();
+		// ©ñ¸mª±®a
 		map.movePlayer( *tony, x, y);
+		// ¬ö¿ý¦ì¸m
 		x = tony->getPlayerPosition().x;
 		y = tony->getPlayerPosition().y;
 		
-		//rlutil::locate(x, y); 
-		//cout << tony->getNotation() << endl; // Output player
+		
 		while (true) {
 			if (kbhit()) {
 				char k = getch(); // Get character
-				//rlutil::locate(x, y); std::cout << " "; // Erase player
-				if (k == arrow_Left) {
-					--x;
-				}
-				else if (k == arrow_Right) {
-					++x;
-				}
-				else if (k == arrow_Up) {
-					--y;
-				}
-				else if (k == arrow_Down) {
-					++y;
-				}
+				if (k == arrow_Left) {--x;}
+				else if (k == arrow_Right) {++x;}
+				else if (k == arrow_Up) {--y;}
+				else if (k == arrow_Down) {++y;}
 				else if (k == ' ') { break; }
+				// ©ñ¸mª±®a
 				map.movePlayer(*tony, x, y);
+				// ¬ö¿ý¦ì¸m
 				x = tony->getPlayerPosition().x;
 				y = tony->getPlayerPosition().y;
 				rlutil::locate(1, 35);
@@ -73,7 +69,7 @@ int main() {
 			}
 			std::cout.flush();
 		}
-		rlutil::showcursor();
+		
 	}
 
 
