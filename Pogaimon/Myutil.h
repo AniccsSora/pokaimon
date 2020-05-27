@@ -17,6 +17,8 @@ namespace myutil {
     void inline correctionConsole();
 	// 允許玩家移動並依照 map 的邏輯去限制移動範圍
 	// void inline playerService();
+    // 在螢幕下方添加 log。 one line only。
+    void inline update_log(std::string msg);
 }
 
 
@@ -92,5 +94,13 @@ void myutil::correctionConsole()
     cout << "Please make \"****\" line to be \"retangle\"." << endl;
     rlutil::anykey("\n\nPress any key to continue...\n");
     rlutil::cls();
+}
+
+void myutil::update_log(std::string msg)
+{
+    rlutil::locate(1, 32);
+    cout << "\r" << std::string(40,' ')<< endl;// 填入40個 空白
+    rlutil::locate(1, 32);
+    cout << "\rlog: "<<msg << endl;
 }
 

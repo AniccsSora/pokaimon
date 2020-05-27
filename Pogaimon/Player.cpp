@@ -11,3 +11,13 @@ MySpace::COORD Player::getPlayerPosition()
 {
 	return position;
 }
+
+char Player::getNotation()
+{
+	return notation;
+}
+
+void Player::setPosition(MySpace::COORD newPosition)
+{
+	position = newPosition;
+}
