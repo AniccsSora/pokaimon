@@ -1,5 +1,6 @@
 #include "Player.h"
 #include "Mydefine.h"
+#include "GameMap.h"
 
 Player::Player(std::string name, int x, int y)
 {
@@ -22,3 +23,15 @@ void Player::setPosition(MySpace::Coordi newPosition)
 {
 	position = newPosition;
 }
+
+std::string Player::getName()
+{
+	return playerName;
+}
+
+char Player::getStandCube()
+{
+	return ' ';
+}
+
+

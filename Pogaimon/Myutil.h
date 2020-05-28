@@ -2,19 +2,24 @@
 #include <iostream>
 #include <string>
 #include <fstream>
+#include "Mydefine.h"
 #include "rlutil.h"
 #include "GameMap.h"
 using std::cout;
 using std::endl;
 
 
+
 namespace myutil {
 	//測試  // inline can resolve error LNK2005
 	void inline helloMother(); 
-	// 讀取 Map，並show在終端
-	GameMap inline loadMap(std::string filename);
+
+	// 讀取 Map，並show在終端， ** 這個會 new 指標 請注意要 DELETE **
+    GameMapPtr inline loadMap(std::string filename);
+
     // 請使用者校正 console。
     void inline correctionConsole();
+
 	// 允許玩家移動並依照 map 的邏輯去限制移動範圍
 	// void inline playerService();
     // 在螢幕下方添加 log。 one line only。
@@ -26,7 +31,7 @@ void myutil::helloMother(){
 		std::cout << "hello" << std::endl;
 }
 
-GameMap myutil::loadMap(std::string filename)
+GameMapPtr myutil::loadMap(std::string filename)
 {
     std::string line;
     std::ifstream mapfile(filename);
@@ -37,7 +42,7 @@ GameMap myutil::loadMap(std::string filename)
         while (getline(mapfile, line))
         {
             // 處理 一行資料。
-            for (auto i = 0; i < line.length(); i++) {
+            for (size_t i = 0; i < line.length(); i++) {
                 {
                     if ('*' == line[i]) {// * 牆壁,無法穿越
                         ;
@@ -73,7 +78,7 @@ GameMap myutil::loadMap(std::string filename)
     else { 
         std::cout << "Unable to open file: " << "\"" << filename << "\"" << std::endl;
     }
-	return GameMap(filename);
+    return new GameMap(filename);
 }
 
 void myutil::correctionConsole()

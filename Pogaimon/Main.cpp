@@ -1,7 +1,8 @@
 #include "rlutil.h"
 #include "Myutil.h"
-#include "Player.h"
 #include "GameMap.h"
+#include "Player.h"
+
 #include <algorithm>
 #include <cstdlib>
 #include <cstdio>
@@ -28,7 +29,7 @@ int main() {
 
     //myutil::correctionConsole();
 	// 取得MAP物件，用來檢驗碰狀事件，loadMap 會把 map 印在 console。
-    GameMap map = myutil::loadMap("../Pogaimon/assets/yzumap.txt");
+    GameMapPtr map = myutil::loadMap("../Pogaimon/assets/yzumap.txt");
 
 	// 原點 hardcode
 	int x = 20; int y = 30;
@@ -42,33 +43,37 @@ int main() {
 		// 隱藏游標
 		rlutil::hidecursor();
 		// 放置玩家
-		map.movePlayer( *tony, x, y);
+		map->movePlayer( tony, x, y);
 		// 紀錄位置
 		x = tony->getPlayerPosition().x;
 		y = tony->getPlayerPosition().y;
 		
-		
-		while (true) {
-			if (kbhit()) {
-				char k = getch(); // Get character
-				if (k == arrow_Left) {--x;}
-				else if (k == arrow_Right) {++x;}
-				else if (k == arrow_Up) {--y;}
-				else if (k == arrow_Down) {++y;}
-				else if (k == ' ') { break; }
-				// 放置玩家
-				map.movePlayer(*tony, x, y);
-				// 紀錄位置
-				x = tony->getPlayerPosition().x;
-				y = tony->getPlayerPosition().y;
-				rlutil::locate(1, 35);
-				cout << "玩家位置 : x: " << tony->getPlayerPosition().x
-					<< ", y: " << tony->getPlayerPosition().y
-					<< ", 站立cube = \"" << map.returnCubeBy(x, y) << "\"" << endl;
-				//rlutil::locate(x, y); std::cout << '@'; // Output player
+		// Player move 控制 以及各處發事件
+		{
+			while (true) {
+				if (kbhit()) {
+					// 偵測鍵盤
+					char k = getch(); // Get character
+					if (k == arrow_Left) { --x; }
+					else if (k == arrow_Right) { ++x; }
+					else if (k == arrow_Up) { --y; }
+					else if (k == arrow_Down) { ++y; }
+					else if (k == ' ') { break; }
+					// 放置玩家
+					map->movePlayer(tony, x, y);
+					// 紀錄位置
+					x = tony->getPlayerPosition().x;
+					y = tony->getPlayerPosition().y;
+					// shoe log
+					rlutil::locate(1, 35);
+					cout << "玩家位置 : x: " << tony->getPlayerPosition().x
+						<< ", y: " << tony->getPlayerPosition().y
+						<< ", 站立cube = \"" << map->returnCubeBy(x, y) << "\"" << endl;
+				}
+				std::cout.flush();
 			}
-			std::cout.flush();
 		}
+		
 		
 	}
 
