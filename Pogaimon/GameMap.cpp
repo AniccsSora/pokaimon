@@ -55,7 +55,7 @@ void GameMap::showmap()
 {
 	for (size_t i = 0; i < terrain.size(); i++) {
 		for (size_t j = 0; j < terrain.at(i).size(); j++) {
-			std::cout << terrain.at(i).at(j);
+			myutil::printCube(-1,-1, (char)terrain.at(i).at(j)[0]);
 		}std::cout << "\n";
 	}std::cout << "\n";
 }
@@ -72,13 +72,10 @@ void GameMap::movePlayer(Player *player, int tar_x, int tar_y)
 		// 其位置的方塊。
 		char last_Std_Cube = returnCubeBy(p_pos);
 		
-		//rlutil::locate(, ); // 游標定位 在 原本玩家位置
-		//std::cout << last_Std_Cube;// 復原玩家站立 原本的方塊。
 		myutil::printCube(p_pos.x, p_pos.y, last_Std_Cube);// 復原玩家站立 原本的方塊。
-		rlutil::locate(tar_x, tar_y); // 游標定位 在 玩家欲移動位置
-		std::cout << player->getNotation();// 顯示玩家符號
+		myutil::printCube(tar_x, tar_y, player->getNotation());//  在新的位置 顯示玩家符號
 
-		// update player position
+		// update player position, 更新 player 物件。
 		MySpace::Coordi newPos; newPos.x = tar_x; newPos.y = tar_y;
 		rlutil::locate(1, 37);
 		cout << "玩家位置應該在的位置 : x: " << newPos.x

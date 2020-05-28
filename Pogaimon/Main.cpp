@@ -72,6 +72,11 @@ int main() {
 				}
 				std::cout.flush();
 			}// break;
+			
+			rlutil::cls();
+			waitkey;
+			rlutil::cls();
+			map->showmap();
 		}
 		
 		

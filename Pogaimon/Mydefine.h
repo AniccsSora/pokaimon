@@ -6,25 +6,41 @@ namespace MySpace {
 
 	template <typename T>
 	using Vec_2D_ = std::vector<std::vector<T>>;
-	//typedef std::vector<std::vector<std::string>> Vec_2D;
-
+	
 	template <typename T>
 	using Vec_1D_ = std::vector<T>;
 
-	// 保持簡單結構
+	// 座標, 1-base.
 	struct Coordi {
 		short x;
 		short y;
 	};
 
-	// 請使用
+	// 記錄著 寬跟高
+	struct ViewSize {
+		short w;
+		short h;
+	};
+	
+	// 某個 view 的位置資訊
+	struct ViewStatus {
+
+		// view 的起始座標。
+		Coordi lefttop;
+
+		// view 所佔有空間大小。
+		ViewSize size_w_h;
+	};
+
 	struct View {
+		
 		// 這個 View 名稱。
 		std::string viewName;
-		// 會記錄 這個 View 的內容。
+
+		// 記錄著 View 的內容。
 		Vec_2D_<char> element;
-		// View 的起始座標
-		Coordi LeftTop;
+
+		ViewStatus status;
 	};
 }
 

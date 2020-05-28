@@ -16,7 +16,7 @@ public:
 	// 從檔案系統 讀取 map檔，以及一些初始化。
 	GameMap(std::string filename);
 
-	// 印出 地圖長的樣子。 除錯用func。
+	// 印出 地圖長的樣子，會有顏色。
 	void showmap();
 
 	// 顯示 玩家位置並 show 在 console 上，會做碰撞判斷，
@@ -31,8 +31,9 @@ public:
 	char returnCubeBy(MySpace::Coordi coordi);
 
 private:
-	// 紀錄地形
+	// 紀錄地形，其實就是地圖。
 	MySpace::Vec_2D_<std::string> terrain;
+
 	// 定義可站立地形字元，如某字元未定義在內則都認為不可站立。
 	MySpace::Vec_1D_<char> canStandCubes;
 };
