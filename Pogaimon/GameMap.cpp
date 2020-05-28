@@ -12,7 +12,6 @@ GameMap::GameMap(std::string filename)
 {
 	std::string line;
 	std::ifstream mapfile(filename);
-	// 先記錄 預設的顏色，不用 handle 變數沒關係。
 	
 	if (mapfile.is_open())
 	{

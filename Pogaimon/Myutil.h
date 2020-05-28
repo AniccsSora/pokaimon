@@ -28,6 +28,13 @@ namespace myutil {
 	// 印出 cube
 	// 他會依照定義的顏色來印出 cube字元。如果 x= -1, y= -1 代表不指定 locate
 	void inline printCube(int x,int y, char cube);
+
+	// 應該不會被程式使用... 沒機會用到XD
+	MySpace::View createViewByFile(std::string filename, std::string viewName);
+
+	// View 就是一個由 某個 符號圍成的區域，會提供 可印出座標有幾行，最大長度支援到多少。
+	MySpace::View inline createView(char style);
+
 }
 
 
@@ -120,5 +127,54 @@ void myutil::printCube(int x, int y, char cube)
 	}
 	cout << cube;
 	rlutil::resetColor();
+}
+
+MySpace::View myutil::createViewByFile(std::string filename, std::string viewName)
+{
+	// 拿來放 字元 資料。
+	MySpace::Vec_2D_<char> viewData;
+	MySpace::Vec_1D_<char> singleLineTmp; // 一行的 data tmp
+
+	std::string line; // 每行的 tmp
+	std::ifstream viewfile(filename);
+
+	short max_length_of_row = 0;
+	if (viewfile.is_open())
+	{
+		while (getline(viewfile, line))
+		{
+			// 處理 一行資料。
+			for (size_t i = 0; i < line.length(); i++) {
+				singleLineTmp.push_back(line[i]);
+			}cout << "\n";
+			// 更新最大長度
+			if ( (short)singleLineTmp.size() > max_length_of_row) {
+				max_length_of_row = (short)singleLineTmp.size();
+			}
+			viewData.push_back(singleLineTmp);
+			// GOTO next line
+		}
+		viewfile.close();
+	}
+	else {
+		std::cout << "Unable to open file: " << "\"" << filename << "\"" << std::endl;
+	}
+
+	// ViewStatus 資料結構。
+	MySpace::ViewStatus status;
+	// 現在還無法給定 此 view 的 印出基準點。
+	status.lefttop.x = -1;
+	status.lefttop.y = -1;
+	// view 的長寬
+	status.size_w_h.w = max_length_of_row;
+	status.size_w_h.h = (short)viewData.size();
+
+	// 開始組合 View 資料結構
+	MySpace::View thisView;
+	thisView.element = viewData;
+	thisView.status = status;
+	thisView.viewName = viewName;
+
+	return thisView;
 }
 

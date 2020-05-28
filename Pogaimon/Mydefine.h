@@ -40,6 +40,7 @@ namespace MySpace {
 		// 記錄著 View 的內容。
 		Vec_2D_<char> element;
 
+		// 出現的位置 以及 長寬。
 		ViewStatus status;
 	};
 }

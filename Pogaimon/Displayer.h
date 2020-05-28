@@ -18,7 +18,7 @@ public:
 private:
 
 	// 已經被使用的 畫面空間，從displayer 建立到現在的時間。
-	std::vector<MySpace::ViewStatus> usedSpace;
+	// std::vector<MySpace::ViewStatus> usedSpace;
 
 	// 記錄著此 displayer 下所控管的 View。
 	std::vector<MySpace::View> viewList;
