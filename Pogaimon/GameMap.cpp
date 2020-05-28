@@ -2,6 +2,7 @@
 #include "Player.h"
 #include "rlutil.h"
 #include "Myutil.h"
+#include "Mydefine.h"
 #include <string>
 #include <fstream>
 #include <vector>
@@ -64,13 +65,19 @@ void GameMap::movePlayer(Player *player, int tar_x, int tar_y)
 
 	// 紀錄 移動目的地的方塊。
 	if (canStand(tar_x, tar_y)) {
-		// 紀錄玩家原始位置 以及 其位置的方塊。
-		// 玩家原始位置
+
+		// 玩家原始位置 (Coordi 物件)
 		MySpace::Coordi p_pos = player->getPlayerPosition();
-		rlutil::locate(p_pos.x, p_pos.y); // 原本玩家位置
-		std::cout << " ";// erease player notation.
-		rlutil::locate(tar_x, tar_y); // 玩家欲移動位置
-		std::cout << player->getNotation();// show player notation.
+		
+		// 其位置的方塊。
+		char last_Std_Cube = returnCubeBy(p_pos);
+		
+		//rlutil::locate(, ); // 游標定位 在 原本玩家位置
+		//std::cout << last_Std_Cube;// 復原玩家站立 原本的方塊。
+		myutil::printCube(p_pos.x, p_pos.y, last_Std_Cube);// 復原玩家站立 原本的方塊。
+		rlutil::locate(tar_x, tar_y); // 游標定位 在 玩家欲移動位置
+		std::cout << player->getNotation();// 顯示玩家符號
+
 		// update player position
 		MySpace::Coordi newPos; newPos.x = tar_x; newPos.y = tar_y;
 		rlutil::locate(1, 37);
@@ -118,3 +125,18 @@ char GameMap::returnCubeBy(int x, int y) throw(...)
 		exit(0);
 	}
 }
+
+char GameMap::returnCubeBy(MySpace::Coordi coordi)
+{
+	int x = coordi.x; int y = coordi.y;
+	
+	try {
+		return (char)terrain.at(y - 1).at(x - 1)[0]; // have exception risk.
+	}
+	catch (...) {
+		cout << "Caught exception when　call terrain.at(" << y - 1 << ").at(" << x - 1 << ")\n";
+		cout << "... target index size()= " << terrain.at(y - 1).at(x - 1).size() << ".\n";
+		exit(0);
+	}
+}
+

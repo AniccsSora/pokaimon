@@ -1,7 +1,7 @@
 #pragma once
 #include <string>
 #include "Mydefine.h"
-//#include "GameMap.h" -- 加了就會爆炸~~
+
 
 class Player
 {
@@ -33,9 +33,6 @@ private:
 
 	// 玩家符號
 	char notation = '@';
-
-	// 玩家所在的 GameMap "物件指標"。
-	//GameMapPtr playerExistsMap;
 
 };
 

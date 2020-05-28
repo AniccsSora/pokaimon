@@ -71,7 +71,7 @@ int main() {
 						<< ", ¯¸¥ßcube = \"" << map->returnCubeBy(x, y) << "\"" << endl;
 				}
 				std::cout.flush();
-			}
+			}// break;
 		}
 		
 		

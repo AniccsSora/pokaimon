@@ -28,6 +28,7 @@ public:
 
 	// 回傳 terrain(地形物件) 座標(x, y)上 的字元。
 	char returnCubeBy(int x, int y);
+	char returnCubeBy(MySpace::Coordi coordi);
 
 private:
 	// 紀錄地形
