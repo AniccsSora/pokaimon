@@ -52,6 +52,7 @@ GameMap::GameMap(std::string filename)
 
 void GameMap::showmap()
 {
+	rlutil::locate(1, 1);
 	for (size_t i = 0; i < terrain.size(); i++) {
 		for (size_t j = 0; j < terrain.at(i).size(); j++) {
 			myutil::printCube(-1,-1, (char)terrain.at(i).at(j)[0]);

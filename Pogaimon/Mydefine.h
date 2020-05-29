@@ -1,6 +1,8 @@
 #pragma once
 #include <vector>
 #include <string>
+#include "rlutil.h"
+#define rlutil_Color int
 
 namespace MySpace {
 
@@ -9,6 +11,8 @@ namespace MySpace {
 	
 	template <typename T>
 	using Vec_1D_ = std::vector<T>;
+
+	
 
 	// 座標, 1-base.
 	struct Coordi {
@@ -35,13 +39,25 @@ namespace MySpace {
 	struct View {
 		
 		// 這個 View 名稱。
-		std::string viewName = "";
+		std::string viewName = "好像沒洨用了...";
 
 		// 記錄著 View 的內容。
 		Vec_2D_<char> element;
 
-		// 出現的位置 以及 長寬。
+		// 出現的位置 以及 長寬。 1-base。
 		ViewStatus status;
+
+		// 邊框顏色;
+		rlutil_Color frameColor= rlutil::WHITE;
+
+		// set frameColor
+		void setframeColor(rlutil_Color tarC) { frameColor = tarC;}
+
+		// zero-base
+		char getCube(short x, short y) {
+			std::cout << "element size:" << element.size() << std::endl;;
+			return element.at(y).at(x);
+		}
 
 		// 設定 left top 座標(x,y)
 		inline void setLeftTop(short x, short y);

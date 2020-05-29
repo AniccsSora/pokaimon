@@ -24,6 +24,8 @@ public:
 	// 回傳玩家 所站立的 cube char。
 	char getStandCube();
 
+	void showMe_by_coord();
+
 private:
 	// 玩家在地圖的位置
 	struct MySpace::Coordi position;

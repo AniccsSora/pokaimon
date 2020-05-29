@@ -2,7 +2,7 @@
 #include "Myutil.h"
 #include "GameMap.h"
 #include "Player.h"
-
+#include "Displayer.h"
 #include <algorithm>
 #include <cstdlib>
 #include <cstdio>
@@ -50,6 +50,8 @@ int main() {
 		
 		// Player move 控制 以及各處發事件
 		{
+			// 印出 地圖，會附帶顏色變化
+			map->showmap();
 			while (true) {
 				if (kbhit()) {
 					// 偵測鍵盤
@@ -74,9 +76,15 @@ int main() {
 			}// break;
 			
 			rlutil::cls();
-			waitkey;
-			rlutil::cls();
+			// 印出 view 的物件。
+			Displayer viewManager; // static 配置...
+			MySpace::View testView = myutil::createView('*',5,20);
+			testView.setframeColor(rlutil::GREEN);
+
 			map->showmap();
+			viewManager.showView(testView,100,30);
+			
+			rlutil::anykey();
 		}
 		
 		

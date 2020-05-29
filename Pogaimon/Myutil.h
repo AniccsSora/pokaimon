@@ -33,8 +33,12 @@ namespace myutil {
 	MySpace::View inline createViewByFile(std::string filename, std::string viewName);
 
 	// View 就是一個由 某個 符號圍成的區域，會提供 可印出座標有幾行，最大長度支援到多少。
+	// row 可以寫幾行字。
+	// column 一行可以寫多少字。
 	MySpace::View inline createView(char style,short row, short column);
 
+	// 在終端機 印出 尺標 助於 版面配置
+	void inline screen_ruler();
 }
 
 
@@ -42,27 +46,27 @@ void myutil::helloMother(){
 		std::cout << "hello" << std::endl;
 }
 
-// 讀取 Map，並show在終端
+// 讀取 Map。不會印出 Map 了
 GameMapPtr myutil::loadMap(std::string filename)
 {
-    std::string line; // 每行的 tmp
-    std::ifstream mapfile(filename);
-    
-    if (mapfile.is_open())
-    {
-        while (getline(mapfile, line))
-        {
-            // 處理 一行資料。
-            for (size_t i = 0; i < line.length(); i++) {
-				printCube(-1, -1, line[i]); // -1 代表不指定 locate
-            }cout << "\n";
-            // GOTO next line
-        }
-        mapfile.close();
-    }
-    else { 
-        std::cout << "Unable to open file: " << "\"" << filename << "\"" << std::endl;
-    }
+	//std::string line; // 每行的 tmp
+    //std::ifstream mapfile(filename);
+    //
+    //if (mapfile.is_open())
+    //{
+    //    while (getline(mapfile, line))
+    //    {
+    //        // 處理 一行資料。
+    //        for (size_t i = 0; i < line.length(); i++) {
+				//printCube(-1, -1, line[i]); // -1 代表不指定 locate
+    //        }cout << "\n";
+    //        // GOTO next line
+    //    }
+    //    mapfile.close();
+    //}
+    //else { 
+    //    std::cout << "Unable to open file: " << "\"" << filename << "\"" << std::endl;
+    //}
     return new GameMap(filename);
 }
 
@@ -178,25 +182,45 @@ MySpace::View myutil::createViewByFile(std::string filename, std::string viewNam
 	return thisView;
 }
 
+
 MySpace::View myutil::createView(char style, short rowSize, short columnSize)
 {
 	// 宣告個 View 最後回傳
 	MySpace::View rtnView;
 
-	// 每一行的資料暫存, 先初始化 vector 其大小。
-	MySpace::Vec_1D_<char> rowBuffer(columnSize);
-
+	// View 是會被多 "圍"一圈。 所以要各加上2。 hard code。寫死
+	rowSize += 2;
+	columnSize += 2;
+	
 	// 整個View 的DATA，最後要被包去 View::element. 並 初始化 vector 大小。
 	MySpace::Vec_2D_<char> element(rowSize);
 
-	// 整個 View結構 參數
+	for (size_t i=0; i < rowSize; ++i) {
+		//rowBuffer.clear();
+		for (size_t j=0; j < columnSize; ++j) {
+			if (i == 0 || i == rowSize-1) {// "描"出邊框(上 && 下)。
+				element.at(i).push_back(style);
+				continue;
+			}
+			if (j == 0 || j == columnSize-1) {
+				element.at(i).push_back(style);
+				continue;
+			}
+			// 其餘判定為 content area(代表可以填入 自己像要資料的部分。)
+			element.at(i).push_back(' ');
+			continue;
+		}// One row data complete.
+	}
+
+	// 整個 View結構 (參數包裹)。
 	MySpace::ViewStatus status;
 
 	// 因為不知道他的座標 所以不設定。
 	//status.lefttop = ???;
 
-	status.size_w_h.h = columnSize;
-	status.size_w_h.w = rowSize;
+	// View 是會被多 "圍"一圈。 所以要各加上2。
+	status.size_w_h.h = columnSize+2;
+	status.size_w_h.w = rowSize+2;
 
 	//打包 rtnView
 	rtnView.element = element;
@@ -205,5 +229,9 @@ MySpace::View myutil::createView(char style, short rowSize, short columnSize)
 
 
 	return rtnView;
+}
+
+void myutil::screen_ruler()
+{
 }
 
