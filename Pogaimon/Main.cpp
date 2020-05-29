@@ -42,14 +42,13 @@ int main() {
 	// 控制console 內 View 用的。
 	Displayer viewManager; 
 	// 
-	MySpace::View testView = myutil::createView('*', 5, 20);
+	MySpace::ViewPtr testView = myutil::createView('*', 5, 20);
 	//testView.setframeColor(rlutil::GREEN);
 
 	// log 區域。
-	MySpace::View log_Window = myutil::createView('*', 5, 60);
-	log_Window.setLeftTop(65,23);
+	MySpace::ViewPtr log_Window = myutil::createView('*', 5, 60);
+	log_Window->setLeftTop(65,23);
 	
-
 	// 將想要被顯示的 View 註冊進 Displayer 管理。
 	viewManager.registerView(log_Window);
 	
@@ -88,10 +87,10 @@ int main() {
 						", y: " + std::to_string(tony->getPlayerPosition().y) +
 						", 站立cube = \"" + map->returnCubeBy(x, y) + "\"\n";
 
-					log_Window.print(1, pos_msg);
+					log_Window->print(1, pos_msg);
 
-					//viewManager.showRegisteredView();
-					viewManager.showView(log_Window);
+					viewManager.showRegisteredView();
+					//viewManager.showView(log_Window);
 				}
 				std::cout.flush();
 			}// break;

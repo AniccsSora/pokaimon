@@ -36,7 +36,7 @@ namespace myutil {
 	// row 可以寫幾行字。
 	// column 一行可以寫多少字。
 	// default color : 白。
-	MySpace::View inline createView(char style,short row, short column);
+	MySpace::ViewPtr inline createView(char style,short row, short column);
 
 	// 在終端機 印出 尺標 助於 版面配置
 	void inline screen_ruler();
@@ -185,10 +185,10 @@ MySpace::View myutil::createViewByFile(std::string filename, std::string viewNam
 }
 
 
-MySpace::View myutil::createView(char style, short rowSize, short columnSize)
+MySpace::ViewPtr myutil::createView(char style, short rowSize, short columnSize)
 {
 	// 宣告個 View 最後回傳
-	MySpace::View rtnView;
+	MySpace::ViewPtr rtnView = new MySpace::View();
 
 	// View 是會被多 "圍"一圈。 所以要各加上2。 hard code。寫死
 	rowSize += 2;
@@ -225,11 +225,9 @@ MySpace::View myutil::createView(char style, short rowSize, short columnSize)
 	status.size_w_h.w = columnSize;
 
 	//打包 rtnView
-	rtnView.element = element;
-	rtnView.status = status;
+	rtnView->element = element;
+	rtnView->status = status;
 	
-
-
 	return rtnView;
 }
 

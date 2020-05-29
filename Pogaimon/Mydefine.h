@@ -74,8 +74,9 @@ namespace MySpace {
 		// 在此 view 的 第 pos 行 插入 msg。(不會印在 console)
 		inline void print(short pos, std::string msg);
 		
-	};
-	inline void View::setLeftTop(short x, short y) {
+	}; typedef View*  ViewPtr;
+
+inline void View::setLeftTop(short x, short y) {
 		status.lefttop.x = x; status.lefttop.y = y;
 	}
 
