@@ -30,3 +30,30 @@ void Displayer::showView(MySpace::View view, short x, short y){
 	}
 	rlutil::resetColor();
 }
+
+void Displayer::showView(MySpace::View view)
+{
+	if (view.status.lefttop.x < 0 ||
+		view.status.lefttop.y < 0) {
+		throw "Undefined lefttop!";
+	}
+
+	showView(view, view.status.lefttop.x, view.status.lefttop.y);
+}
+
+void Displayer::showRegisteredView()
+{
+	for (size_t i = 0; i < viewList.size(); ++i) {
+		showView(viewList[i]);
+	}
+}
+
+void Displayer::registerView(MySpace::View &view)
+{
+	if (view.status.lefttop.x < 0 ||
+		view.status.lefttop.y < 0) {
+		throw "Undefined lefttop!";
+	}
+
+	viewList.push_back(view);
+}

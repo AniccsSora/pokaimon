@@ -85,16 +85,12 @@ void GameMap::movePlayer(Player *player, int tar_x, int tar_y)
 
 		// update player position, 更新 player 物件。
 		MySpace::Coordi newPos; newPos.x = tar_x; newPos.y = tar_y;
-		rlutil::locate(1, 37);
-		cout << "玩家位置應該在的位置 : x: " << newPos.x
-			<< ", y: " << newPos.y << endl;
 		player->setPosition(newPos);
-		myutil::update_log("已經移動 且可移動");
+		
 		return;
 	}
 	else {
-		std::string msg = std::string("此玩家 " + player->getName() + " 不可移動至 (" + std::to_string(tar_x) + ", " + std::to_string(tar_y) + ")");
-		myutil::update_log(msg);
+		return ;// pass
 	}
 	
 	
@@ -107,9 +103,7 @@ bool GameMap::canStand(int x, int y)
 	// 檢測欲站立的點(terrain.at(x).at(y)) 在 canStandCubes 內 就OK。
 	for (size_t i = 0; i < canStandCubes.size(); i++) {
 		char wantStandCube = returnCubeBy(x,y);
-		rlutil::locate(1, 34);
-		cout << "\rlog: " << "returnCubeBy(" <<  x << "," << y << ")="
-			<< "\'" << returnCubeBy(x,y) << "\'"<< endl;
+		
 		if (canStandCubes[i] == wantStandCube) {
 			rtn = true;
 			break;

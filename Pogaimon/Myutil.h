@@ -35,6 +35,7 @@ namespace myutil {
 	// View 就是一個由 某個 符號圍成的區域，會提供 可印出座標有幾行，最大長度支援到多少。
 	// row 可以寫幾行字。
 	// column 一行可以寫多少字。
+	// default color : 白。
 	MySpace::View inline createView(char style,short row, short column);
 
 	// 在終端機 印出 尺標 助於 版面配置
@@ -94,7 +95,8 @@ void myutil::correctionConsole()
 
 // 允許玩家移動並依照 map 的邏輯去限制移動範圍
 // void inline playerService();
-// 在螢幕下方添加 log。 one line only。
+
+// 在螢幕下方添加 log。 one line only。 FOR DEBUG
 void myutil::update_log(std::string msg)
 {
     rlutil::locate(1, 32);
@@ -218,9 +220,9 @@ MySpace::View myutil::createView(char style, short rowSize, short columnSize)
 	// 因為不知道他的座標 所以不設定。
 	//status.lefttop = ???;
 
-	// View 是會被多 "圍"一圈。 所以要各加上2。
-	status.size_w_h.h = columnSize+2;
-	status.size_w_h.w = rowSize+2;
+	// View 整體的 高x寬 (注意: 跟 可以打印 msg 的區域大小不同)
+	status.size_w_h.h = rowSize;
+	status.size_w_h.w = columnSize;
 
 	//打包 rtnView
 	rtnView.element = element;

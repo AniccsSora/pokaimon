@@ -7,7 +7,7 @@
 #include <cstdlib>
 #include <cstdio>
 #include <ctime>
-
+#include <string>
 
 
 #define waitkey rlutil::anykey("Press any key to continue...\n")
@@ -38,6 +38,21 @@ int main() {
 	Player *tony = new Player("tony", x, y);
 	/*rlutil::locate(x, y);
 	cout << tony->getNotation() << endl;*/
+
+	// 控制console 內 View 用的。
+	Displayer viewManager; 
+	// 
+	MySpace::View testView = myutil::createView('*', 5, 20);
+	//testView.setframeColor(rlutil::GREEN);
+
+	// log 區域。
+	MySpace::View log_Window = myutil::createView('*', 5, 60);
+	log_Window.setLeftTop(65,23);
+	
+
+	// 將想要被顯示的 View 註冊進 Displayer 管理。
+	viewManager.registerView(log_Window);
+	
 	while (1) {
 
 		// 隱藏游標
@@ -68,29 +83,27 @@ int main() {
 					y = tony->getPlayerPosition().y;
 					// shoe log
 					rlutil::locate(1, 35);
-					cout << "玩家位置 : x: " << tony->getPlayerPosition().x
-						<< ", y: " << tony->getPlayerPosition().y
-						<< ", 站立cube = \"" << map->returnCubeBy(x, y) << "\"" << endl;
+
+					std::string pos_msg = "玩家位置 : x: " + std::to_string(tony->getPlayerPosition().x) +
+						", y: " + std::to_string(tony->getPlayerPosition().y) +
+						", 站立cube = \"" + map->returnCubeBy(x, y) + "\"\n";
+
+					log_Window.print(1, pos_msg);
+
+					//viewManager.showRegisteredView();
+					viewManager.showView(log_Window);
 				}
 				std::cout.flush();
 			}// break;
 			
 			rlutil::cls();
 			// 印出 view 的物件。
-			Displayer viewManager; // static 配置...
-			MySpace::View testView = myutil::createView('*',5,20);
-			testView.setframeColor(rlutil::GREEN);
+			
 			map->showMap_and_Player(*tony);
 			viewManager.showView(testView,100,30);
 			
 			rlutil::anykey();
 		}
-		
-		
 	}
-
-
-	// 回到最新行數
-	//rlutil::locate(1, 32);
 	return 0;
 }
