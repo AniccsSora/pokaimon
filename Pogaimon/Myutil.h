@@ -30,10 +30,10 @@ namespace myutil {
 	void inline printCube(int x,int y, char cube);
 
 	// 應該不會被程式使用... 沒機會用到XD
-	MySpace::View createViewByFile(std::string filename, std::string viewName);
+	MySpace::View inline createViewByFile(std::string filename, std::string viewName);
 
 	// View 就是一個由 某個 符號圍成的區域，會提供 可印出座標有幾行，最大長度支援到多少。
-	MySpace::View inline createView(char style);
+	MySpace::View inline createView(char style,short row, short column);
 
 }
 
@@ -176,5 +176,34 @@ MySpace::View myutil::createViewByFile(std::string filename, std::string viewNam
 	thisView.viewName = viewName;
 
 	return thisView;
+}
+
+MySpace::View myutil::createView(char style, short rowSize, short columnSize)
+{
+	// 宣告個 View 最後回傳
+	MySpace::View rtnView;
+
+	// 每一行的資料暫存, 先初始化 vector 其大小。
+	MySpace::Vec_1D_<char> rowBuffer(columnSize);
+
+	// 整個View 的DATA，最後要被包去 View::element. 並 初始化 vector 大小。
+	MySpace::Vec_2D_<char> element(rowSize);
+
+	// 整個 View結構 參數
+	MySpace::ViewStatus status;
+
+	// 因為不知道他的座標 所以不設定。
+	//status.lefttop = ???;
+
+	status.size_w_h.h = columnSize;
+	status.size_w_h.w = rowSize;
+
+	//打包 rtnView
+	rtnView.element = element;
+	rtnView.status = status;
+	
+
+
+	return rtnView;
 }
 
