@@ -60,6 +60,14 @@ void GameMap::showmap()
 	}std::cout << "\n";
 }
 
+void GameMap::showMap_and_Player(Player player)
+{
+	showmap();
+	player.showMe_by_coord();
+}
+
+
+
 void GameMap::movePlayer(Player *player, int tar_x, int tar_y)
 {
 

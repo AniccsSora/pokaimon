@@ -51,7 +51,7 @@ int main() {
 		// Player move 控制 以及各處發事件
 		{
 			// 印出 地圖，會附帶顏色變化
-			map->showmap();
+			map->showMap_and_Player(*tony);
 			while (true) {
 				if (kbhit()) {
 					// 偵測鍵盤
@@ -80,8 +80,7 @@ int main() {
 			Displayer viewManager; // static 配置...
 			MySpace::View testView = myutil::createView('*',5,20);
 			testView.setframeColor(rlutil::GREEN);
-
-			map->showmap();
+			map->showMap_and_Player(*tony);
 			viewManager.showView(testView,100,30);
 			
 			rlutil::anykey();

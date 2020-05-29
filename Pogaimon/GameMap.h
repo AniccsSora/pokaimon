@@ -19,6 +19,9 @@ public:
 	// 印出 地圖長的樣子，會有顏色。
 	void showmap();
 
+	// 印出 地圖長的樣子，會有顏色。順便把 玩家也印上去
+	void showMap_and_Player(Player player);
+
 	// 顯示 玩家位置並 show 在 console 上，會做碰撞判斷，
 	// 如果與 terrain 內的地形狀態不符合則不能移動過去。
 	void movePlayer(Player *player, int tar_x, int tar_y);

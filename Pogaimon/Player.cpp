@@ -34,4 +34,10 @@ char Player::getStandCube()
 	return ' ';
 }
 
+void Player::showMe_by_coord()
+{
+	rlutil::locate(position.x, position.y);
+	std::cout << notation;
+}
+
 

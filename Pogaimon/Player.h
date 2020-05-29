@@ -24,10 +24,11 @@ public:
 	// 回傳玩家 所站立的 cube char。
 	char getStandCube();
 
+	// 在 console show 出 玩家
 	void showMe_by_coord();
 
 private:
-	// 玩家在地圖的位置
+	// 玩家在地圖的位置, 1-base。
 	struct MySpace::Coordi position;
 
 	// 玩家名稱
