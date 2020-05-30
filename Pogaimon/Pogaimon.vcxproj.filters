@@ -154,6 +154,9 @@
     <ClCompile Include="Displayer.cpp">
       <Filter>來源檔案</Filter>
     </ClCompile>
+    <ClCompile Include="InfoProvider.cpp">
+      <Filter>來源檔案</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="rlutil.h">
@@ -170,6 +173,9 @@
     </ClInclude>
     <ClInclude Include="Mydefine.h">
       <Filter>來源檔案</Filter>
+    </ClInclude>
+    <ClInclude Include="InfoProvider.h">
+      <Filter>標頭檔</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

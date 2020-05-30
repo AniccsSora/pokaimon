@@ -47,27 +47,9 @@ void myutil::helloMother(){
 		std::cout << "hello" << std::endl;
 }
 
-// 讀取 Map。不會印出 Map 了
+// 讀取 Map。不會印出 Map。
 GameMapPtr myutil::loadMap(std::string filename)
 {
-	//std::string line; // 每行的 tmp
-    //std::ifstream mapfile(filename);
-    //
-    //if (mapfile.is_open())
-    //{
-    //    while (getline(mapfile, line))
-    //    {
-    //        // 處理 一行資料。
-    //        for (size_t i = 0; i < line.length(); i++) {
-				//printCube(-1, -1, line[i]); // -1 代表不指定 locate
-    //        }cout << "\n";
-    //        // GOTO next line
-    //    }
-    //    mapfile.close();
-    //}
-    //else { 
-    //    std::cout << "Unable to open file: " << "\"" << filename << "\"" << std::endl;
-    //}
     return new GameMap(filename);
 }
 
@@ -233,5 +215,35 @@ MySpace::ViewPtr myutil::createView(char style, short rowSize, short columnSize)
 
 void myutil::screen_ruler()
 {
+	int MAX_ROW = 40;
+	int MAX_COL = 150;
+	for (size_t row_idx = 0; row_idx < MAX_ROW; ++row_idx) {
+		for (size_t col_idx = 0; col_idx < MAX_COL; ++col_idx) {
+			if (row_idx == 0 || row_idx == MAX_ROW-1 ) { // first row
+				std::cout << (col_idx + 1) % 10; // 只印出 數字...
+				continue;
+			}
+			else { // not first row
+				if (col_idx == 0) { // first item of row, but not first row.
+					std::cout << (row_idx + 1) % 10; // 每行的第一個元素, 也只印數字。
+					continue;
+				}
+				else { // not first item of row
+					if (col_idx % 10 == 9) { // 印出 垂直分隔線。
+						std::cout << '|'; continue;
+					}
+					else {
+						if (row_idx % 10 == 9) { // 印出 水平分隔線。
+							std::cout << '-'; continue;
+						}
+						else {
+							std::cout << ' '; continue;
+						}
+					}
+				}
+			}
+		}
+		cout << endl;
+	}
 }
 

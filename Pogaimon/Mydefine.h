@@ -58,6 +58,9 @@ namespace MySpace {
 		// 邊框顏色;
 		rlutil_Color frameColor= rlutil::WHITE;
 
+		// 字體顏色
+		rlutil_Color msgColor = rlutil::WHITE;
+
 		// set frameColor
 		void setframeColor(rlutil_Color tarC) { frameColor = tarC;}
 
@@ -90,7 +93,7 @@ inline void View::setLeftTop(short x, short y) {
 
 		// 檢查 要 print 的位置 及大小 在 此 view 的容許範圍。
 		try{
-			if (msg.size() > status.size_w_h.w - 4) { 
+			if (msg.size() > status.size_w_h.w - 2) {// -2, 去除左右邊框後，剩下的空白大小。
 				std::string errMsg = " Max of massage legth = " + std::to_string(status.size_w_h.w - 4) + 
 					", but your length = " + std::to_string(msg.size());
 				throw ViewOutOfRangeException(errMsg); 
@@ -103,21 +106,34 @@ inline void View::setLeftTop(short x, short y) {
 		}
 		catch (ViewOutOfRangeException& caught) {
 			std::cout << caught.what() << std::endl;
+			rlutil::anykey("Exception happened!!\n");
 		}
 
-		short target_x = status.lefttop.x + 1; // view 的 左上角 +1
-		short target_y = status.lefttop.y + pos;// log 真正在 console 的高度。
+		//short target_x = status.lefttop.x + 1; // view 的 左上角 +1
+		//short target_y = status.lefttop.y + pos;// log 真正在 console 的高度。
 
-		// 先 erase 該 view, 第 pos 行的所有字元。
-		for (size_t i = 1; i < status.size_w_h.w-2; ++i) {// i = 1, 因為 最左邊邊框不希望變空; -2 同理。
-			if (msg.size() >= i) { 
-				// (i + 1): 跟左邊邊框多一格(好看用); (i - 1):msg是 0-base.
-				element.at(pos).at(i + 1) = msg.at(i - 1); 
+		// 覆寫該 view, 第 pos 行的所有字元如果超出 msg 則補 ' '。
+		for (size_t view_col_idx = 0; view_col_idx < status.size_w_h.w-2; ++view_col_idx) {
+			if (msg.size()-1 >= view_col_idx) {
+				// (i + 1): 因為有左邊邊框; (i - 1):msg是 0-base.
+				element.at(pos).at(view_col_idx + 1) = msg.at(view_col_idx);
 			}
 			else {  // .at(pos) 0-base, 跟多出的 上框剛好 計數抵銷 (-1 + 1) = 0。
-				element.at(pos).at(i) = ' '; 
+				element.at(pos).at(view_col_idx + 1) = ' ';
 			} 
 		}
+
+		// 最大可印區域。-2:去頭尾, -1: 1-base(status) to 0-base(.at()).
+		//short max_can_printIdx_of_view_col = status.size_w_h.w -2 -1;
+		//for (size_t msg_idx = 0; msg_idx <= msg.size(); ++msg_idx) {// i = 1, 因為 最左邊邊框不希望變空; -2 同理。
+		//	if ( msg_idx < view_col_idx) {
+		//		// (i + 1): 跟左邊邊框多一格(好看用); (i - 1):msg是 0-base.
+		//		element.at(pos).at(view_col_idx + 1) = msg.at(view_col_idx - 1);
+		//	}
+		//	else {  // .at(pos) 0-base, 跟多出的 上框剛好 計數抵銷 (-1 + 1) = 0。
+		//		element.at(pos).at(view_col_idx + 1) = ' ';
+		//	}
+		//}
 	}
 	
 }

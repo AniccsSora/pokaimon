@@ -3,6 +3,7 @@
 #include "GameMap.h"
 #include "Player.h"
 #include "Displayer.h"
+#include "InfoProvider.h"
 #include <algorithm>
 #include <cstdlib>
 #include <cstdio>
@@ -21,51 +22,64 @@ char chargen() {
 }
 
 int main() {
-	{
-		// 跟 resetColor() 有關係。
-		// 呼叫 resetColor()，可以 回到 saveDefaultColor() 當時所記錄的顏色。
-		//rlutil::saveDefaultColor();
-	}
+	//myutil::screen_ruler(); waitkey;
 
-    //myutil::correctionConsole();
-	// 取得MAP物件，用來檢驗碰狀事件，loadMap 會把 map 印在 console。
-    GameMapPtr map = myutil::loadMap("../Pogaimon/assets/yzumap.txt");
+	// 初始化 一些物件，地圖、玩家、遊戲輔助類別(滿多的)...
+	//===============
+	// 取得MAP物件，用來檢驗碰狀事件，loadMap 會傳回 *map。
+	GameMapPtr map = myutil::loadMap("../Pogaimon/assets/yzumap.txt");
 
-	// 原點 hardcode
+	// 玩家站立原點, hardcode
 	int x = 20; int y = 30;
 
-	// 建立玩家
-	Player *tony = new Player("tony", x, y);
-	/*rlutil::locate(x, y);
-	cout << tony->getNotation() << endl;*/
+	// 建立玩家, 給名字 給生成座標。
+	Player* tony = new Player("tony", x, y);
 
-	// 控制console 內 View 用的。
-	Displayer viewManager; 
-	// 
-	MySpace::ViewPtr testView = myutil::createView('*', 5, 20);
-	//testView.setframeColor(rlutil::GREEN);
+	// 控制 console 內 View 的顯示。
+	Displayer viewManager;
+
+	// 設定一些View... 
 
 	// log 區域。
-	MySpace::ViewPtr log_Window = myutil::createView('*', 5, 60);
-	log_Window->setLeftTop(65,23);
+	MySpace::ViewPtr log_Window = myutil::createView('*', 5, 60); // 決定 View 的大小
+	log_Window->setLeftTop(65, 23); // 決定 這個View 的位置
+	log_Window->setframeColor(rlutil::GREEN);
+	viewManager.registerView(log_Window);// 將想要被顯示的 View 註冊進 Displayer 管理。
+
+	// 顯示玩家持有寵物用的 View
+	MySpace::ViewPtr monsterHold_Window = myutil::createView('O', 8, 30);
+	monsterHold_Window->setframeColor(rlutil::YELLOW); // 邊框顏色
+	monsterHold_Window->setLeftTop(100, 6); // 決定 這個View 的位置
+	viewManager.registerView(monsterHold_Window);// 將想要被顯示的 View 註冊進 Displayer 管理。
+	monsterHold_Window->print(1, "  === 玩家持有 Monster === ");
+	monsterHold_Window->print(3, " 2345678901234567890123456789 ");
+	monsterHold_Window->print(5, "  2\.aaz");
+	monsterHold_Window->print(7, "  3\.ssssdsd v");
+
+
+	// 玩家 info 提供類別, 會負責回傳一些 log(std::string).
+	InfoProvider tonyInfoService(tony, map);
+	//=============== 初始化完畢
 	
-	// 將想要被顯示的 View 註冊進 Displayer 管理。
-	viewManager.registerView(log_Window);
+	// 隱藏游標
+	rlutil::hidecursor();
 	
 	while (1) {
 
-		// 隱藏游標
-		rlutil::hidecursor();
 		// 放置玩家
 		map->movePlayer( tony, x, y);
 		// 紀錄位置
 		x = tony->getPlayerPosition().x;
 		y = tony->getPlayerPosition().y;
-		
+		// 印出 地圖，會附帶顏色變化
+		map->showMap_and_Player(*tony);
+		// 對指定的 View 給定 訊息。
+		log_Window->print(1, tonyInfoService.getPlayerPositionMsg());
+		// 印出 Displayer 所管理的 view物件。
+		viewManager.showRegisteredView();
+
 		// Player move 控制 以及各處發事件
 		{
-			// 印出 地圖，會附帶顏色變化
-			map->showMap_and_Player(*tony);
 			while (true) {
 				if (kbhit()) {
 					// 偵測鍵盤
@@ -78,30 +92,19 @@ int main() {
 					// 放置玩家
 					map->movePlayer(tony, x, y);
 					// 紀錄位置
-					x = tony->getPlayerPosition().x;
-					y = tony->getPlayerPosition().y;
-					// shoe log
-					rlutil::locate(1, 35);
+					x = tony->getPlayerPosition().x; y = tony->getPlayerPosition().y;
+					 
+					// show log
+					// 對指定的 View 給定 訊息。
+					log_Window->print(1, tonyInfoService.getPlayerPositionMsg());
 
-					std::string pos_msg = "玩家位置 : x: " + std::to_string(tony->getPlayerPosition().x) +
-						", y: " + std::to_string(tony->getPlayerPosition().y) +
-						", 站立cube = \"" + map->returnCubeBy(x, y) + "\"\n";
-
-					log_Window->print(1, pos_msg);
-
+					// 印出 Displayer 所管理的 view物件。
 					viewManager.showRegisteredView();
-					//viewManager.showView(log_Window);
 				}
 				std::cout.flush();
-			}// break;
-			
-			rlutil::cls();
-			// 印出 view 的物件。
-			
-			map->showMap_and_Player(*tony);
-			viewManager.showView(testView,100,30);
-			
-			rlutil::anykey();
+			}// break 控制玩家;
+
+			// 下面處理 戰鬥???
 		}
 	}
 	return 0;
