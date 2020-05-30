@@ -31,13 +31,24 @@ std::string Player::getName()
 
 char Player::getStandCube()
 {
-	return ' ';
+	return ' ';// use less???
 }
 
 void Player::showMe_by_coord()
 {
+	rlutil::setColor(getColor());
 	rlutil::locate(position.x, position.y);
 	std::cout << notation;
+}
+
+void Player::setColor(rlutil_Color c)
+{
+	color = c;
+}
+
+rlutil_Color Player::getColor()
+{
+	return color;
 }
 
 

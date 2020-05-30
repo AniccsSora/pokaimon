@@ -20,7 +20,6 @@ namespace MySpace {
 		const char* what() const throw() { return s.c_str(); }
 	};
 
-
 	// ®y¼Ð, 1-base.
 	struct Coordi {
 		short x = -1;

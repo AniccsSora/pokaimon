@@ -7,10 +7,9 @@ Displayer::Displayer(){
 
 // one-base
 void Displayer::showView(MySpace::ViewPtr view, short x, short y){
-
+	
 	rlutil::locate(x, y);
 	rlutil::saveDefaultColor();
-	//rlutil::setColor(view->frameColor);
 	for (size_t i = 0; i < (size_t)view->element.size(); ++i) {
 		for (size_t j = 0; j < (size_t)view->element.at(i).size(); ++j) {
 			
@@ -18,27 +17,28 @@ void Displayer::showView(MySpace::ViewPtr view, short x, short y){
 			{
 				// 判斷是否在邊框, 給定不同顏色
 
-				// (i,j) 不位於邊框時。  ( 上邊 || 下邊 || 
-				//                       左邊 || 右邊 )
-				/*if (i != 0 || i != view->element.size() - 1 ||
-					j != 0 || j != view->element.at(i).size()-1) {
-					rlutil::setColor(view->msgColor);
+				// (i,j) 位於邊框時。  ( 上邊 || 下邊 || 
+				//                     左邊 || 右邊 )
+				if (i == 0 || i == view->element.size() - 1 ||
+					j == 0 || j == view->element.at(i).size()-1) {
+					rlutil::setColor(view->frameColor);
 				}
 				else {
-					rlutil::setColor(view->frameColor);
-				}*/
+					rlutil::setColor(view->msgColor);
+				}
 				
 				// 印出內容
 				std::cout << view->element.at(i).at(j);
 			}
 			catch (std::out_of_range & oor) {
 				std::cout << "out_of_range : (" << i << ", " << j << ")...";
+				rlutil::anykey("\n");
 			}
 			catch (std::exception & e) {
-				std::cout << "Other exception of Displayer::showView()...";
+				std::cout << "Other exception happen in Displayer::showView()...";
+				rlutil::anykey("\n");
 			}
 		}
-		std::cout << "\n";
 		rlutil::locate(x, ++y);
 	}
 	rlutil::resetColor();
@@ -50,7 +50,7 @@ void Displayer::showView(MySpace::ViewPtr view)
 		view->status.lefttop.y < 0) {
 		throw "Undefined lefttop!";
 	}
-
+	
 	showView(view, view->status.lefttop.x, view->status.lefttop.y);
 }
 

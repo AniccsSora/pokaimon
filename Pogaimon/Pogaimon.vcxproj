@@ -179,12 +179,15 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Displayer.cpp" />
+    <ClCompile Include="Event.cpp" />
     <ClCompile Include="example.c">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
     </ClCompile>
     <ClCompile Include="GameMap.cpp" />
     <ClCompile Include="InfoProvider.cpp" />
     <ClCompile Include="Main.cpp" />
+    <ClCompile Include="Monster.cpp" />
+    <ClCompile Include="MonsterProperty.cpp" />
     <ClCompile Include="Myutil.h" />
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="test.cpp">
@@ -193,11 +196,18 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Displayer.h" />
+    <ClInclude Include="Event.h" />
     <ClInclude Include="GameMap.h" />
     <ClInclude Include="InfoProvider.h" />
+    <ClInclude Include="Monster.h" />
+    <ClInclude Include="MonsterProperty.h" />
     <ClInclude Include="Mydefine.h" />
     <ClInclude Include="Player.h" />
+    <ClInclude Include="resource.h" />
     <ClInclude Include="rlutil.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="Pogaimon.rc" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

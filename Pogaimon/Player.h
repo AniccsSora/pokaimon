@@ -27,6 +27,14 @@ public:
 	// 在 console show 出 玩家
 	void showMe_by_coord();
 
+	// 設定玩家顏色
+	void setColor(rlutil_Color c);
+
+	// 取得玩家顏色
+	rlutil_Color getColor();
+
+	//
+
 private:
 	// 玩家在地圖的位置, 1-base。
 	struct MySpace::Coordi position;
@@ -37,5 +45,7 @@ private:
 	// 玩家符號
 	char notation = '@';
 
+	// 玩家顏色
+	int color = rlutil::WHITE;
 };
 

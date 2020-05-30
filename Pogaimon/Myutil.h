@@ -5,10 +5,15 @@
 #include "Mydefine.h"
 #include "rlutil.h"
 #include "GameMap.h"
+#include "Monster.h"
+#include "MonsterProperty.h"
+
 using std::cout;
 using std::endl;
 
+#define typeTablePath "./assets/type.csv"
 
+typedef MySpace::Vec_2D_<double> TypeTable;
 
 namespace myutil {
 	//測試  // inline can resolve error LNK2005
@@ -40,6 +45,13 @@ namespace myutil {
 
 	// 在終端機 印出 尺標 助於 版面配置
 	void inline screen_ruler();
+
+	// 讀取 csv檔案 的 monster。製作成 屬性表，要建立 monster時 直接用這個物件即可參考各項數值。
+	MonsterPropertyList inline loadMonsterFile();
+	
+	// 取得屬性攻擊倍率表~~
+	TypeTable inline getDamageRatioTable();
+	
 }
 
 
@@ -96,7 +108,7 @@ void myutil::printCube(int x, int y, char cube)
 	if (x != -1 && y != -1){ rlutil::locate(x, y); }
 	
 	if ('*' == cube) {// * 牆壁,無法穿越
-		// 原色
+		rlutil::setColor(rlutil::WHITE); // 白色
 	}
 	else if (';' == cube) {//; 草地, green,可以穿越
 		rlutil::setColor(rlutil::GREEN);
@@ -107,11 +119,11 @@ void myutil::printCube(int x, int y, char cube)
 	else if ('~' == cube) {// ~ 水池, blue,可以穿越
 		rlutil::setColor(rlutil::BLUE);
 	}
-	/*else if (' ' == line[i]) {
-		// another~~
-	}*/
 	else if ('#' == cube) {// # 建築入口, yellow,可以穿越
 		rlutil::setColor(rlutil::YELLOW);
+	}
+	else {
+		rlutil::setColor(rlutil::WHITE); // 白色
 	}
 	cout << cube;
 	rlutil::resetColor();
@@ -245,5 +257,123 @@ void myutil::screen_ruler()
 		}
 		cout << endl;
 	}
+}
+
+MonsterPropertyList myutil::loadMonsterFile()
+{
+	std::string line;
+	std::ifstream pokemonsTableFile(monster_define_filePath);
+
+	// 用指標傳回去
+	MySpace::Vec_1D_<MonsterProperty*> *rtnList = new MySpace::Vec_1D_<MonsterProperty*>();
+
+	if (pokemonsTableFile.is_open())
+	{
+		while (getline(pokemonsTableFile, line))
+		{
+			// 暫時存放用，這個物件不會被傳遞，我們只會參考其數值。
+			std::vector<std::string> tmpList; 
+			tmpList.reserve(8);// 一個怪物有8個屬性 相幫其初始化大小。
+
+			// parse line(from csv)
+			std::string delimiter = ",";
+
+			// process each line, and use dilimiter to split it.
+			size_t pos = 0;
+			std::string token;
+			while ((pos = line.find(delimiter)) != std::string::npos) {
+				token = line.substr(0, pos);
+				//std::cout << token << std::endl;// 其他的 ability
+				tmpList.push_back(token);
+				line.erase(0, pos + delimiter.length());
+			}
+			// 最後一個 ability。(這個處理是會破壞 line 的所以可這樣取值)
+			//std::cout << line << std::endl;
+			tmpList.push_back(line);
+			// End of parse line
+
+			//int idx, std::string name, std::string type, int hp, int atk, int def, int speed, int ability
+			// 建構 "怪物參數" 物件，一個怪物就是一個 "怪物參數"。(不想動腦了，請容忍這種建立法。XD)
+			MonsterProperty *mpElement = new MonsterProperty(
+				std::atoi(tmpList.at(0).c_str()),
+				tmpList.at(1),
+				tmpList.at(2),
+				std::atoi(tmpList.at(3).c_str()),
+				std::atoi(tmpList.at(4).c_str()),
+				std::atoi(tmpList.at(5).c_str()),
+				std::atoi(tmpList.at(6).c_str()),
+				std::atoi(tmpList.at(7).c_str())
+			);
+			// std::cout << "One line process finish!" << std::endl;
+			rtnList->push_back(mpElement);
+		}
+		pokemonsTableFile.close();
+	}
+	else {
+		std::cout << "Unable to open file: " << "\"" << monster_define_filePath << "\"" << std::endl;
+		system("pause");
+		exit(887);
+	}
+
+	return *rtnList;
+}
+
+TypeTable myutil::getDamageRatioTable()
+{
+	
+	std::string line;
+	std::ifstream typeTableFile(typeTablePath);
+
+	// 要回傳的 物件。
+	TypeTable rtbTable;
+	
+	if (typeTableFile.is_open())
+	{
+		MySpace::Vec_1D_<double> vec_row_tmp;
+		while (getline(typeTableFile, line))
+		{
+			vec_row_tmp.clear();
+			
+			// parse line(from csv)
+			std::string delimiter = ",";
+
+			// process each line, and use dilimiter to split it.
+			size_t pos = 0;
+			std::string token;
+			while ((pos = line.find(delimiter)) != std::string::npos) {
+				token = line.substr(0, pos);
+				//std::cout << token << std::endl;// 其他的 ability
+				try {
+					vec_row_tmp.push_back(std::atof(token.c_str())); // Exception
+				}
+				catch (...) {
+					cout << "Exception : token = \"" << token.c_str() << "\"" << endl;
+					std::system("pause");
+					std::exit(777888);
+				}
+				line.erase(0, pos + delimiter.length());
+			}
+			try {
+				// 注意 這是 line。 不是 token. 這邊用的 csv 解析 會破壞 line，故最後 line 會只剩下一個元素。
+				vec_row_tmp.push_back(std::atof(line.c_str())); // Exception
+			}
+			catch (...) {
+				cout << "Exception : token = \"" << token.c_str() << "\"" << endl;
+				std::system("pause");
+				std::exit(7778881);
+			}
+			// End of parse line
+			rtbTable.push_back(vec_row_tmp);// save vector
+			// GOTO next line
+		}
+		typeTableFile.close();
+	}
+	else {
+		std::cout << "Unable to open file: " << "\"" << typeTablePath << "\"" << std::endl;
+		system("pause");
+		exit(887);
+	}
+
+	return rtbTable;
 }
 

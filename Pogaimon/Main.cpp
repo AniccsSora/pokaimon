@@ -4,11 +4,13 @@
 #include "Player.h"
 #include "Displayer.h"
 #include "InfoProvider.h"
+#include "Monster.h"
 #include <algorithm>
 #include <cstdlib>
 #include <cstdio>
 #include <ctime>
 #include <string>
+
 
 
 #define waitkey rlutil::anykey("Press any key to continue...\n")
@@ -22,6 +24,23 @@ char chargen() {
 }
 
 int main() {
+	srand(time(NULL));
+	//================ test~~
+	while (1) {
+		// 取得寵物參數圖鑑
+		MonsterPropertyList mstPropertyList = myutil::loadMonsterFile();
+		// 取得相剋表
+		TypeTable typeTable = myutil::getDamageRatioTable();
+
+		int idx = 1;
+		MonsterPtr DAJJ = new Monster(rand(), mstPropertyList);
+		MonsterPtr DAGG = new Monster(rand(), mstPropertyList);
+
+		cout << typeTable.at(DAJJ->getType()).at(DAGG->getType()) << endl;
+		rlutil::anykey("test end...");
+	}
+	//================
+	rlutil::saveDefaultColor();
 	//myutil::screen_ruler(); waitkey;
 
 	// 初始化 一些物件，地圖、玩家、遊戲輔助類別(滿多的)...
@@ -52,29 +71,34 @@ int main() {
 	monsterHold_Window->setLeftTop(100, 6); // 決定 這個View 的位置
 	viewManager.registerView(monsterHold_Window);// 將想要被顯示的 View 註冊進 Displayer 管理。
 	monsterHold_Window->print(1, "  === 玩家持有 Monster === ");
-	monsterHold_Window->print(3, " 2345678901234567890123456789 ");
-	monsterHold_Window->print(5, "  2\.aaz");
-	monsterHold_Window->print(7, "  3\.ssssdsd v");
+	monsterHold_Window->print(3, "  1. 無");
+	monsterHold_Window->print(5, "  2. 無");
+	monsterHold_Window->print(7, "  3. 無");
 
 
 	// 玩家 info 提供類別, 會負責回傳一些 log(std::string).
 	InfoProvider tonyInfoService(tony, map);
 	//=============== 初始化完畢
 	
-	// 隱藏游標
-	rlutil::hidecursor();
-	
 	while (1) {
+		
+		// 隱藏游標
+		rlutil::hidecursor();
 
 		// 放置玩家
-		map->movePlayer( tony, x, y);
+		// map->movePlayer( tony, x, y);
+
 		// 紀錄位置
 		x = tony->getPlayerPosition().x;
 		y = tony->getPlayerPosition().y;
+
 		// 印出 地圖，會附帶顏色變化
 		map->showMap_and_Player(*tony);
+
 		// 對指定的 View 給定 訊息。
 		log_Window->print(1, tonyInfoService.getPlayerPositionMsg());
+		log_Window->print(3, " 草叢遭遇 = ");
+
 		// 印出 Displayer 所管理的 view物件。
 		viewManager.showRegisteredView();
 
@@ -96,7 +120,7 @@ int main() {
 					 
 					// show log
 					// 對指定的 View 給定 訊息。
-					log_Window->print(1, tonyInfoService.getPlayerPositionMsg());
+					log_Window->print(1,tonyInfoService.getPlayerPositionMsg()); // 
 
 					// 印出 Displayer 所管理的 view物件。
 					viewManager.showRegisteredView();
