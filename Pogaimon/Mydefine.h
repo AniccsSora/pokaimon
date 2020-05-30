@@ -54,6 +54,9 @@ namespace MySpace {
 		// 出現的位置 以及 長寬。 1-base。
 		ViewStatus status;
 
+		// 是 ASCII image ??
+		bool isASCII = false;
+
 		// 邊框顏色;
 		rlutil_Color frameColor= rlutil::WHITE;
 

@@ -12,6 +12,7 @@ using std::cout;
 using std::endl;
 
 #define typeTablePath "./assets/type.csv"
+#define asciiPath "./assets/icons/color/"
 
 typedef MySpace::Vec_2D_<double> TypeTable;
 
@@ -51,6 +52,9 @@ namespace myutil {
 	
 	// 取得屬性攻擊倍率表~~
 	TypeTable inline getDamageRatioTable();
+
+	// 給 idx，送你 ASCII 2D vec。(他只幫你給 element 的內容而已)
+	MySpace::ViewPtr inline getMonsterASCII(int monsterIdx);
 	
 }
 
@@ -375,5 +379,51 @@ TypeTable myutil::getDamageRatioTable()
 	}
 
 	return rtbTable;
+}
+
+MySpace::ViewPtr myutil::getMonsterASCII(int monsterIdx)
+{
+	MySpace::ViewPtr rtnView = new MySpace::View();
+
+	// 記錄著 View 的內容。
+	// 整個View 的DATA，最後要被包去 View::element
+	MySpace::Vec_2D_<char> element;
+
+	// 讀檔~
+	std::string line;
+
+	// 補零用 "1" -> "001"。
+	std::string file_name = std::string(3 - std::to_string(monsterIdx).length(), '0') + std::to_string(monsterIdx);
+	// 拼出完整路徑 + 檔案名稱。
+	std::string file_PTH_NAME = asciiPath + file_name + ".txt";
+	std::ifstream asciifile(file_PTH_NAME);
+
+	if (asciifile.is_open())
+	{
+		std::vector<char> vec_row_tmp;
+		while (getline(asciifile, line))
+		{
+			vec_row_tmp.clear();
+			// 處理 一行資料。
+			for (size_t i = 0; i < line.length(); i++) {
+				{
+					vec_row_tmp.push_back(line[i]);
+				}
+			}
+			element.push_back(vec_row_tmp);
+			// GOTO next line
+		}
+		asciifile.close();
+	}
+	else {
+		std::cout << "Unable to open file: " << "\"" << file_PTH_NAME << "\"" << std::endl;
+	}
+
+	// 是 ASCII image ??
+	rtnView->isASCII = true;
+	// 塞回去~
+	rtnView->element = element;
+
+	return rtnView;
 }
 

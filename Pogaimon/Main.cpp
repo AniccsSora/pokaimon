@@ -26,17 +26,19 @@ char chargen() {
 int main() {
 	srand(time(NULL));
 	//================ test~~
-	while (1) {
+	while (0) {
 		// 取得寵物參數圖鑑
-		MonsterPropertyList mstPropertyList = myutil::loadMonsterFile();
-		// 取得相剋表
-		TypeTable typeTable = myutil::getDamageRatioTable();
+		//MonsterPropertyList mstPropertyList = myutil::loadMonsterFile();
+		//// 取得相剋表
+		//TypeTable typeTable = myutil::getDamageRatioTable();
 
-		int idx = 1;
-		MonsterPtr DAJJ = new Monster(rand(), mstPropertyList);
-		MonsterPtr DAGG = new Monster(rand(), mstPropertyList);
+		//int idx = 1;
+		//MonsterPtr DAJJ = new Monster(rand(), mstPropertyList);
+		//MonsterPtr DAGG = new Monster(rand(), mstPropertyList);
 
-		cout << typeTable.at(DAJJ->getType()).at(DAGG->getType()) << endl;
+		//cout << typeTable.at(DAJJ->getType()).at(DAGG->getType()) << endl;
+		//MySpace::ViewPtr ascii =  myutil::getMonsterASCII(5);
+
 		rlutil::anykey("test end...");
 	}
 	//================
@@ -58,6 +60,9 @@ int main() {
 	Displayer viewManager;
 
 	// 設定一些View... 
+	MySpace::ViewPtr ascii = myutil::getMonsterASCII(5); //小火龍
+	ascii->setLeftTop(100, 50);
+	viewManager.registerView(ascii);
 
 	// log 區域。
 	MySpace::ViewPtr log_Window = myutil::createView('*', 5, 60); // 決定 View 的大小

@@ -15,16 +15,21 @@ void Displayer::showView(MySpace::ViewPtr view, short x, short y){
 			
 			try
 			{
-				// 判斷是否在邊框, 給定不同顏色
-
-				// (i,j) 位於邊框時。  ( 上邊 || 下邊 || 
-				//                     左邊 || 右邊 )
-				if (i == 0 || i == view->element.size() - 1 ||
-					j == 0 || j == view->element.at(i).size()-1) {
-					rlutil::setColor(view->frameColor);
+				if (view->isASCII) {
+					// 他是 ASCII 圖片 不設定顏色
 				}
 				else {
-					rlutil::setColor(view->msgColor);
+					// 判斷是否在邊框, 給定不同顏色
+
+					// (i,j) 位於邊框時。  ( 上邊 || 下邊 || 
+					//                     左邊 || 右邊 )
+					if (i == 0 || i == view->element.size() - 1 ||
+						j == 0 || j == view->element.at(i).size() - 1) {
+						rlutil::setColor(view->frameColor);
+					}
+					else {
+						rlutil::setColor(view->msgColor);
+					}
 				}
 				
 				// 印出內容
