@@ -41,7 +41,7 @@ public:
 
 		// ÄÝ©Ê
 		property.setType(mstPropertyList.at(monsterIdx)->getType());
-
+		property.setTypeStr(mstPropertyList.at(monsterIdx)->getTypeStr());
 		property.setHp(mstPropertyList.at(monsterIdx)->getHp());
 		property.setAtk(mstPropertyList.at(monsterIdx)->getAtk());
 		property.setDef(mstPropertyList.at(monsterIdx)->getDef());
@@ -56,6 +56,8 @@ public:
 	std::string getName();
 
 	monType getType();
+
+	std::string getTypeStr();
 
 	int getHp();
 

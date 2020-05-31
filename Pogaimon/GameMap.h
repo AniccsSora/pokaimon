@@ -16,6 +16,9 @@ public:
 	// 從檔案系統 讀取 map檔，以及一些初始化。
 	GameMap(std::string filename);
 
+	// copy constractor
+	GameMap(const GameMap& gm);
+
 	// 印出 地圖長的樣子，會有顏色。
 	void showmap();
 

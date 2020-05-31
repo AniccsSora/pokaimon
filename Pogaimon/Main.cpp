@@ -5,6 +5,7 @@
 #include "Displayer.h"
 #include "InfoProvider.h"
 #include "Monster.h"
+#include "GameService.h"
 #include <algorithm>
 #include <cstdlib>
 #include <cstdio>
@@ -38,7 +39,7 @@ int main() {
 
 		//cout << typeTable.at(DAJJ->getType()).at(DAGG->getType()) << endl;
 		//MySpace::ViewPtr ascii =  myutil::getMonsterASCII(5);
-
+		
 		rlutil::anykey("test end...");
 	}
 	//================
@@ -60,9 +61,9 @@ int main() {
 	Displayer viewManager;
 
 	// 設定一些View... 
-	MySpace::ViewPtr ascii = myutil::getMonsterASCII(5); //小火龍
+	MySpace::ViewPtr ascii = myutil::getMonsterASCIIViewPtrbyIdx(5); //小火龍
 	ascii->setLeftTop(100, 50);
-	viewManager.registerView(ascii);
+	//viewManager.registerView(ascii);
 
 	// log 區域。
 	MySpace::ViewPtr log_Window = myutil::createView('*', 5, 60); // 決定 View 的大小
@@ -80,9 +81,12 @@ int main() {
 	monsterHold_Window->print(5, "  2. 無");
 	monsterHold_Window->print(7, "  3. 無");
 
-
 	// 玩家 info 提供類別, 會負責回傳一些 log(std::string).
 	InfoProvider tonyInfoService(tony, map);
+
+	// 可以服務 玩家  的咚咚物件。(只要一個就可以了)。
+	GameService gameService(map);
+	
 	//=============== 初始化完畢
 	
 	while (1) {
@@ -122,13 +126,23 @@ int main() {
 					map->movePlayer(tony, x, y);
 					// 紀錄位置
 					x = tony->getPlayerPosition().x; y = tony->getPlayerPosition().y;
-					 
+					
+					// 由 gameService 回報玩家現在的 Event
+					// gameService 上方 new 出時必須要帶 map(copy的) 進去 因為他必須要參考玩家位置
+					Event* tonyEvent = gameService.getEvent(tony);
+					// 這個 event get 到時 他回傳的 Event 就要把 這個 event 所擁有的東西 都給訂好， view等 一些設定。
+					// Event 
+
+					tonyEvent->touchOff(); //觸發該 event，並且 evnet 會有 touchIff() 一定會刷掉螢幕，他會把畫面先刷掉。
+											  // 
 					// show log
 					// 對指定的 View 給定 訊息。
 					log_Window->print(1,tonyInfoService.getPlayerPositionMsg()); // 
 
 					// 印出 Displayer 所管理的 view物件。
 					viewManager.showRegisteredView();
+
+					delete[] tonyEvent;
 				}
 				std::cout.flush();
 			}// break 控制玩家;

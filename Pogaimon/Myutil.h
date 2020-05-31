@@ -7,6 +7,7 @@
 #include "GameMap.h"
 #include "Monster.h"
 #include "MonsterProperty.h"
+#include "ctime"
 
 using std::cout;
 using std::endl;
@@ -54,7 +55,11 @@ namespace myutil {
 	TypeTable inline getDamageRatioTable();
 
 	// 給 idx，送你 ASCII 2D vec。(他只幫你給 element 的內容而已)
-	MySpace::ViewPtr inline getMonsterASCII(int monsterIdx);
+	MySpace::ViewPtr inline getMonsterASCIIViewPtrbyIdx(int monsterIdx);
+
+
+	// 有 X 的機率回傳 True
+	bool inline X_Probability_get_True(double x);
 	
 }
 
@@ -381,7 +386,7 @@ TypeTable myutil::getDamageRatioTable()
 	return rtbTable;
 }
 
-MySpace::ViewPtr myutil::getMonsterASCII(int monsterIdx)
+MySpace::ViewPtr myutil::getMonsterASCIIViewPtrbyIdx(int monsterIdx)
 {
 	MySpace::ViewPtr rtnView = new MySpace::View();
 
@@ -425,5 +430,22 @@ MySpace::ViewPtr myutil::getMonsterASCII(int monsterIdx)
 	rtnView->element = element;
 
 	return rtnView;
+}
+
+bool myutil::X_Probability_get_True(double x)
+{
+	bool flag = false;
+
+	if (x >= 1){ flag = true;}
+	else if (x <= 0) { flag = false; }
+	else {
+		if ( (int)((rand() % 100)+1)  < int(x*100)) {
+			flag = true;
+		}
+		else {
+			;// keep origin flag...
+		}
+	}
+	return flag;
 }
 

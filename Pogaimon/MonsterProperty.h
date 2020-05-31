@@ -39,6 +39,7 @@ public:
 		this->idx = idx;
 		this->name = name;
 		this->type = str2type(type);
+		this->typeStr = type;
 		this->hp = hp;
 		this->atk = atk;
 		this->def = def;
@@ -65,6 +66,13 @@ public:
 	}
 	void setType(monType type) {
 		this->type = type;
+	}
+
+	std::string getTypeStr() {
+		return typeStr;
+	}
+	void setTypeStr(std::string typeStr) {
+		this->typeStr = typeStr;
 	}
 
 	int getHp() {
@@ -192,6 +200,7 @@ private:
 	int idx = -1;
 	std::string name = "";
 	monType type = Undefined;
+	std::string typeStr = "";
 	int hp = -1;
 	int atk = -1;
 	int def = -1;

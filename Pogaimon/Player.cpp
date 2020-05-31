@@ -29,10 +29,6 @@ std::string Player::getName()
 	return playerName;
 }
 
-char Player::getStandCube()
-{
-	return ' ';// use less???
-}
 
 void Player::showMe_by_coord()
 {

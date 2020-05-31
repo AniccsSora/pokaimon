@@ -21,9 +21,6 @@ public:
 	// 回傳玩家 name.
 	std::string getName();
 
-	// 回傳玩家 所站立的 cube char。
-	char getStandCube();
-
 	// 在 console show 出 玩家
 	void showMe_by_coord();
 

@@ -166,6 +166,9 @@
     <ClCompile Include="MonsterProperty.cpp">
       <Filter>來源檔案</Filter>
     </ClCompile>
+    <ClCompile Include="GameService.cpp">
+      <Filter>來源檔案</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="rlutil.h">
@@ -196,6 +199,9 @@
       <Filter>標頭檔</Filter>
     </ClInclude>
     <ClInclude Include="MonsterProperty.h">
+      <Filter>標頭檔</Filter>
+    </ClInclude>
+    <ClInclude Include="GameService.h">
       <Filter>標頭檔</Filter>
     </ClInclude>
   </ItemGroup>

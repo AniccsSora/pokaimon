@@ -1,30 +1,53 @@
 #pragma once
 #include <string>
+#include "Monster.h"
+#include "MonsterProperty.h"
+#include "Mydefine.h"
+#include "Displayer.h"
+#include "Myutil.h"
+#include "rlutil.h"
+
 
 // Event 父類別
 class Event
 {
 public :
-	// 給個 事件名稱
-	Event(std::string eN) :eventName(eN) {};
+	// Do nothing
+	Event(){};
 
 	// 觸發此事件，由子類別實做
-	virtual void touchOff();
+	virtual void touchOff() = 0; //  = 0, 宣告成 pure virtual function
 
 protected:
-
-	// 事件名稱
-	std::string eventName = "Undefined Event Name.";
+	
 };
 
 // 遭遇 Monster 事件
-class EncounterMonster : public Event {
+class EncounterMonsterEvent : public Event {
+
 public:
-	// 呼叫父類別建構
-	EncounterMonster(std::string eN) : Event(eN) {
-	};
-	void touchOff();
+	// 建構子
+	EncounterMonsterEvent(MonsterPropertyList mstPropertyList, Player* servicedPlayer);
+
+	// 實作 父類別的 pure virtual function...(必須加上 virtual 關鍵字)
+	virtual void touchOff();
+
 private:
-	; // Nothing ~~
+	// 確認是否要抓怪
+	void showStartBattleDialog();
+	Monster* monster =NULL; // Nothing ~~
+	Displayer* eventViewList = NULL; // 遊戲畫面~~
+};
+
+// 沒有事件，如果玩家站在 非特殊方塊時會回傳此物件。
+class NoneEvent : public Event {
+
+	//建構子不用寫~ 用預設的。
+
+	// 無實作，但不寫實作這類別會被認為是 abstract class.
+	// 實作 父類別的 pure virtual function...(必須加上 virtual 關鍵字)
+	virtual void touchOff() {
+		; // nothing
+	}
 };
 

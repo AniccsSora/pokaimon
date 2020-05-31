@@ -22,6 +22,9 @@ monType Monster::getType() {
 	return property.getType();
 }
 
+std::string Monster::getTypeStr() {
+	return property.getTypeStr();
+}
 
 int Monster::getHp() {
 	return property.getHp();

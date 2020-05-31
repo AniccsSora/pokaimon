@@ -50,6 +50,14 @@ GameMap::GameMap(std::string filename)
 	
 }
 
+GameMap::GameMap(const GameMap& gm)
+{
+	MySpace::Vec_1D_<char> copiedTerrain(gm.canStandCubes);
+	MySpace::Vec_2D_<std::string> copiedMap(gm.terrain);
+	this->terrain = copiedMap;
+	this->canStandCubes = copiedTerrain;
+}
+
 void GameMap::showmap()
 {
 	rlutil::locate(1, 1);
