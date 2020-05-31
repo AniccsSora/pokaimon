@@ -34,5 +34,6 @@ void EncounterMonsterEvent::touchOff(){
 	this->eventViewList->showRegisteredView();
 	//this->monster
 
-	rlutil::anykey("測試...\n");
+	rlutil::anykey("按下任意按鍵回到地圖...\n");
+	rlutil::cls();
 }

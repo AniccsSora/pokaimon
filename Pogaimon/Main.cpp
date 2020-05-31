@@ -15,6 +15,7 @@
 
 
 #define waitkey rlutil::anykey("Press any key to continue...\n")
+// 用方向鍵 程式會怪怪的。。
 constexpr auto arrow_Left = 75;
 constexpr auto arrow_Up = 72;
 constexpr auto arrow_Down = 80;
@@ -117,32 +118,36 @@ int main() {
 				if (kbhit()) {
 					// 偵測鍵盤
 					char k = getch(); // Get character
-					if (k == arrow_Left) { --x; }
-					else if (k == arrow_Right) { ++x; }
-					else if (k == arrow_Up) { --y; }
-					else if (k == arrow_Down) { ++y; }
+					if (k == 'a') { --x; }
+					else if (k == 'd') { ++x; }
+					else if (k == 'w') { --y; }
+					else if (k == 's') { ++y; }
 					else if (k == ' ') { break; }
 					// 放置玩家
 					map->movePlayer(tony, x, y);
 					// 紀錄位置
 					x = tony->getPlayerPosition().x; y = tony->getPlayerPosition().y;
 					
-					// 由 gameService 回報玩家現在的 Event
-					// gameService 上方 new 出時必須要帶 map(copy的) 進去 因為他必須要參考玩家位置
-					Event* tonyEvent = gameService.getEvent(tony);
-					// 這個 event get 到時 他回傳的 Event 就要把 這個 event 所擁有的東西 都給訂好， view等 一些設定。
-					// Event 
+					// 如果玩家站的不是空 字元。
+					if (' ' != map->returnCubeBy(x,y)){
+						// 由 gameService 回報玩家現在的 Event
+						// gameService 上方 new 出時必須要帶 map(copy的) 進去 因為他必須要參考玩家位置
+						Event* tonyEvent = gameService.getEvent(tony);
+						// 這個 event get 到時 他回傳的 Event 就要把 這個 event 所擁有的東西 都給訂好， view等 一些設定。
+						// Event 
+						tonyEvent->touchOff(); //觸發該 event，並且 evnet 會有 touchOff() 一定會刷掉螢幕，他會把畫面先刷掉。
+						delete[] tonyEvent;
+					}
 
-					tonyEvent->touchOff(); //觸發該 event，並且 evnet 會有 touchIff() 一定會刷掉螢幕，他會把畫面先刷掉。
-											  // 
+					// 返回地圖 畫面
+					map->showMap_and_Player(*tony);
+
 					// show log
 					// 對指定的 View 給定 訊息。
 					log_Window->print(1,tonyInfoService.getPlayerPositionMsg()); // 
 
 					// 印出 Displayer 所管理的 view物件。
 					viewManager.showRegisteredView();
-
-					delete[] tonyEvent;
 				}
 				std::cout.flush();
 			}// break 控制玩家;
