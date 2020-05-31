@@ -115,6 +115,7 @@ int main() {
 		// Player move 控制 以及各處發事件
 		{
 			while (true) {
+				rlutil::hidecursor();
 				if (kbhit()) {
 					// 偵測鍵盤
 					char k = getch(); // Get character
@@ -137,7 +138,7 @@ int main() {
 						// Event 
 						tonyEvent->touchOff(); //觸發該 event，並且 evnet 會有 touchOff() 一定會刷掉螢幕，他會把畫面先刷掉。
 						delete[] tonyEvent;
-					}
+					}// 特殊格 判斷完畢。
 
 					// 返回地圖 畫面
 					map->showMap_and_Player(*tony);
