@@ -48,7 +48,7 @@ public:
 		property.setSpeed(mstPropertyList.at(monsterIdx)->getSpeed());
 		property.setAbilityIdx(mstPropertyList.at(monsterIdx)->getAbilityIdx());
 	};
-	
+
 	void attack(IMonsterPtr beAttactedMonster);
 
 	int getIdx();
@@ -68,6 +68,9 @@ public:
 	int getSpeed();
 
 	int getAbilityIdx();
+
+	// 將 monster ability idx 轉成他的名字。
+	std::string getAbilityNameByAbliIdx(int idx);
 	   
 private:
 	int aaa = 0;

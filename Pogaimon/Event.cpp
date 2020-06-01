@@ -6,15 +6,26 @@
 EncounterMonsterEvent::EncounterMonsterEvent(MonsterPropertyList mstPropertyList,Player* servicedPlayer):Event(){
 	// 隨便生一個怪物~~
 	this->monster = new Monster(rand(), mstPropertyList);
+	
 	// 給 display 物件
 	this->eventViewList = new Displayer();
 
 	// 做一些 View
 
 	// 右上的 View
-	MySpace::ViewPtr monsterProperty = myutil::createView('*', 3, 20);
-	monsterProperty->setLeftTop(100, 2);
-	monsterProperty->print(2, "  Type: " + this->monster->getTypeStr());
+	MySpace::ViewPtr monsterProperty = myutil::createView('*', 15, 40);
+	monsterProperty->setLeftTop(80, 2);
+	
+	monsterProperty->print(2, " ~~~~~~~~  Monater Property  ~~~~~~~~ ");
+	monsterProperty->print(4, " ************************************ ");
+	monsterProperty->print(5, "  Index - : " + std::to_string(this->monster->getIdx()));
+	monsterProperty->print(6, "  Name -- : " + this->monster->getName());
+	monsterProperty->print(7, "  Type -- : " + this->monster->getTypeStr());
+	monsterProperty->print(8, "  HP ---- : " + std::to_string(this->monster->getHp()));
+	monsterProperty->print(9, "  ATK --- : " + std::to_string(this->monster->getAtk()));
+	monsterProperty->print(10, "  DEF --- : " + std::to_string(this->monster->getDef()));
+	monsterProperty->print(11, "  SPEED - : " + std::to_string(this->monster->getSpeed()));
+	monsterProperty->print(12, "  Ability : " + this->monster->getAbilityNameByAbliIdx( this->monster->getAbilityIdx()));
 
 	// 左上的 ASCII 圖，  (寵物在 console 的圖示)。
 	MySpace::ViewPtr ascii = myutil::getMonsterASCIIViewPtrbyIdx(this->monster->getIdx());

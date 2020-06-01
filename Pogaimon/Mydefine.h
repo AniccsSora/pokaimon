@@ -116,7 +116,7 @@ inline void View::setLeftTop(short x, short y) {
 
 		// 覆寫該 view, 第 pos 行的所有字元如果超出 msg 則補 ' '。
 		for (size_t view_col_idx = 0; view_col_idx < status.size_w_h.w-2; ++view_col_idx) {
-			if (msg.size()-1 >= view_col_idx) {
+			if ( (int)msg.size()-1 >= view_col_idx ) {
 				// (i + 1): 因為有左邊邊框; (i - 1):msg是 0-base.
 				element.at(pos).at(view_col_idx + 1) = msg.at(view_col_idx);
 			}
