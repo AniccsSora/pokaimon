@@ -29,16 +29,16 @@ EncounterMonsterEvent::EncounterMonsterEvent(MonsterPropertyList mstPropertyList
 	MySpace::ViewPtr loggerTitle = myutil::createView('L', title_H, logger_w); // 標題區域 把這兩個 View 拼起來(視覺上成為一個View)。
 	loggerTitle->setLeftTop(MostleftTop_X, MostleftTop_Y);
 	int speceSize = 13;
-	loggerTitle->print(2, std::string(speceSize, ' ')+"~~ 提示訊息 ~~"+std::string(speceSize,' '));
+	loggerTitle->print(2, std::string(speceSize, ' ')+"~~ Message ~~"+std::string(speceSize,' '));
 	loggerTitle->setframeColor(rlutil::YELLOW);
 	this->eventViewList->registerView(loggerTitle);// 左上的 View Title
 
 	// 提示訊息 View Content
 	MySpace::ViewPtr logger = myutil::createView('L', content_H, logger_w);
 	logger->setLeftTop(MostleftTop_X, MostleftTop_Y + content_H- title_H);
-	logger->print(2, "  按下 空白鍵 回到地圖... ");
-	logger->print(4, "  按下 \" C \" 開始捕捉...");
-	logger->print(6, "  其他訊息~~~~~          ");
+	logger->print(2, "  Press \"SPACE\" back to map... ");
+	logger->print(4, "  Press \" C \" try catch...");
+	logger->print(6, "  Other log ~~~~~ ");
 	logger->setframeColor(rlutil::YELLOW);
 	this->eventViewList->registerView(logger);// 左上的 View
 	// 玩家持有 monster列表的 View <End>
@@ -59,7 +59,7 @@ void EncounterMonsterEvent::touchOff(){
 			// 偵測鍵盤
 			char k = getch(); // Get character
 			if (k == 'C' || k == 'c') { 
-				std::cout << "開始捕捉...\n";
+				std::cout << "Start Catch...\n";
 				rlutil::anykey();
 				break;
 			}

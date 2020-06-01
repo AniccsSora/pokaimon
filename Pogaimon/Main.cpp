@@ -77,10 +77,10 @@ int main() {
 	monsterHold_Window->setframeColor(rlutil::YELLOW); // 邊框顏色
 	monsterHold_Window->setLeftTop(100, 6); // 決定 這個View 的位置
 	viewManager.registerView(monsterHold_Window);// 將想要被顯示的 View 註冊進 Displayer 管理。
-	monsterHold_Window->print(1, "  === 玩家持有 Monster === ");
-	monsterHold_Window->print(3, "  1. 無");
-	monsterHold_Window->print(5, "  2. 無");
-	monsterHold_Window->print(7, "  3. 無");
+	monsterHold_Window->print(1, "  === Player Monster === ");
+	monsterHold_Window->print(3, "  1. None");
+	monsterHold_Window->print(5, "  2. None");
+	monsterHold_Window->print(7, "  3. None");
 
 	// 玩家 info 提供類別, 會負責回傳一些 log(std::string).
 	InfoProvider tonyInfoService(tony, map);
@@ -107,7 +107,7 @@ int main() {
 
 		// 對指定的 View 給定 訊息。
 		log_Window->print(1, tonyInfoService.getPlayerPositionMsg());
-		log_Window->print(3, " 草叢遭遇 = ");
+		log_Window->print(3, " Bush Event = ");
 
 		// 印出 Displayer 所管理的 view物件。
 		viewManager.showRegisteredView();
