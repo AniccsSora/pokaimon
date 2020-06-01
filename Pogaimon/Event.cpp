@@ -52,6 +52,8 @@ EncounterMonsterEvent::EncounterMonsterEvent(MonsterPropertyList mstPropertyList
 	logger->print(6, "  Other log ~~~~~ ");
 	logger->setframeColor(rlutil::YELLOW);
 	this->eventViewList->registerView(logger);// 左上的 View
+
+
 	// 玩家持有 monster列表的 View <End>
 
 	this->eventViewList->registerView(monsterProperty);// 右上的 View
@@ -64,6 +66,10 @@ void EncounterMonsterEvent::touchOff(){
 
 	this->eventViewList->showRegisteredView();
 	//this->monster
+
+	/*
+	
+	*/
 
 	while (true) {
 		if (kbhit()) {

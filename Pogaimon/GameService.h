@@ -4,7 +4,6 @@
 #include "Event.h"
 #include "MonsterProperty.h"
 
-
 // 遇到 怪物的機率
 #define ENCOUBTER_MONSTER_P 0.1
 
@@ -18,7 +17,6 @@ public:
 	// 回報 玩家現在的 Event，這Event會非常的客製化，回給 Event 子類別。他會 new
 	Event* getEvent(Player* player);
 	/* 補充: C++ 內不得回傳 純虛擬類別的 "實體"， 我們只能以指標方式指到 abstract class.*/
-
 
 private:
 	GameMapPtr map = NULL;

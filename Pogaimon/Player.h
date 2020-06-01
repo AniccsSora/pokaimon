@@ -44,5 +44,8 @@ private:
 
 	// 玩家顏色
 	int color = rlutil::WHITE;
+
+	// 裡面存放著 monster 指標。
+	MySpace::Vec_1D_<MonsterPtr> monsterList;
 };
 
