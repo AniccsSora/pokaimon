@@ -2,6 +2,7 @@
 #include <vector>
 #include <string>
 #include "rlutil.h"
+
 #define rlutil_Color int
 
 namespace MySpace {
@@ -44,7 +45,9 @@ namespace MySpace {
 	};
 
 	struct View {
-		
+		View() = default;
+		View(const View&); // copy constructor
+
 		// 這個 View 名稱。
 		std::string viewName = "好像沒洨用了...";
 
@@ -78,10 +81,19 @@ namespace MySpace {
 
 		// 在此 view 的 第 pos 行 插入 msg。(不會印在 console)
 		inline void print(short pos, std::string msg);
-		
+
 	}; typedef View*  ViewPtr;
 
-inline void View::setLeftTop(short x, short y) {
+	inline View::View(const View& src)
+	{
+		this->element = src.element;
+		this->frameColor = src.frameColor;
+		this->isASCII = src.isASCII;
+		this->msgColor = src.msgColor;
+		this->status = src.status;
+	}
+
+	inline void View::setLeftTop(short x, short y) {
 		status.lefttop.x = x; status.lefttop.y = y;
 	}
 
@@ -137,6 +149,7 @@ inline void View::setLeftTop(short x, short y) {
 		//	}
 		//}
 	}
-	
+
+
 }
 
