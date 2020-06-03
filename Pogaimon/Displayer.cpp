@@ -53,7 +53,7 @@ void Displayer::showView(MySpace::ViewPtr view)
 {
 	if (view->status.lefttop.x < 0 ||
 		view->status.lefttop.y < 0) {
-		throw "Undefined lefttop!";
+		throw "Undefined lefttop!"; // TODO: 要改成丟 exception 物件。
 	}
 	
 	showView(view, view->status.lefttop.x, view->status.lefttop.y);
