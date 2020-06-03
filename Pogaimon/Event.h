@@ -35,8 +35,10 @@ public:
 private:
 	// 確認是否要抓怪
 	void showStartBattleDialog();
-	Monster* monster =NULL; // Nothing ~~
+	Monster* encounterMonster =NULL; // EncounterMonsterEvent 建構子會給此數值
 	Displayer* eventViewList = NULL; // 遊戲畫面~~
+	Player* servicedPlayer = NULL;
+	MySpace::ViewPtr log_content_view = NULL;
 };
 
 // 沒有事件，如果玩家站在 非特殊方塊時會回傳此物件。
