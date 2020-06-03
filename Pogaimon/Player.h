@@ -1,7 +1,14 @@
 #pragma once
 #include <string>
 #include "Mydefine.h"
+#include "Monster.h"
 
+struct OverThreeMonsterUNHANDLE: public std::exception {
+	std::string s;
+	OverThreeMonsterUNHANDLE(std::string ss) : s(ss) {}
+	~OverThreeMonsterUNHANDLE() throw() {}
+	const char* what() const throw() { return s.c_str(); }
+};
 
 class Player
 {
@@ -30,7 +37,14 @@ public:
 	// 取得玩家顏色
 	rlutil_Color getColor();
 
-	//
+	// 取得玩家 持有寵物的View。
+	MySpace::ViewPtr getHoldMonsterView();
+
+	// 設定 monsterView 的位置。
+	void setMonsterView_FT(int x, int y);
+
+	// 抓到 Monster 了，會更新 monsterList、monsterView。
+	void addMonster(MonsterPtr monsterCaught) throw(OverThreeMonsterUNHANDLE);
 
 private:
 	// 玩家在地圖的位置, 1-base。
@@ -47,5 +61,8 @@ private:
 
 	// 裡面存放著 monster 指標。
 	MySpace::Vec_1D_<MonsterPtr> monsterList;
+
+	// 玩家的 ViewPtr, 從 monsterList 取得資料來顯示。// 不要是 null 就好
+	MySpace::ViewPtr monsterView = NULL;
 };
 
