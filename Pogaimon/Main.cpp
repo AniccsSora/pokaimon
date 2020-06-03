@@ -53,7 +53,7 @@ int main() {
 	GameMapPtr map = myutil::loadMap("../Pogaimon/assets/yzumap.txt");
 
 	// 玩家站立原點, hardcode
-	int x = 20; int y = 30;
+	int x = 30; int y = 20; // 20, 30
 
 	// 建立玩家, 給名字 給生成座標。
 	Player* tony = new Player("tony", x, y);
@@ -73,14 +73,19 @@ int main() {
 	viewManager.registerView(log_Window);// 將想要被顯示的 View 註冊進 Displayer 管理。
 
 	// 顯示玩家持有寵物用的 View
-	MySpace::ViewPtr monsterHold_Window = myutil::createView('O', 8, 30);
-	monsterHold_Window->setframeColor(rlutil::YELLOW); // 邊框顏色
-	monsterHold_Window->setLeftTop(100, 6); // 決定 這個View 的位置
-	viewManager.registerView(monsterHold_Window);// 將想要被顯示的 View 註冊進 Displayer 管理。
-	monsterHold_Window->print(1, "  === Player Monster === ");
-	monsterHold_Window->print(3, "  1. None");
-	monsterHold_Window->print(5, "  2. None");
-	monsterHold_Window->print(7, "  3. None");
+	//MySpace::ViewPtr monsterHold_Window = myutil::createView('O', 8, 30);
+	//monsterHold_Window->setframeColor(rlutil::YELLOW); // 邊框顏色
+	//monsterHold_Window->setLeftTop(100, 6); // 決定 這個View 的位置
+	//viewManager.registerView(monsterHold_Window);// 將想要被顯示的 View 註冊進 Displayer 管理。
+	//monsterHold_Window->print(1, "  === Player Monster === ");
+	//monsterHold_Window->print(3, "  1. None");
+	//monsterHold_Window->print(5, "  2. None");
+	//monsterHold_Window->print(7, "  3. None");
+
+	// 決定 玩家 monster View 的位置, 顏色是在建構時給定的。
+	tony->setMonsterView_FT(100, 6);
+	// 將想要被顯示的 View 註冊進 Displayer 管理。
+	viewManager.registerView(tony->getHoldMonsterView());
 
 	// 玩家 info 提供類別, 會負責回傳一些 log(std::string).
 	InfoProvider tonyInfoService(tony, map);
