@@ -22,6 +22,9 @@ public:
 	// ** 沒有 給定 lefttop 的 View **, 是不得被註冊進去的。
 	void registerView(MySpace::ViewPtr view);
 
+	// 清除所有已經被註冊的 View
+	void clearALLview();
+
 private:
 	MySpace::Vec_1D_<MySpace::ViewPtr> viewList;
 };

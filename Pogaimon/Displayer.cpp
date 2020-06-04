@@ -71,7 +71,12 @@ void Displayer::registerView(MySpace::ViewPtr view)
 	if (view->status.lefttop.x < 0 ||
 		view->status.lefttop.y < 0) {
 		throw "Undefined lefttop!";
-	}
+	}// TODO : 要設計 "你忘記給 View 左上角了" 的 exception
 
 	viewList.push_back(view);
+}
+
+void Displayer::clearALLview()
+{
+	this->viewList.clear();
 }
