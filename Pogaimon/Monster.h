@@ -51,6 +51,7 @@ public:
 
 	void attack(IMonsterPtr beAttactedMonster);
 
+	// 取得寵物在圖鑑上的編號
 	int getIdx();
 
 	std::string getName();
