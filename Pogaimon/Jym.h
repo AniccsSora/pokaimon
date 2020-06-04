@@ -16,9 +16,16 @@ private:
 	PlayerPtr P1 = NULL;
 	PlayerPtr P2 = NULL;
 
-	// 管理P1 寵物(ASCII)、寵物屬性、持有寵物清單 的 Displayer 物件。
+	// 寵物(ASCII) = 圖示對應 monsterList 順序
+	MySpace::Vec_1D_<MySpace::ViewPtr> P1_ascii_veiwList;
+	MySpace::Vec_1D_<MySpace::ViewPtr> P2_ascii_veiwList;
+
+	// 管理、寵物屬性、持有寵物清單 的 Displayer 物件。
 	Displayer P1_ViewManager;
+	Displayer P1_mons_asciiManager; // 只放一個View，也只用第一個View，要使用時才會 呼叫, 不用初始化
 	Displayer P2_ViewManager;
+	Displayer P2_mons_asciiManager; // 只放一個View，也只用第一個View，要使用時才會 呼叫, 不用初始化
 	Displayer battle_log;
 };
+
 

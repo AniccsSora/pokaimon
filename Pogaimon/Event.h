@@ -46,7 +46,7 @@ class EncounterNPCEvent : public Event {
 public:
 	// 建構子
 	EncounterNPCEvent(Player* player, PlayerPtr encounterNpc);
-	// 遇到 NPC 時的實作
+	// 遇到 NPC 時的實作, 這邊會有一個 道館(Gym) 物件在內部。
 	virtual void touchOff();
 
 private:
