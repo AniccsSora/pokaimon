@@ -7,22 +7,30 @@
 #include <fstream>
 #include <vector>
 #include <iostream>
+#include <string>
 
 GameMap::GameMap(std::string filename)
 {
 	std::string line;
 	std::ifstream mapfile(filename);
-	
+	int row_cnt = 0;// 計數現在處理到第幾行了
 	if (mapfile.is_open())
 	{
 		std::vector<std::string> vec_row_tmp;
 		while (getline(mapfile, line))
 		{
 			vec_row_tmp.clear();
+			row_cnt += 1;
 			// 處理 一行資料。
 			for (size_t i = 0; i < line.length(); i++) {
-				{
-					vec_row_tmp.push_back(std::string(1, line[i]));
+				vec_row_tmp.push_back(std::string(1, line[i]));// push 1 string in vector, size() only 1.
+				
+				// 尋找 此行 地圖資料 有無包含 NPC_CUBE。
+				if (this->NPC_CUBE == line[i]) {
+					MySpace::Coordi cod;
+					// 1-base
+					cod.x = i + 1; cod.y = row_cnt + 1;
+					this->npc_stand_corrdi_list.push_back(cod);
 				}
 			}
 			terrain.push_back(vec_row_tmp);

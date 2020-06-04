@@ -42,6 +42,12 @@ private:
 
 	// 定義可站立地形字元，如某字元未定義在內則都認為不可站立。
 	MySpace::Vec_1D_<char> canStandCubes;
+
+	// 代表 NPC 的 CUBE.
+	char NPC_CUBE = '#';
+
+	// 會記錄這地圖上 NPC 的所在座標(1-base)
+	MySpace::Vec_1D_<MySpace::Coordi> npc_stand_corrdi_list;
 };
 
 
