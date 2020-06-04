@@ -154,7 +154,7 @@ void Player::addMonster(MonsterPtr monsterCaught) throw(OverThreeMonsterUNHANDLE
 				}
 				else if ( 'r' == k || 'R' == k) {
 					// 替換 monster List 的元素
-					this->monsterList.at(canLocate_Y_idx);
+					this->monsterList.at(canLocate_Y_idx) = monsterCaught;
 					// 更新了資料 View 也要更新
 					// 0 1 2  -> 3 5 7 (idx 對應 View 的實際列數)
 					// 更新 View 的 內容
