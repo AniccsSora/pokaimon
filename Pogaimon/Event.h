@@ -6,7 +6,7 @@
 #include "Displayer.h"
 #include "Myutil.h"
 #include "rlutil.h"
-
+#include "Jym.h"
 
 // Event 父類別
 class Event
@@ -39,6 +39,21 @@ private:
 	Displayer* eventViewList = NULL; // 遊戲畫面~~
 	Player* servicedPlayer = NULL;
 	MySpace::ViewPtr log_content_view = NULL;
+};
+
+// 玩家遇到 NPC，準備對戰 Event。
+class EncounterNPCEvent : public Event {
+public:
+	// 建構子
+	EncounterNPCEvent(Player* player, PlayerPtr encounterNpc);
+	// 遇到 NPC 時的實作
+	virtual void touchOff();
+
+private:
+	// 玩家本人
+	PlayerPtr player = NULL;
+	// 遇到的 NPC
+	PlayerPtr encounterNpc;
 };
 
 // 沒有事件，如果玩家站在 非特殊方塊時會回傳此物件。

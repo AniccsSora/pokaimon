@@ -4,8 +4,17 @@
 #include "Player.h"
 GameService::GameService(GameMapPtr map)
 {
+	// 初始化 
 	this->map = new GameMap(*map);
+
 	this->mstPropertyList = myutil::loadMonsterFile();
+
+	// 初始化 NPC_list
+	for (int i = 0; i < map->get_number_of_NPC(); i++) {
+		this->NPC_list.push_back(new Player(3)); // 每個 NPC 有三隻怪
+	}
+	// ===========================
+
 }
 
 Event* GameService::getEvent(Player* player)
@@ -28,8 +37,13 @@ Event* GameService::getEvent(Player* player)
 		}
 		
 	}
-	else if (false) {
-
+	else if ( '#' == playerStandCube) { // 遇到 NPC
+		// 取得 NPC player 物件，那要先取得 NPC 編號
+		int npc_id = this->map->return_NPC_idx(player->getPlayerPosition().x, player->getPlayerPosition().y);
+		// 從 GameService 的取得該編號 NPC 物件。
+		PlayerPtr encounterNPC = this->NPC_list.at(npc_id);
+		
+		rtnEvent = new EncounterNPCEvent(player, encounterNPC);
 	}
 	else {
 		rtnEvent = new NoneEvent();
@@ -37,4 +51,9 @@ Event* GameService::getEvent(Player* player)
 
 
 	return rtnEvent;
+}
+
+PlayerPtr GameService::getNPC(int idx)
+{
+	return this->NPC_list.at(idx);
 }

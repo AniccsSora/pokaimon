@@ -23,6 +23,16 @@ Player::Player(std::string name, int x, int y)
 	this->monsterView = monsterHold_Window;
 }
 
+Player::Player(int number_of_monster){
+	
+	// 取得寵物參數圖鑑
+	MonsterPropertyList mstPropertyList = myutil::loadMonsterFile();
+	// 生成怪物
+	for (size_t i = 0; i < number_of_monster; ++i) {
+		monsterList.push_back(new Monster(rand(), mstPropertyList));
+	}
+}
+
 MySpace::Coordi Player::getPlayerPosition()
 {
 	return position;
@@ -201,6 +211,11 @@ void Player::addMonster(MonsterPtr monsterCaught) throw(OverThreeMonsterUNHANDLE
 int Player::getMonsterListSize()
 {
 	return this->monsterList.size();
+}
+
+int Player::getPoint()
+{
+	return this->point;
 }
 
 

@@ -64,6 +64,7 @@ GameMap::GameMap(const GameMap& gm)
 	MySpace::Vec_2D_<std::string> copiedMap(gm.terrain);
 	this->terrain = copiedMap;
 	this->canStandCubes = copiedTerrain;
+	this->npc_stand_corrdi_list = gm.npc_stand_corrdi_list;
 }
 
 void GameMap::showmap()
@@ -184,5 +185,10 @@ int GameMap::return_NPC_idx(int x, int y){
 	}
 
 	return rtnIdx;
+}
+
+int GameMap::get_number_of_NPC()
+{
+	return this->npc_stand_corrdi_list.size();
 }
 

@@ -16,6 +16,9 @@ public:
 	// 玩家建構子，提供名字 以及其生成點座標。
 	Player(std::string name,int x,int y);
 
+	// 給 NPC用 的建構子，會幫他的 monsterList 初始化 number_of_monster 隻怪物。
+	Player(int number_of_monster);
+
 	// 回傳玩家現在在的座標，跟GameMap沒有半毛關係，這只是一組 "座標"。
 	struct MySpace::Coordi getPlayerPosition();
 
@@ -49,6 +52,9 @@ public:
 	// 抓到幾隻怪獸了
 	int getMonsterListSize();
 
+	// 取得玩家分數
+	int getPoint();
+
 private:
 	// 玩家在地圖的位置, 1-base。
 	struct MySpace::Coordi position;
@@ -67,5 +73,9 @@ private:
 
 	// 玩家的 ViewPtr, 從 monsterList 取得資料來顯示。// 不要是 null 就好
 	MySpace::ViewPtr monsterView = NULL;
+
+	// 玩家的對戰點數，打贏NPC 才會獲得。
+	int point = 0;
 };
+typedef Player* PlayerPtr;
 

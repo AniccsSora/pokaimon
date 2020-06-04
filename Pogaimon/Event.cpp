@@ -142,3 +142,15 @@ void EncounterMonsterEvent::touchOff(){
 	}
 	rlutil::cls();
 }
+
+EncounterNPCEvent::EncounterNPCEvent(Player* player, PlayerPtr encounterNpc)
+{
+	// 初始化
+	this->player = player;
+	this->encounterNpc = encounterNpc;
+}
+
+void EncounterNPCEvent::touchOff(){
+	Jym *myJJ = new Jym(player, encounterNpc); // TODO: 要記得刪掉。
+	myJJ->battle_start();
+}

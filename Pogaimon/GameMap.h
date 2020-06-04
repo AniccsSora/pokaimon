@@ -42,6 +42,9 @@ public:
 	// 回傳 NPC 編號(0-base.) 如果是 負數代表這邊沒有站NPC。
 	int return_NPC_idx(int x, int y);
 
+	// 回傳 現在地圖上有的 NPC數量。
+	int get_number_of_NPC();
+
 private:
 	// 紀錄地形，其實就是地圖。
 	MySpace::Vec_2D_<std::string> terrain;

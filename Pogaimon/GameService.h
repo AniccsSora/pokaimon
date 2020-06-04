@@ -18,8 +18,15 @@ public:
 	Event* getEvent(Player* player);
 	/* 補充: C++ 內不得回傳 純虛擬類別的 "實體"， 我們只能以指標方式指到 abstract class.*/
 
+	// 回傳指定 NPC編號 PlayerPtr物件
+	PlayerPtr getNPC(int idx);
+
 private:
+	// 地圖物件
 	GameMapPtr map = NULL;
+	// 寵物圖鑑，所有的寵物資訊會存在這個表
 	MonsterPropertyList mstPropertyList;
+	// 儲存 NPC player 物件
+	MySpace::Vec_1D_<PlayerPtr> NPC_list;
 };
 
