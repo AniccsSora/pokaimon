@@ -2,7 +2,7 @@
 // Microsoft Visual C++ generated include file.
 // Used by Pogaimon.rc
 
-// ¤U¤@­Ó·s¼Wª«¥óªº¹w³]­È
+// ä¸‹ä¸€å€‹æ–°å¢ç‰©ä»¶çš„é è¨­å€¼
 // 
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS

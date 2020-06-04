@@ -13,7 +13,7 @@ namespace MySpace {
 	template <typename T>
 	using Vec_1D_ = std::vector<T>;
 
-	// View ¨Ï¥Îªº¨Ò¥~
+	// View ä½¿ç”¨çš„ä¾‹å¤–
 	struct ViewOutOfRangeException : public std::exception {
 		std::string s;
 		ViewOutOfRangeException(std::string ss) : s(ss) {}
@@ -21,26 +21,26 @@ namespace MySpace {
 		const char* what() const throw() { return s.c_str(); }
 	};
 
-	// ®y¼Ğ, 1-base.
+	// åº§æ¨™, 1-base.
 	struct Coordi {
 		short x = -1;
 		short y = -1;
 	};
 
-	// °O¿ıµÛ ¼e¸ò°ª
+	// è¨˜éŒ„è‘— å¯¬è·Ÿé«˜
 	struct ViewSize {
 
 		// 1-base
 		short w = -1; short h = -1;
 	};
 	
-	// ¬Y­Ó view ªº¦ì¸m¸ê°T
+	// æŸå€‹ view çš„ä½ç½®è³‡è¨Š
 	struct ViewStatus {
 
-		// view ªº°_©l®y¼Ğ¡C
+		// view çš„èµ·å§‹åº§æ¨™ã€‚
 		Coordi lefttop;
 
-		// view ©Ò¦û¦³ªÅ¶¡¤j¤p¡C
+		// view æ‰€ä½”æœ‰ç©ºé–“å¤§å°ã€‚
 		ViewSize size_w_h;
 	};
 
@@ -48,22 +48,22 @@ namespace MySpace {
 		View() = default;
 		View(const View&); // copy constructor
 
-		// ³o­Ó View ¦WºÙ¡C
-		std::string viewName = "¦n¹³¨SÏm¥Î¤F...";
+		// é€™å€‹ View åç¨±ã€‚
+		std::string viewName = "å¥½åƒæ²’æ´¨ç”¨äº†...";
 
-		// °O¿ıµÛ View ªº¤º®e¡C
+		// è¨˜éŒ„è‘— View çš„å…§å®¹ã€‚
 		Vec_2D_<char> element;
 
-		// ¥X²{ªº¦ì¸m ¥H¤Î ªø¼e¡C 1-base¡C
+		// å‡ºç¾çš„ä½ç½® ä»¥åŠ é•·å¯¬ã€‚ 1-baseã€‚
 		ViewStatus status;
 
-		// ¬O ASCII image ??
+		// æ˜¯ ASCII image ??
 		bool isASCII = false;
 
-		// Ãä®ØÃC¦â;
+		// é‚Šæ¡†é¡è‰²;
 		rlutil_Color frameColor= rlutil::WHITE;
 
-		// ¦rÅéÃC¦â
+		// å­—é«”é¡è‰²
 		rlutil_Color msgColor = rlutil::WHITE;
 
 		// set frameColor
@@ -75,11 +75,11 @@ namespace MySpace {
 			return element.at(y).at(x);
 		}
 
-		// ³]©w left top ®y¼Ğ(x,y)
+		// è¨­å®š left top åº§æ¨™(x,y)
 		inline void setLeftTop(short x, short y);
 		inline void setLeftTop(Coordi c);
 
-		// ¦b¦¹ view ªº ²Ä pos ¦æ ´¡¤J msg¡C(¤£·|¦L¦b console)
+		// åœ¨æ­¤ view çš„ ç¬¬ pos è¡Œ æ’å…¥ msgã€‚(ä¸æœƒå°åœ¨ console)
 		inline void print(short pos, std::string msg);
 
 	}; typedef View*  ViewPtr;
@@ -105,9 +105,9 @@ namespace MySpace {
 
 		short max_idx = status.size_w_h.h - 2;
 
-		// ÀË¬d ­n print ªº¦ì¸m ¤Î¤j¤p ¦b ¦¹ view ªº®e³\½d³ò¡C
+		// æª¢æŸ¥ è¦ print çš„ä½ç½® åŠå¤§å° åœ¨ æ­¤ view çš„å®¹è¨±ç¯„åœã€‚
 		try{
-			if (msg.size() > status.size_w_h.w - 2) {// -2, ¥h°£¥ª¥kÃä®Ø«á¡A³Ñ¤UªºªÅ¥Õ¤j¤p¡C
+			if (msg.size() > status.size_w_h.w - 2) {// -2, å»é™¤å·¦å³é‚Šæ¡†å¾Œï¼Œå‰©ä¸‹çš„ç©ºç™½å¤§å°ã€‚
 				std::string errMsg = " Max of massage legth = " + std::to_string(status.size_w_h.w - 4) + 
 					", but your length = " + std::to_string(msg.size());
 				throw ViewOutOfRangeException(errMsg); 
@@ -123,28 +123,28 @@ namespace MySpace {
 			rlutil::anykey("Exception happened!!\n");
 		}
 
-		//short target_x = status.lefttop.x + 1; // view ªº ¥ª¤W¨¤ +1
-		//short target_y = status.lefttop.y + pos;// log ¯u¥¿¦b console ªº°ª«×¡C
+		//short target_x = status.lefttop.x + 1; // view çš„ å·¦ä¸Šè§’ +1
+		//short target_y = status.lefttop.y + pos;// log çœŸæ­£åœ¨ console çš„é«˜åº¦ã€‚
 
-		// ÂĞ¼g¸Ó view, ²Ä pos ¦æªº©Ò¦³¦r¤¸¦pªG¶W¥X msg «h¸É ' '¡C
+		// è¦†å¯«è©² view, ç¬¬ pos è¡Œçš„æ‰€æœ‰å­—å…ƒå¦‚æœè¶…å‡º msg å‰‡è£œ ' 'ã€‚
 		for (size_t view_col_idx = 0; view_col_idx < status.size_w_h.w-2; ++view_col_idx) {
 			if ( (int)msg.size()-1 >= view_col_idx ) {
-				// (i + 1): ¦]¬°¦³¥ªÃäÃä®Ø; (i - 1):msg¬O 0-base.
+				// (i + 1): å› ç‚ºæœ‰å·¦é‚Šé‚Šæ¡†; (i - 1):msgæ˜¯ 0-base.
 				element.at(pos).at(view_col_idx + 1) = msg.at(view_col_idx);
 			}
-			else {  // .at(pos) 0-base, ¸ò¦h¥Xªº ¤W®Ø­è¦n ­p¼Æ©è¾P (-1 + 1) = 0¡C
+			else {  // .at(pos) 0-base, è·Ÿå¤šå‡ºçš„ ä¸Šæ¡†å‰›å¥½ è¨ˆæ•¸æŠµéŠ· (-1 + 1) = 0ã€‚
 				element.at(pos).at(view_col_idx + 1) = ' ';
 			} 
 		}
 
-		// ³Ì¤j¥i¦L°Ï°ì¡C-2:¥hÀY§À, -1: 1-base(status) to 0-base(.at()).
+		// æœ€å¤§å¯å°å€åŸŸã€‚-2:å»é ­å°¾, -1: 1-base(status) to 0-base(.at()).
 		//short max_can_printIdx_of_view_col = status.size_w_h.w -2 -1;
-		//for (size_t msg_idx = 0; msg_idx <= msg.size(); ++msg_idx) {// i = 1, ¦]¬° ³Ì¥ªÃäÃä®Ø¤£§Æ±æÅÜªÅ; -2 ¦P²z¡C
+		//for (size_t msg_idx = 0; msg_idx <= msg.size(); ++msg_idx) {// i = 1, å› ç‚º æœ€å·¦é‚Šé‚Šæ¡†ä¸å¸Œæœ›è®Šç©º; -2 åŒç†ã€‚
 		//	if ( msg_idx < view_col_idx) {
-		//		// (i + 1): ¸ò¥ªÃäÃä®Ø¦h¤@®æ(¦n¬İ¥Î); (i - 1):msg¬O 0-base.
+		//		// (i + 1): è·Ÿå·¦é‚Šé‚Šæ¡†å¤šä¸€æ ¼(å¥½çœ‹ç”¨); (i - 1):msgæ˜¯ 0-base.
 		//		element.at(pos).at(view_col_idx + 1) = msg.at(view_col_idx - 1);
 		//	}
-		//	else {  // .at(pos) 0-base, ¸ò¦h¥Xªº ¤W®Ø­è¦n ­p¼Æ©è¾P (-1 + 1) = 0¡C
+		//	else {  // .at(pos) 0-base, è·Ÿå¤šå‡ºçš„ ä¸Šæ¡†å‰›å¥½ è¨ˆæ•¸æŠµéŠ· (-1 + 1) = 0ã€‚
 		//		element.at(pos).at(view_col_idx + 1) = ' ';
 		//	}
 		//}

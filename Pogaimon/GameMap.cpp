@@ -13,7 +13,7 @@ GameMap::GameMap(std::string filename)
 {
 	std::string line;
 	std::ifstream mapfile(filename);
-	int row_cnt = 0;// ­p¼Æ²{¦b³B²z¨ì²Ä´X¦æ¤F
+	int row_cnt = 0;// è¨ˆæ•¸ç¾åœ¨è™•ç†åˆ°ç¬¬å¹¾è¡Œäº†
 	if (mapfile.is_open())
 	{
 		std::vector<std::string> vec_row_tmp;
@@ -21,15 +21,15 @@ GameMap::GameMap(std::string filename)
 		{
 			vec_row_tmp.clear();
 			row_cnt += 1;
-			// ³B²z ¤@¦æ¸ê®Æ¡C
+			// è™•ç† ä¸€è¡Œè³‡æ–™ã€‚
 			for (size_t i = 0; i < line.length(); ++i) {
 				vec_row_tmp.push_back(std::string(1, line[i]));// push 1 string in vector, size() only 1.
 				
-				// ´M§ä ¦¹¦æ ¦a¹Ï¸ê®Æ ¦³µL¥]§t NPC_CUBE¡C
+				// å°‹æ‰¾ æ­¤è¡Œ åœ°åœ–è³‡æ–™ æœ‰ç„¡åŒ…å« NPC_CUBEã€‚
 				if (this->NPC_CUBE == line[i]) {
 					MySpace::Coordi cod;
 					// 1-base    
-					cod.x = i + 1; cod.y = row_cnt; // row_cnt ¤@¶}©l´N¬O 1-base
+					cod.x = i + 1; cod.y = row_cnt; // row_cnt ä¸€é–‹å§‹å°±æ˜¯ 1-base
 					this->npc_stand_corrdi_list.push_back(cod);
 				}
 			}
@@ -42,19 +42,19 @@ GameMap::GameMap(std::string filename)
 		std::cout << "Unable to open file: " << "\"" << filename << "\"" << std::endl;
 	}
 
-	// ©w¸q¥i¯¸¥ß¦a§Î¦r¤¸ 
+	// å®šç¾©å¯ç«™ç«‹åœ°å½¢å­—å…ƒ 
 	/*
-	¡½ * Àğ¾À,µLªk¬ï¶V
-	¡½ ; ¯ó¦a, green,¥i¥H¬ï¶V
-	¡½ ! ¾ğ¤ì, brown,µLªk¬ï¶V
-	¡½ ~ ¤ô¦À, blue,¥i¥H¬ï¶V
-	¡½ 1-9, A, B, C,D «Ø¿vª«, µLªk¬ï¶V
-	¡½ # «Ø¿v¤J¤f, yellow,¥i¥H¬ï¶V
+	â–  * ç‰†å£,ç„¡æ³•ç©¿è¶Š
+	â–  ; è‰åœ°, green,å¯ä»¥ç©¿è¶Š
+	â–  ! æ¨¹æœ¨, brown,ç„¡æ³•ç©¿è¶Š
+	â–  ~ æ°´æ± , blue,å¯ä»¥ç©¿è¶Š
+	â–  1-9, A, B, C,D å»ºç¯‰ç‰©, ç„¡æ³•ç©¿è¶Š
+	â–  # å»ºç¯‰å…¥å£, yellow,å¯ä»¥ç©¿è¶Š
 	*/
 	canStandCubes.push_back(';');
 	canStandCubes.push_back('~');
 	canStandCubes.push_back('#');
-	canStandCubes.push_back(' ');// §O§Ñ¤F ' ' ¤]¥i¥H¯¸¥ß¡C
+	canStandCubes.push_back(' ');// åˆ¥å¿˜äº† ' ' ä¹Ÿå¯ä»¥ç«™ç«‹ã€‚
 	
 }
 
@@ -88,19 +88,19 @@ void GameMap::showMap_and_Player(Player player)
 void GameMap::movePlayer(Player *player, int tar_x, int tar_y)
 {
 
-	// ¬ö¿ı ²¾°Ê¥Øªº¦aªº¤è¶ô¡C
+	// ç´€éŒ„ ç§»å‹•ç›®çš„åœ°çš„æ–¹å¡Šã€‚
 	if (canStand(tar_x, tar_y)) {
 
-		// ª±®a­ì©l¦ì¸m (Coordi ª«¥ó)
+		// ç©å®¶åŸå§‹ä½ç½® (Coordi ç‰©ä»¶)
 		MySpace::Coordi p_pos = player->getPlayerPosition();
 		
-		// ¨ä¦ì¸mªº¤è¶ô¡C
+		// å…¶ä½ç½®çš„æ–¹å¡Šã€‚
 		char last_Std_Cube = returnCubeBy(p_pos);
 		
-		myutil::printCube(p_pos.x, p_pos.y, last_Std_Cube);// ´_­ìª±®a¯¸¥ß ­ì¥»ªº¤è¶ô¡C
-		myutil::printCube(tar_x, tar_y, player->getNotation());//  ¦b·sªº¦ì¸m Åã¥Üª±®a²Å¸¹
+		myutil::printCube(p_pos.x, p_pos.y, last_Std_Cube);// å¾©åŸç©å®¶ç«™ç«‹ åŸæœ¬çš„æ–¹å¡Šã€‚
+		myutil::printCube(tar_x, tar_y, player->getNotation());//  åœ¨æ–°çš„ä½ç½® é¡¯ç¤ºç©å®¶ç¬¦è™Ÿ
 
-		// update player position, §ó·s player ª«¥ó¡C
+		// update player position, æ›´æ–° player ç‰©ä»¶ã€‚
 		MySpace::Coordi newPos; newPos.x = tar_x; newPos.y = tar_y;
 		player->setPosition(newPos);
 		
@@ -117,7 +117,7 @@ bool GameMap::canStand(int x, int y)
 {
 	bool rtn = false;
 	
-	// ÀË´ú±ı¯¸¥ßªºÂI(terrain.at(x).at(y)) ¦b canStandCubes ¤º ´NOK¡C
+	// æª¢æ¸¬æ¬²ç«™ç«‹çš„é»(terrain.at(x).at(y)) åœ¨ canStandCubes å…§ å°±OKã€‚
 	for (size_t i = 0; i < canStandCubes.size(); i++) {
 		char wantStandCube = returnCubeBy(x,y);
 		
@@ -136,7 +136,7 @@ char GameMap::returnCubeBy(int x, int y) throw(...)
 		return (char)terrain.at(y - 1).at(x - 1)[0]; // have exception risk.
 	}
 	catch (...) {
-		cout << "Caught exception when¡@call terrain.at(" << y-1 << ").at("<< x-1 <<")\n";
+		cout << "Caught exception whenã€€call terrain.at(" << y-1 << ").at("<< x-1 <<")\n";
 		cout << "... target index size()= " << terrain.at(y - 1).at(x - 1).size() << ".\n";
 		exit(0);
 	}
@@ -150,7 +150,7 @@ char GameMap::returnCubeBy(MySpace::Coordi coordi)
 		return (char)terrain.at(y - 1).at(x - 1)[0]; // have exception risk.
 	}
 	catch (...) {
-		cout << "Caught exception when¡@call terrain.at(" << y - 1 << ").at(" << x - 1 << ")\n";
+		cout << "Caught exception whenã€€call terrain.at(" << y - 1 << ").at(" << x - 1 << ")\n";
 		cout << "... target index size()= " << terrain.at(y - 1).at(x - 1).size() << ".\n";
 		exit(0);
 	}
@@ -170,9 +170,9 @@ int GameMap::return_NPC_idx(int x, int y){
 	int rtnIdx = -1;
 
 	if (isNPCstanding(x,y)){
-		// ¨«³X npc_stand_corrdi_list
+		// èµ°è¨ª npc_stand_corrdi_list
 		for (size_t i = 0; i < this->npc_stand_corrdi_list.size(); ++i) {
-			// ¤ñ¹ïºO
+			// æ¯”å°æ‘Ÿ
 			if ( npc_stand_corrdi_list[i].x == x && 
 				 npc_stand_corrdi_list[i].y == y) {
 				rtnIdx = i;

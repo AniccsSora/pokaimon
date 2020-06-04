@@ -2,24 +2,24 @@
 
 
 
-// «Øºc¤l
+// å»ºæ§‹å­
 EncounterMonsterEvent::EncounterMonsterEvent(MonsterPropertyList mstPropertyList,Player* servicedPlayer):Event(){
-	// ÀH«K¥Í¤@­Ó©Çª«~~
+	// éš¨ä¾¿ç”Ÿä¸€å€‹æ€ªç‰©~~
 	this->encounterMonster = new Monster(rand(), mstPropertyList);
 	
-	// µ¹ display ª«¥ó
+	// çµ¦ display ç‰©ä»¶
 	this->eventViewList = new Displayer();
 
-	// ©ÒªA°Èªºª±®a
+	// æ‰€æœå‹™çš„ç©å®¶
 	this->servicedPlayer = servicedPlayer;
 
-	// log ¤º®eªº View¡C
-	//log_content_view = ³Ì«á­±¦A¥[¤J;
+	// log å…§å®¹çš„ Viewã€‚
+	//log_content_view = æœ€å¾Œé¢å†åŠ å…¥;
 
-	// °µ¤@¨Ç View
+	// åšä¸€äº› View
 	//=============================================================================
 
-	//  Ãdª«Äİ©Êªº View
+	//  å¯µç‰©å±¬æ€§çš„ View
 	MySpace::ViewPtr monsterProperty = myutil::createView('*', 15, 40);
 	monsterProperty->setLeftTop(80, 2);
 	
@@ -33,37 +33,37 @@ EncounterMonsterEvent::EncounterMonsterEvent(MonsterPropertyList mstPropertyList
 	monsterProperty->print(10, "  DEF --- : " + std::to_string(this->encounterMonster->getDef()));
 	monsterProperty->print(11, "  SPEED - : " + std::to_string(this->encounterMonster->getSpeed()));
 	monsterProperty->print(12, "  Ability : " + this->encounterMonster->getAbilityNameByAbliIdx( this->encounterMonster->getAbilityIdx()));
-	this->eventViewList->registerView(monsterProperty);// Ãdª«Äİ©Ê ªº View
+	this->eventViewList->registerView(monsterProperty);// å¯µç‰©å±¬æ€§ çš„ View
 	//=============================================================================
 
-	//  ASCII ¹Ï  (Ãdª«¦b console ªº¹Ï¥Ü)¡C
+	//  ASCII åœ–  (å¯µç‰©åœ¨ console çš„åœ–ç¤º)ã€‚
 	MySpace::ViewPtr ascii = myutil::getMonsterASCIIViewPtrbyIdx(this->encounterMonster->getIdx());
 	ascii->setLeftTop(1, 1);
-	this->eventViewList->registerView(ascii);//  ASCII¹Ï ªº View
+	this->eventViewList->registerView(ascii);//  ASCIIåœ– çš„ View
 	//=============================================================================
 	short logger_w = 40, MostleftTop_Y = 31;// for log view
-	short MostleftTop_X = 80;// for log view, Player.cpp::addMonster() ·|¨Ï¥Î¦¹¼Æ­È(¤£¬OÅÜ¼Æ)¡C
+	short MostleftTop_X = 80;// for log view, Player.cpp::addMonster() æœƒä½¿ç”¨æ­¤æ•¸å€¼(ä¸æ˜¯è®Šæ•¸)ã€‚
 	short title_H = 3, content_H = 7;// for log view
-	short holdMonsterView_Y = 20;// for monater, Player.cpp::addMonster() ·|¨Ï¥Î¦¹¼Æ­È(¤£¬OÅÜ¼Æ)¡C
+	short holdMonsterView_Y = 20;// for monater, Player.cpp::addMonster() æœƒä½¿ç”¨æ­¤æ•¸å€¼(ä¸æ˜¯è®Šæ•¸)ã€‚
 	//=============================================================================
-	// ª±®a«ù¦³ monster View
-	// map ¤Wªº view ¦ì¸m¸ò³o­Ó¤£¤@¼Ë¡A¦ı§Ú¤£·Q­nºŞ¤Ó¦h°®¯Ü½Æ»s¤@­Ó¨Ó§ï¦ì¸m´N¥i¥H«ÜµÎªA¤F
+	// ç©å®¶æŒæœ‰ monster View
+	// map ä¸Šçš„ view ä½ç½®è·Ÿé€™å€‹ä¸ä¸€æ¨£ï¼Œä½†æˆ‘ä¸æƒ³è¦ç®¡å¤ªå¤šä¹¾è„†è¤‡è£½ä¸€å€‹ä¾†æ”¹ä½ç½®å°±å¯ä»¥å¾ˆèˆ’æœäº†
 	MySpace::View* src = servicedPlayer->getHoldMonsterView();
 	MySpace::View* copied_Player_Hole_Monster_View = new MySpace::View(*src);
-	// ª±®a«ù¦³ monster View
+	// ç©å®¶æŒæœ‰ monster View
 	copied_Player_Hole_Monster_View->setLeftTop(MostleftTop_X, holdMonsterView_Y); // 
 	copied_Player_Hole_Monster_View->setframeColor(rlutil::LIGHTBLUE);
-	this->eventViewList->registerView(copied_Player_Hole_Monster_View);// «ù¦³©Çª«ªº View¡C
+	this->eventViewList->registerView(copied_Player_Hole_Monster_View);// æŒæœ‰æ€ªç‰©çš„ Viewã€‚
 	//=============================================================================
-	// ´£¥Ü°T®§ View Title
-	MySpace::ViewPtr loggerTitle = myutil::createView('L', title_H, logger_w); // ¼ĞÃD°Ï°ì §â³o¨â­Ó View «÷°_¨Ó(µøÄ±¤W¦¨¬°¤@­ÓView)¡C
+	// æç¤ºè¨Šæ¯ View Title
+	MySpace::ViewPtr loggerTitle = myutil::createView('L', title_H, logger_w); // æ¨™é¡Œå€åŸŸ æŠŠé€™å…©å€‹ View æ‹¼èµ·ä¾†(è¦–è¦ºä¸Šæˆç‚ºä¸€å€‹View)ã€‚
 	loggerTitle->setLeftTop(MostleftTop_X, MostleftTop_Y);
 	int speceSize = 13;
 	loggerTitle->print(2, std::string(speceSize, ' ')+"~~ Message ~~"+std::string(speceSize,' '));
 	loggerTitle->setframeColor(rlutil::YELLOW);
 	this->eventViewList->registerView(loggerTitle);//log View Title
 
-	// ´£¥Ü°T®§ View Content
+	// æç¤ºè¨Šæ¯ View Content
 	MySpace::ViewPtr logger = myutil::createView('L', content_H, logger_w);
 	logger->setLeftTop(MostleftTop_X, MostleftTop_Y + content_H- title_H);
 	logger->print(2, "  Press \"SPACE\" to return to the map. ");
@@ -71,17 +71,17 @@ EncounterMonsterEvent::EncounterMonsterEvent(MonsterPropertyList mstPropertyList
 	logger->print(6, "  >");
 	logger->setframeColor(rlutil::YELLOW);
 	this->eventViewList->registerView(logger);// log View Content
-	// §ó·s Event ­n¥Îªº¡C
+	// æ›´æ–° Event è¦ç”¨çš„ã€‚
 	this->log_content_view = logger;
 	//=============================================================================
 
-	// ³Ğ¥ß View <End>
+	// å‰µç«‹ View <End>
 	
 }
 
-// ¾D¹J¨ì monster ªº¹ê§@
+// é­é‡åˆ° monster çš„å¯¦ä½œ
 void EncounterMonsterEvent::touchOff(){
-	// ¹J¨ì ©Ç©Ô£«£«£«£«£«
+	// é‡åˆ° æ€ªæ‹‰ã„šã„šã„šã„šã„š
 	// this->encounterMonster;
 	
 	
@@ -95,7 +95,7 @@ void EncounterMonsterEvent::touchOff(){
 
 	while (true) {
 		if (kbhit()) {
-			// °»´úÁä½L
+			// åµæ¸¬éµç›¤
 			char k = getch(); // Get character
 			if (k == 'C' || k == 'c') { 
 				rlutil::hidecursor();
@@ -103,28 +103,28 @@ void EncounterMonsterEvent::touchOff(){
 					cout << "  Start Catch-> " + this->encounterMonster->getName();
 					rlutil::msleep(500);
 				}
-				else { // Hardcode ­×§ï Message View ªº°T®§¡C ´N¬O³o»òÃø¬İXD¡C
+				else { // Hardcode ä¿®æ”¹ Message View çš„è¨Šæ¯ã€‚ å°±æ˜¯é€™éº¼é›£çœ‹XDã€‚
 					int view_x_ptr, view_y_ptr;
 					view_x_ptr = this->log_content_view->status.lefttop.x+1; 
 					view_y_ptr = this->log_content_view->status.lefttop.y + 2;//
-					rlutil::locate(view_x_ptr, view_y_ptr);//locate¨ì ²Ä¤@¦æ ¶}ÀY¦ì¸m
-					cout << std::string(40, ' ');//²MªÅ¸Ó°Ï
-					rlutil::locate(view_x_ptr, view_y_ptr);//¦A¦¸¦^¨ì ²Ä¤@¦æ ¶}ÀY¦ì¸m¡A¦¹®É¬OªÅ¥Õªº¡C
+					rlutil::locate(view_x_ptr, view_y_ptr);//locateåˆ° ç¬¬ä¸€è¡Œ é–‹é ­ä½ç½®
+					cout << std::string(40, ' ');//æ¸…ç©ºè©²å€
+					rlutil::locate(view_x_ptr, view_y_ptr);//å†æ¬¡å›åˆ° ç¬¬ä¸€è¡Œ é–‹é ­ä½ç½®ï¼Œæ­¤æ™‚æ˜¯ç©ºç™½çš„ã€‚
 					cout << std::string("  Press \"ESC\" to abort the crawl.");
-					// ±µ¤U¨Ó¥h§ï²Ä¤G¦æ msg "Press " C " try catch..."
+					// æ¥ä¸‹ä¾†å»æ”¹ç¬¬äºŒè¡Œ msg "Press " C " try catch..."
 					// logger->print(4, "  Press \" C \" try catch monster.");
-					rlutil::locate(view_x_ptr, view_y_ptr+2);//¨ì ²Ä¤G¦æ ¶}ÀY¦ì¸m
-					cout << std::string(40, ' '); //²MªÅ¸Ó°Ï
-					rlutil::locate(view_x_ptr, view_y_ptr + 2);//¦^¨ì ²Ä¤G¦æ ¶}ÀY¦ì¸m
+					rlutil::locate(view_x_ptr, view_y_ptr+2);//åˆ° ç¬¬äºŒè¡Œ é–‹é ­ä½ç½®
+					cout << std::string(40, ' '); //æ¸…ç©ºè©²å€
+					rlutil::locate(view_x_ptr, view_y_ptr + 2);//å›åˆ° ç¬¬äºŒè¡Œ é–‹é ­ä½ç½®
 					cout << std::string("  Press \" R \" to replace the monster.");
 
 					rlutil::saveDefaultColor();
 					rlutil::setColor(rlutil::LIGHTRED);
-					rlutil::locate(view_x_ptr+4, view_y_ptr + 4);//¨ì ²Ä¤T¦æ ¶}ÀY¦ì¸m
+					rlutil::locate(view_x_ptr+4, view_y_ptr + 4);//åˆ° ç¬¬ä¸‰è¡Œ é–‹é ­ä½ç½®
 					cout << "Use the \'W\',\'S\' buttons to replace.";
 					rlutil::resetColor();
 				}
-				this->servicedPlayer->addMonster(this->encounterMonster); // ·|§@ ¤j©ó 3ªºÀË¬d
+				this->servicedPlayer->addMonster(this->encounterMonster); // æœƒä½œ å¤§æ–¼ 3çš„æª¢æŸ¥
 				
 				break;
 			}
@@ -132,7 +132,7 @@ void EncounterMonsterEvent::touchOff(){
 				this->log_content_view->print(6, "  Cancel catch...");
 				rlutil::locate(84, 41); //harcode.
 				cout << "  Cancel catch...";
-				//this->eventViewList->showRegisteredView();// §ï­Ó¦r ¾ã¹Ï­«¦L...// ®ø¯Ó¹L¦h®Ä¯à
+				//this->eventViewList->showRegisteredView();// æ”¹å€‹å­— æ•´åœ–é‡å°...// æ¶ˆè€—éå¤šæ•ˆèƒ½
 				rlutil::hidecursor();
 				rlutil::msleep(500);
 				break; 
@@ -145,12 +145,12 @@ void EncounterMonsterEvent::touchOff(){
 
 EncounterNPCEvent::EncounterNPCEvent(Player* player, PlayerPtr encounterNpc)
 {
-	// ªì©l¤Æ
+	// åˆå§‹åŒ–
 	this->player = player;
 	this->encounterNpc = encounterNpc;
 }
 
 void EncounterNPCEvent::touchOff(){
-	Jym *myJJ = new Jym(player, encounterNpc); // TODO: ­n°O±o§R±¼¡C
+	Jym *myJJ = new Jym(player, encounterNpc); // TODO: è¦è¨˜å¾—åˆªæ‰ã€‚
 	myJJ->battle_start();
 }

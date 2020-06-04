@@ -16,13 +16,13 @@ void Displayer::showView(MySpace::ViewPtr view, short x, short y){
 			try
 			{
 				if (view->isASCII) {
-					// ¥L¬O ASCII ¹Ï¤ù ¤£³]©wÃC¦â
+					// ä»–æ˜¯ ASCII åœ–ç‰‡ ä¸è¨­å®šé¡è‰²
 				}
 				else {
-					// §PÂ_¬O§_¦bÃä®Ø, µ¹©w¤£¦PÃC¦â
+					// åˆ¤æ–·æ˜¯å¦åœ¨é‚Šæ¡†, çµ¦å®šä¸åŒé¡è‰²
 
-					// (i,j) ¦ì©óÃä®Ø®É¡C  ( ¤WÃä || ¤UÃä || 
-					//                     ¥ªÃä || ¥kÃä )
+					// (i,j) ä½æ–¼é‚Šæ¡†æ™‚ã€‚  ( ä¸Šé‚Š || ä¸‹é‚Š || 
+					//                     å·¦é‚Š || å³é‚Š )
 					if (i == 0 || i == view->element.size() - 1 ||
 						j == 0 || j == view->element.at(i).size() - 1) {
 						rlutil::setColor(view->frameColor);
@@ -32,7 +32,7 @@ void Displayer::showView(MySpace::ViewPtr view, short x, short y){
 					}
 				}
 				
-				// ¦L¥X¤º®e
+				// å°å‡ºå…§å®¹
 				std::cout << view->element.at(i).at(j);
 			}
 			catch (std::out_of_range & oor) {
@@ -53,7 +53,7 @@ void Displayer::showView(MySpace::ViewPtr view)
 {
 	if (view->status.lefttop.x < 0 ||
 		view->status.lefttop.y < 0) {
-		throw "Undefined lefttop!"; // TODO: ­n§ï¦¨¥á exception ª«¥ó¡C
+		throw "Undefined lefttop!"; // TODO: è¦æ”¹æˆä¸Ÿ exception ç‰©ä»¶ã€‚
 	}
 	
 	showView(view, view->status.lefttop.x, view->status.lefttop.y);
@@ -71,7 +71,7 @@ void Displayer::registerView(MySpace::ViewPtr view)
 	if (view->status.lefttop.x < 0 ||
 		view->status.lefttop.y < 0) {
 		throw "Undefined lefttop!";
-	}// TODO : ­n³]­p "§A§Ñ°Oµ¹ View ¥ª¤W¨¤¤F" ªº exception
+	}// TODO : è¦è¨­è¨ˆ "ä½ å¿˜è¨˜çµ¦ View å·¦ä¸Šè§’äº†" çš„ exception
 
 	viewList.push_back(view);
 }

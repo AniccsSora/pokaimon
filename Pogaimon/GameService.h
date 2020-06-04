@@ -4,29 +4,29 @@
 #include "Event.h"
 #include "MonsterProperty.h"
 
-// ¹J¨ì ©Çª«ªº¾÷²v
+// é‡åˆ° æ€ªç‰©çš„æ©Ÿç‡
 #define ENCOUBTER_MONSTER_P 0.1
 
 class GameService
 {
 public:
 
-	// ½Æ»s¤@¥÷ map µ¹¦¹ª«¥ó¡C
+	// è¤‡è£½ä¸€ä»½ map çµ¦æ­¤ç‰©ä»¶ã€‚
 	GameService(GameMapPtr map);
 
-	// ¦^³ø ª±®a²{¦bªº Event¡A³oEvent·|«D±`ªº«È»s¤Æ¡A¦^µ¹ Event ¤lÃş§O¡C¥L·| new
+	// å›å ± ç©å®¶ç¾åœ¨çš„ Eventï¼Œé€™Eventæœƒéå¸¸çš„å®¢è£½åŒ–ï¼Œå›çµ¦ Event å­é¡åˆ¥ã€‚ä»–æœƒ new
 	Event* getEvent(Player* player);
-	/* ¸É¥R: C++ ¤º¤£±o¦^¶Ç ¯ÂµêÀÀÃş§Oªº "¹êÅé"¡A §Ú­Ì¥u¯à¥H«ü¼Ğ¤è¦¡«ü¨ì abstract class.*/
+	/* è£œå……: C++ å…§ä¸å¾—å›å‚³ ç´”è™›æ“¬é¡åˆ¥çš„ "å¯¦é«”"ï¼Œ æˆ‘å€‘åªèƒ½ä»¥æŒ‡æ¨™æ–¹å¼æŒ‡åˆ° abstract class.*/
 
-	// ¦^¶Ç«ü©w NPC½s¸¹ PlayerPtrª«¥ó
+	// å›å‚³æŒ‡å®š NPCç·¨è™Ÿ PlayerPtrç‰©ä»¶
 	PlayerPtr getNPC(int idx);
 
 private:
-	// ¦a¹Ïª«¥ó
+	// åœ°åœ–ç‰©ä»¶
 	GameMapPtr map = NULL;
-	// Ãdª«¹ÏÅ²¡A©Ò¦³ªºÃdª«¸ê°T·|¦s¦b³o­Óªí
+	// å¯µç‰©åœ–é‘‘ï¼Œæ‰€æœ‰çš„å¯µç‰©è³‡è¨Šæœƒå­˜åœ¨é€™å€‹è¡¨
 	MonsterPropertyList mstPropertyList;
-	// Àx¦s NPC player ª«¥ó
+	// å„²å­˜ NPC player ç‰©ä»¶
 	MySpace::Vec_1D_<PlayerPtr> NPC_list;
 };
 

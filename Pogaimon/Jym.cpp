@@ -2,55 +2,55 @@
 
 Jym::Jym(PlayerPtr P1, PlayerPtr P2)
 {
-	// P1(ª±®a¦pªG¨S¦³§ì¥b°¦©ÇÃ~´N¶i¥h¹DÀ] ¥s¥L¥h¦Y«Ë)
+	// P1(ç©å®¶å¦‚æœæ²’æœ‰æŠ“åŠéš»æ€ªç¸å°±é€²å»é“é¤¨ å«ä»–å»åƒå±)
 	if (P1->getMonsterListSize() <= 0) {
 		rlutil::cls();
 		rlutil::anykey("\n\n     You don't seem to have any Monster. Are you going to fight boxing?     ");
 		return;
 	}
 
-	// ªì©l¤Æ
+	// åˆå§‹åŒ–
 	this->P1 = P1;
 	this->P2 = P2;
-	// ªì©l¤Æ P1_ascii_veiwList
+	// åˆå§‹åŒ– P1_ascii_veiwList
 	for (size_t i = 0; i < P1->getMonsterListSize(); ++i) {
-		int mos_idx = P1->getMonIDX_by_MonsList(i);// ±qª±®aª«¥ó ©Ò«ù¦³ªº monsterList ¤¤¥h¿ï§Ú­n²Ä´X(i)­Ó¡A©Çª«ªº¹ÏÅ²½s¸¹¡C 
+		int mos_idx = P1->getMonIDX_by_MonsList(i);// å¾ç©å®¶ç‰©ä»¶ æ‰€æŒæœ‰çš„ monsterList ä¸­å»é¸æˆ‘è¦ç¬¬å¹¾(i)å€‹ï¼Œæ€ªç‰©çš„åœ–é‘‘ç·¨è™Ÿã€‚ 
 		MySpace::ViewPtr mos = myutil::getMonsterASCIIViewPtrbyIdx(mos_idx);
 		this->P1_ascii_veiwList.push_back(mos);
 	}
-	// ªì©l¤Æ P2_ascii_veiwList
+	// åˆå§‹åŒ– P2_ascii_veiwList
 	for (size_t i = 0; i < P2->getMonsterListSize(); ++i) {
-		int mos_idx = P2->getMonIDX_by_MonsList(i);// ±qª±®aª«¥ó ©Ò«ù¦³ªº monsterList ¤¤¥h¿ï§Ú­n²Ä´X(i)­Ó¡A©Çª«ªº¹ÏÅ²½s¸¹¡C 
+		int mos_idx = P2->getMonIDX_by_MonsList(i);// å¾ç©å®¶ç‰©ä»¶ æ‰€æŒæœ‰çš„ monsterList ä¸­å»é¸æˆ‘è¦ç¬¬å¹¾(i)å€‹ï¼Œæ€ªç‰©çš„åœ–é‘‘ç·¨è™Ÿã€‚ 
 		MySpace::ViewPtr mos = myutil::getMonsterASCIIViewPtrbyIdx(mos_idx);
 		this->P2_ascii_veiwList.push_back(mos);
 	}
 	
-	// ===================== < ¹ï¾Ôµe­± View °Ñ¼Æ³]©w°Ï>
-	// ³o¨Ç°Ñ¼Æ¬O¨Ì·Ó PDF ¶}ªº³W®æ¥hµû¦ôªº¡C
-	int limit_of_Y = 30; //¨M©w ¦h¤Ö°ª«× "¶}©l"¦L¥X Äİ©Ê View¡A¦]¬° ASCII °ª«×§Ú­ÌµLªk´x´¤¡C
-	int half_x = 50; // ¨M©w console ªº­şÃä¶}©l­n¤À¤@¥b¡C
-	// ===================== </¹ï¾Ôµe­± View °Ñ¼Æ³]©w°Ï>
+	// ===================== < å°æˆ°ç•«é¢ View åƒæ•¸è¨­å®šå€>
+	// é€™äº›åƒæ•¸æ˜¯ä¾ç…§ PDF é–‹çš„è¦æ ¼å»è©•ä¼°çš„ã€‚
+	int limit_of_Y = 30; //æ±ºå®š å¤šå°‘é«˜åº¦ "é–‹å§‹"å°å‡º å±¬æ€§ Viewï¼Œå› ç‚º ASCII é«˜åº¦æˆ‘å€‘ç„¡æ³•æŒæ¡ã€‚
+	int half_x = 50; // æ±ºå®š console çš„å“ªé‚Šé–‹å§‹è¦åˆ†ä¸€åŠã€‚
+	// ===================== </å°æˆ°ç•«é¢ View åƒæ•¸è¨­å®šå€>
 	//for (size_t i = 0; i < P1->getMonsterListSize(); ++i) {
-	//	this->P1_mons_asciiManager.clearALLview();// ¥ı²M°®²b¡Aascii displayer¡C
-	//	MySpace::ViewPtr v_ptr = this->P1_ascii_veiwList.at(i);// ¨ú±o¸Óª±®aªº ascii
-	//	v_ptr->setLeftTop(1,1);//¨S³]©w ¥ª¤W¨¤ªº ¬O¤£±o³Qµù¥U¶i¥hªº¡C
-	//	this->P1_mons_asciiManager.registerView(v_ptr);// µù¥U
-	//	rlutil::cls(); // ²Mµe­±
-	//	this->P1_mons_asciiManager.showRegisteredView(); // ¦L¥XASCII
+	//	this->P1_mons_asciiManager.clearALLview();// å…ˆæ¸…ä¹¾æ·¨ï¼Œascii displayerã€‚
+	//	MySpace::ViewPtr v_ptr = this->P1_ascii_veiwList.at(i);// å–å¾—è©²ç©å®¶çš„ ascii
+	//	v_ptr->setLeftTop(1,1);//æ²’è¨­å®š å·¦ä¸Šè§’çš„ æ˜¯ä¸å¾—è¢«è¨»å†Šé€²å»çš„ã€‚
+	//	this->P1_mons_asciiManager.registerView(v_ptr);// è¨»å†Š
+	//	rlutil::cls(); // æ¸…ç•«é¢
+	//	this->P1_mons_asciiManager.showRegisteredView(); // å°å‡ºASCII
 	//	rlutil::anykey("\n press any to next");
 	//	rlutil::cls();
 	//}
 	
-	// Ãdª«¹Ï¥Ü ASCII µLªk ½T©w°ª«× 
+	// å¯µç‰©åœ–ç¤º ASCII ç„¡æ³• ç¢ºå®šé«˜åº¦ 
 	;
 	// ===================== 
-	// ·í«eÃdª«Äİ©Ê
+	// ç•¶å‰å¯µç‰©å±¬æ€§
 	
 	// ===================== 
-	// ·í «ù¦³Ãdª«²M³æ (¬O§_­n­Ó¤H¤Æ?)
+	// ç•¶ æŒæœ‰å¯µç‰©æ¸…å–® (æ˜¯å¦è¦å€‹äººåŒ–?)
 
 	// ===================== 
-	// ¹ï¾Ô°T®§
+	// å°æˆ°è¨Šæ¯
 
 	// ===================== 
 }

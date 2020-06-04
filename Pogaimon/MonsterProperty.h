@@ -32,10 +32,10 @@ class Property {
 
 class MonsterProperty :	public Property{
 public:
-	MonsterProperty() = default; // compile »¡§Ú¨S¼g¹w³]«Øºc¤l¡A¦n §Ú¼gµ¹¥L¡C
+	MonsterProperty() = default; // compile èªªæˆ‘æ²’å¯«é è¨­å»ºæ§‹å­ï¼Œå¥½ æˆ‘å¯«çµ¦ä»–ã€‚
 	MonsterProperty(int idx, std::string name, std::string type, int hp, int atk, int def, int speed, int ability) 
 		:Property (){
-		// ³o¸Ì¨S this ´N¬O¦Y«Ë¡Cª½±µ¤£·|°Ê¡C
+		// é€™è£¡æ²’ this å°±æ˜¯åƒå±Žã€‚ç›´æŽ¥ä¸æœƒå‹•ã€‚
 		this->idx = idx;
 		this->name = name;
 		this->type = str2type(type);
@@ -110,7 +110,7 @@ public:
 		this->ability = abilityIdx;
 	}
 
-	// debug ¥Îªº
+	// debug ç”¨çš„
 	void printALL() {
 		std::string msg = "idx:" + std::to_string(idx) +
 			", name: " + name +
@@ -123,14 +123,14 @@ public:
 		std::cout << msg << std::endl;
 	}
 
-	// enum ¤g¬¶Âà¦r¦ê...
+	// enum åœŸç‚®è½‰å­—ä¸²...
 	monType str2type(std::string typeStr) {
 		monType rtnType = Undefined;
 		
-		// ¤j¼gª©ªº type ¦r¦ê¡C
+		// å¤§å¯«ç‰ˆçš„ type å­—ä¸²ã€‚
 		std::string typeUpper = "";
 
-		//  toupper ¬Oµ¹¦r¤¸¥Îªº...¡A§ï¦¨µ¹¦r¦ê¥Îªºª©¥»
+		//  toupper æ˜¯çµ¦å­—å…ƒç”¨çš„...ï¼Œæ”¹æˆçµ¦å­—ä¸²ç”¨çš„ç‰ˆæœ¬
 		for (auto& c : typeStr) { typeUpper += toupper(c);}
 		
 		// When equal compare() return 0.

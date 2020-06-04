@@ -14,75 +14,75 @@ struct OverThreeMonsterUNHANDLE: public std::exception {
 class Player
 {
 public:
-	// ª±®a«Øºc¤l¡A´£¨Ñ¦W¦r ¥H¤Î¨ä¥Í¦¨ÂI®y¼Ğ¡C
+	// ç©å®¶å»ºæ§‹å­ï¼Œæä¾›åå­— ä»¥åŠå…¶ç”Ÿæˆé»åº§æ¨™ã€‚
 	Player(std::string name,int x,int y);
 
-	// µ¹ NPC¥Î ªº«Øºc¤l¡A·|À°¥Lªº monsterList ªì©l¤Æ number_of_monster °¦©Çª«¡C
+	// çµ¦ NPCç”¨ çš„å»ºæ§‹å­ï¼Œæœƒå¹«ä»–çš„ monsterList åˆå§‹åŒ– number_of_monster éš»æ€ªç‰©ã€‚
 	Player(int number_of_monster);
 
-	// ¦^¶Çª±®a²{¦b¦bªº®y¼Ğ¡A¸òGameMap¨S¦³¥b¤òÃö«Y¡A³o¥u¬O¤@²Õ "®y¼Ğ"¡C
+	// å›å‚³ç©å®¶ç¾åœ¨åœ¨çš„åº§æ¨™ï¼Œè·ŸGameMapæ²’æœ‰åŠæ¯›é—œä¿‚ï¼Œé€™åªæ˜¯ä¸€çµ„ "åº§æ¨™"ã€‚
 	struct MySpace::Coordi getPlayerPosition();
 
-	// ¦^¶Ç¥Nªí¦¹ª±®aªº²Å¸¹, Default = '@'
+	// å›å‚³ä»£è¡¨æ­¤ç©å®¶çš„ç¬¦è™Ÿ, Default = '@'
 	char getNotation();
 
-	// ³]©wª±®a®y¼Ğ¡A¨S¦³¨¾§b¥L´N¬O³]©w¦¹ª«¥óªº"®y¼Ğ"°Ñ¼Æ¡C
+	// è¨­å®šç©å®¶åº§æ¨™ï¼Œæ²’æœ‰é˜²å‘†ä»–å°±æ˜¯è¨­å®šæ­¤ç‰©ä»¶çš„"åº§æ¨™"åƒæ•¸ã€‚
 	void setPosition(MySpace::Coordi newPosition);
 
-	// ¦^¶Çª±®a name.
+	// å›å‚³ç©å®¶ name.
 	std::string getName();
 
-	// ¦b console show ¥X ª±®a
+	// åœ¨ console show å‡º ç©å®¶
 	void showMe_by_coord();
 
-	// ³]©wª±®aÃC¦â
+	// è¨­å®šç©å®¶é¡è‰²
 	void setColor(rlutil_Color c);
 
-	// ¨ú±oª±®aÃC¦â
+	// å–å¾—ç©å®¶é¡è‰²
 	rlutil_Color getColor();
 
-	// ¨ú±oª±®a «ù¦³Ãdª«ªºView¡C
+	// å–å¾—ç©å®¶ æŒæœ‰å¯µç‰©çš„Viewã€‚
 	MySpace::ViewPtr getHoldMonsterView();
 
-	// ³]©w monsterView ªº¦ì¸m¡C
+	// è¨­å®š monsterView çš„ä½ç½®ã€‚
 	void setMonsterView_FT(int x, int y);
 
-	// §ì¨ì Monster ¤F¡A·|§ó·s monsterList¡BmonsterView¡C
+	// æŠ“åˆ° Monster äº†ï¼Œæœƒæ›´æ–° monsterListã€monsterViewã€‚
 	void addMonster(MonsterPtr monsterCaught) throw(OverThreeMonsterUNHANDLE);
 
-	// §ì¨ì´X°¦©ÇÃ~¤F
+	// æŠ“åˆ°å¹¾éš»æ€ªç¸äº†
 	int getMonsterListSize();
 
-	// ¨ú±oª±®a¤À¼Æ
+	// å–å¾—ç©å®¶åˆ†æ•¸
 	int getPoint();
 
-	// ¨ú±o monsterList «ü©w idx ¤§ name(string)
+	// å–å¾— monsterList æŒ‡å®š idx ä¹‹ name(string)
 	std::string getMonName_by_MonsList(int idx_of_monsterList);
 
-	// ¨ú±o monsterList «ü©w idx ¤§ ©ÇÃ~¹ÏÅ²ªº ½s¸¹¡C
+	// å–å¾— monsterList æŒ‡å®š idx ä¹‹ æ€ªç¸åœ–é‘‘çš„ ç·¨è™Ÿã€‚
 	int getMonIDX_by_MonsList(int idx_of_monsterList);
 	
 
 private:
-	// ª±®a¦b¦a¹Ïªº¦ì¸m, 1-base¡C
+	// ç©å®¶åœ¨åœ°åœ–çš„ä½ç½®, 1-baseã€‚
 	struct MySpace::Coordi position;
 
-	// ª±®a¦WºÙ
+	// ç©å®¶åç¨±
 	std::string playerName;
 
-	// ª±®a²Å¸¹
+	// ç©å®¶ç¬¦è™Ÿ
 	char notation = '@';
 
-	// ª±®aÃC¦â
+	// ç©å®¶é¡è‰²
 	int color = rlutil::WHITE;
 
-	// ¸Ì­±¦s©ñµÛ monster «ü¼Ğ¡C
+	// è£¡é¢å­˜æ”¾è‘— monster æŒ‡æ¨™ã€‚
 	MySpace::Vec_1D_<MonsterPtr> monsterList;
 
-	// ª±®aªº ViewPtr, ±q monsterList ¨ú±o¸ê®Æ¨ÓÅã¥Ü¡C// ¤£­n¬O null ´N¦n
+	// ç©å®¶çš„ ViewPtr, å¾ monsterList å–å¾—è³‡æ–™ä¾†é¡¯ç¤ºã€‚// ä¸è¦æ˜¯ null å°±å¥½
 	MySpace::ViewPtr monsterView = NULL;
 
-	// ª±®aªº¹ï¾ÔÂI¼Æ¡A¥´Ä¹NPC ¤~·|Àò±o¡C
+	// ç©å®¶çš„å°æˆ°é»æ•¸ï¼Œæ‰“è´NPC æ‰æœƒç²å¾—ã€‚
 	int point = 0;
 };
 typedef Player* PlayerPtr;

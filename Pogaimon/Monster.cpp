@@ -5,7 +5,7 @@
 
 void Monster::attack(IMonsterPtr beAttactedMonster) {
 
-		// YA ±q¤÷ÃþÄ~©Ó¤Uªº
+		// YA å¾žçˆ¶é¡žç¹¼æ‰¿ä¸‹çš„
 }
 
 int Monster::getIdx() {

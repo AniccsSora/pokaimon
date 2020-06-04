@@ -4,27 +4,27 @@
 #include "Mydefine.h"
 #include "Myutil.h"
 
-// ¨â¦ìª±®a­n¹ï¾Ô´N¨Ó³oÃä¡A§â (Player)X 2  ¶Ç¶i¨Ó¡A¸Ì­±·|»İ­n«Ü¦hªºªFªF
+// å…©ä½ç©å®¶è¦å°æˆ°å°±ä¾†é€™é‚Šï¼ŒæŠŠ (Player)X 2  å‚³é€²ä¾†ï¼Œè£¡é¢æœƒéœ€è¦å¾ˆå¤šçš„æ±æ±
 class Jym{
 public:
-	// «Øºc¤l
+	// å»ºæ§‹å­
 	Jym(PlayerPtr P1, PlayerPtr P2);
-	// ª½±µ¶}¥´
+	// ç›´æ¥é–‹æ‰“
 	void battle_start();
 
 private:
 	PlayerPtr P1 = NULL;
 	PlayerPtr P2 = NULL;
 
-	// Ãdª«(ASCII) = ¹Ï¥Ü¹ïÀ³ monsterList ¶¶§Ç
+	// å¯µç‰©(ASCII) = åœ–ç¤ºå°æ‡‰ monsterList é †åº
 	MySpace::Vec_1D_<MySpace::ViewPtr> P1_ascii_veiwList;
 	MySpace::Vec_1D_<MySpace::ViewPtr> P2_ascii_veiwList;
 
-	// ºŞ²z¡BÃdª«Äİ©Ê¡B«ù¦³Ãdª«²M³æ ªº Displayer ª«¥ó¡C
+	// ç®¡ç†ã€å¯µç‰©å±¬æ€§ã€æŒæœ‰å¯µç‰©æ¸…å–® çš„ Displayer ç‰©ä»¶ã€‚
 	Displayer P1_ViewManager;
-	Displayer P1_mons_asciiManager; // ¥u©ñ¤@­ÓView¡A¤]¥u¥Î²Ä¤@­ÓView¡A­n¨Ï¥Î®É¤~·| ©I¥s, ¤£¥Îªì©l¤Æ
+	Displayer P1_mons_asciiManager; // åªæ”¾ä¸€å€‹Viewï¼Œä¹Ÿåªç”¨ç¬¬ä¸€å€‹Viewï¼Œè¦ä½¿ç”¨æ™‚æ‰æœƒ å‘¼å«, ä¸ç”¨åˆå§‹åŒ–
 	Displayer P2_ViewManager;
-	Displayer P2_mons_asciiManager; // ¥u©ñ¤@­ÓView¡A¤]¥u¥Î²Ä¤@­ÓView¡A­n¨Ï¥Î®É¤~·| ©I¥s, ¤£¥Îªì©l¤Æ
+	Displayer P2_mons_asciiManager; // åªæ”¾ä¸€å€‹Viewï¼Œä¹Ÿåªç”¨ç¬¬ä¸€å€‹Viewï¼Œè¦ä½¿ç”¨æ™‚æ‰æœƒ å‘¼å«, ä¸ç”¨åˆå§‹åŒ–
 	Displayer battle_log;
 };
 

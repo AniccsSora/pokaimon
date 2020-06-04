@@ -6,23 +6,23 @@ class Displayer
 {
 public:
 
-	// Ô£¨Æ³£¤£·|°µ~~~
+	// å•¥äº‹éƒ½ä¸æœƒåš~~~
 	Displayer();
 
-	// Åã¥Ü ¬Y­Ó View, ¦b console ¤W¡C
+	// é¡¯ç¤º æŸå€‹ View, åœ¨ console ä¸Šã€‚
 	void showView(MySpace::ViewPtr view, short x, short y);
 	
-	// ¦L¥X ¦³±a ®y¼Ğ ªº View¡C
+	// å°å‡º æœ‰å¸¶ åº§æ¨™ çš„ Viewã€‚
 	void showView(MySpace::ViewPtr view);
 	
-	// ¦L¥X ©Ò¦³¤wµù¥Uªº View
+	// å°å‡º æ‰€æœ‰å·²è¨»å†Šçš„ View
 	void showRegisteredView();
 
-	// ²K¥[ View ¨ì viewList¸Ì­±¡C
-	// ** ¨S¦³ µ¹©w lefttop ªº View **, ¬O¤£±o³Qµù¥U¶i¥hªº¡C
+	// æ·»åŠ  View åˆ° viewListè£¡é¢ã€‚
+	// ** æ²’æœ‰ çµ¦å®š lefttop çš„ View **, æ˜¯ä¸å¾—è¢«è¨»å†Šé€²å»çš„ã€‚
 	void registerView(MySpace::ViewPtr view);
 
-	// ²M°£©Ò¦³¤w¸g³Qµù¥Uªº View
+	// æ¸…é™¤æ‰€æœ‰å·²ç¶“è¢«è¨»å†Šçš„ View
 	void clearALLview();
 
 private:

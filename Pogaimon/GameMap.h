@@ -13,49 +13,49 @@ typedef GameMap* GameMapPtr;
 class GameMap
 {
 public:
-	// ±qÀÉ®×¨t²Î Åª¨ú mapÀÉ¡A¥H¤Î¤@¨Çªì©l¤Æ¡C
+	// å¾æª”æ¡ˆç³»çµ± è®€å– mapæª”ï¼Œä»¥åŠä¸€äº›åˆå§‹åŒ–ã€‚
 	GameMap(std::string filename);
 
 	// copy constractor
 	GameMap(const GameMap& gm);
 
-	// ¦L¥X ¦a¹Ïªøªº¼Ë¤l¡A·|¦³ÃC¦â¡C
+	// å°å‡º åœ°åœ–é•·çš„æ¨£å­ï¼Œæœƒæœ‰é¡è‰²ã€‚
 	void showmap();
 
-	// ¦L¥X ¦a¹Ïªøªº¼Ë¤l¡A·|¦³ÃC¦â¡C¶¶«K§â ª±®a¤]¦L¤W¥h
+	// å°å‡º åœ°åœ–é•·çš„æ¨£å­ï¼Œæœƒæœ‰é¡è‰²ã€‚é †ä¾¿æŠŠ ç©å®¶ä¹Ÿå°ä¸Šå»
 	void showMap_and_Player(Player player);
 
-	// Åã¥Ü ª±®a¦ì¸m¨Ã show ¦b console ¤W¡A·|°µ¸I¼²§PÂ_¡A
-	// ¦pªG»P terrain ¤ºªº¦a§Îª¬ºA¤£²Å¦X«h¤£¯à²¾°Ê¹L¥h¡C
+	// é¡¯ç¤º ç©å®¶ä½ç½®ä¸¦ show åœ¨ console ä¸Šï¼Œæœƒåšç¢°æ’åˆ¤æ–·ï¼Œ
+	// å¦‚æœèˆ‡ terrain å…§çš„åœ°å½¢ç‹€æ…‹ä¸ç¬¦åˆå‰‡ä¸èƒ½ç§»å‹•éå»ã€‚
 	void movePlayer(Player *player, int tar_x, int tar_y);
 
-	// ¦^¶Ç ¸ÓÂI¬O§_¥i¥H¯¸¥ß¡C
+	// å›å‚³ è©²é»æ˜¯å¦å¯ä»¥ç«™ç«‹ã€‚
 	bool canStand(int x, int y);
 
-	// ¦^¶Ç terrain(¦a§Îª«¥ó) ®y¼Ğ(x, y)¤W ªº¦r¤¸¡C
+	// å›å‚³ terrain(åœ°å½¢ç‰©ä»¶) åº§æ¨™(x, y)ä¸Š çš„å­—å…ƒã€‚
 	char returnCubeBy(int x, int y);
 	char returnCubeBy(MySpace::Coordi coordi);
 
-	// ÀË¬d 484 npc ¯¸ªº¦ì¸m¡C(1-base)
+	// æª¢æŸ¥ 484 npc ç«™çš„ä½ç½®ã€‚(1-base)
 	bool isNPCstanding(int x,int y);
 
-	// ¦^¶Ç NPC ½s¸¹(0-base.) ¦pªG¬O ­t¼Æ¥Nªí³oÃä¨S¦³¯¸NPC¡C
+	// å›å‚³ NPC ç·¨è™Ÿ(0-base.) å¦‚æœæ˜¯ è² æ•¸ä»£è¡¨é€™é‚Šæ²’æœ‰ç«™NPCã€‚
 	int return_NPC_idx(int x, int y);
 
-	// ¦^¶Ç ²{¦b¦a¹Ï¤W¦³ªº NPC¼Æ¶q¡C
+	// å›å‚³ ç¾åœ¨åœ°åœ–ä¸Šæœ‰çš„ NPCæ•¸é‡ã€‚
 	int get_number_of_NPC();
 
 private:
-	// ¬ö¿ı¦a§Î¡A¨ä¹ê´N¬O¦a¹Ï¡C
+	// ç´€éŒ„åœ°å½¢ï¼Œå…¶å¯¦å°±æ˜¯åœ°åœ–ã€‚
 	MySpace::Vec_2D_<std::string> terrain;
 
-	// ©w¸q¥i¯¸¥ß¦a§Î¦r¤¸¡A¦p¬Y¦r¤¸¥¼©w¸q¦b¤º«h³£»{¬°¤£¥i¯¸¥ß¡C
+	// å®šç¾©å¯ç«™ç«‹åœ°å½¢å­—å…ƒï¼Œå¦‚æŸå­—å…ƒæœªå®šç¾©åœ¨å…§å‰‡éƒ½èªç‚ºä¸å¯ç«™ç«‹ã€‚
 	MySpace::Vec_1D_<char> canStandCubes;
 
-	// ¥Nªí NPC ªº CUBE.
+	// ä»£è¡¨ NPC çš„ CUBE.
 	char NPC_CUBE = '#';
 
-	// ·|°O¿ı³o¦a¹Ï¤W NPC ªº©Ò¦b®y¼Ğ(1-base)
+	// æœƒè¨˜éŒ„é€™åœ°åœ–ä¸Š NPC çš„æ‰€åœ¨åº§æ¨™(1-base)
 	MySpace::Vec_1D_<MySpace::Coordi> npc_stand_corrdi_list;
 };
 

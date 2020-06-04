@@ -15,7 +15,7 @@
 
 
 #define waitkey rlutil::anykey("Press any key to continue...\n")
-// ¥Î¤è¦VÁä µ{¦¡·|©Ç©Çªº¡C¡C
+// ç”¨æ–¹å‘éµ ç¨‹å¼æœƒæ€ªæ€ªçš„ã€‚ã€‚
 constexpr auto arrow_Left = 75;
 constexpr auto arrow_Up = 72;
 constexpr auto arrow_Down = 80;
@@ -32,9 +32,9 @@ int main() {
 
 		
 
-		// ¨ú±oÃdª«°Ñ¼Æ¹ÏÅ²
+		// å–å¾—å¯µç‰©åƒæ•¸åœ–é‘‘
 		//MonsterPropertyList mstPropertyList = myutil::loadMonsterFile();
-		//// ¨ú±o¬Û«gªí
+		//// å–å¾—ç›¸å‰‹è¡¨
 		//TypeTable typeTable = myutil::getDamageRatioTable();
 
 		//int idx = 1;
@@ -50,110 +50,110 @@ int main() {
 	rlutil::saveDefaultColor();
 	//myutil::screen_ruler(); waitkey;
 
-	// ªì©l¤Æ ¤@¨Çª«¥ó¡A¦a¹Ï¡Bª±®a¡B¹CÀ¸»²§UÃş§O(º¡¦hªº)...
+	// åˆå§‹åŒ– ä¸€äº›ç‰©ä»¶ï¼Œåœ°åœ–ã€ç©å®¶ã€éŠæˆ²è¼”åŠ©é¡åˆ¥(æ»¿å¤šçš„)...
 	//===============
-	// ¨ú±oMAPª«¥ó¡A¥Î¨ÓÀËÅç¸Iª¬¨Æ¥ó¡AloadMap ·|¶Ç¦^ *map¡C
+	// å–å¾—MAPç‰©ä»¶ï¼Œç”¨ä¾†æª¢é©—ç¢°ç‹€äº‹ä»¶ï¼ŒloadMap æœƒå‚³å› *mapã€‚
 	GameMapPtr map = myutil::loadMap("../Pogaimon/assets/yzumap.txt");
 
-	// ¥i¥HªA°È ª±®a  ªº©N©Nª«¥ó¡C(¥u­n¤@­Ó´N¥i¥H¤F)¡C
+	// å¯ä»¥æœå‹™ ç©å®¶  çš„å’šå’šç‰©ä»¶ã€‚(åªè¦ä¸€å€‹å°±å¯ä»¥äº†)ã€‚
 	GameService gameService(map);
 
-	// ª±®a¯¸¥ß­ìÂI, hardcode
+	// ç©å®¶ç«™ç«‹åŸé», hardcode
 	int x = 15; int y = 18; // 20, 30
 
-	// «Ø¥ßª±®a, µ¹¦W¦r µ¹¥Í¦¨®y¼Ğ¡C
+	// å»ºç«‹ç©å®¶, çµ¦åå­— çµ¦ç”Ÿæˆåº§æ¨™ã€‚
 	Player* tony = new Player("tony", x, y);
 
-	// ±±¨î console ¤º View ªºÅã¥Ü¡C
+	// æ§åˆ¶ console å…§ View çš„é¡¯ç¤ºã€‚
 	Displayer viewManager;
 
-	// ³]©w¤@¨ÇView... 
-	MySpace::ViewPtr ascii = myutil::getMonsterASCIIViewPtrbyIdx(5); //¤p¤õÀs
+	// è¨­å®šä¸€äº›View... 
+	MySpace::ViewPtr ascii = myutil::getMonsterASCIIViewPtrbyIdx(5); //å°ç«é¾
 	ascii->setLeftTop(100, 50);
 	//viewManager.registerView(ascii);
 
-	// log °Ï°ì¡C
-	MySpace::ViewPtr log_Window = myutil::createView('*', 5, 60); // ¨M©w View ªº¤j¤p
-	log_Window->setLeftTop(65, 23); // ¨M©w ³o­ÓView ªº¦ì¸m
+	// log å€åŸŸã€‚
+	MySpace::ViewPtr log_Window = myutil::createView('*', 5, 60); // æ±ºå®š View çš„å¤§å°
+	log_Window->setLeftTop(65, 23); // æ±ºå®š é€™å€‹View çš„ä½ç½®
 	log_Window->setframeColor(rlutil::GREEN);
-	viewManager.registerView(log_Window);// ±N·Q­n³QÅã¥Üªº View µù¥U¶i Displayer ºŞ²z¡C
+	viewManager.registerView(log_Window);// å°‡æƒ³è¦è¢«é¡¯ç¤ºçš„ View è¨»å†Šé€² Displayer ç®¡ç†ã€‚
 
-	// ¨M©w ª±®a monster View ªº¦ì¸m, ÃC¦â¬O¦b«Øºc®Éµ¹©wªº¡C
+	// æ±ºå®š ç©å®¶ monster View çš„ä½ç½®, é¡è‰²æ˜¯åœ¨å»ºæ§‹æ™‚çµ¦å®šçš„ã€‚
 	tony->setMonsterView_FT(100, 6);
-	// ±N·Q­n³QÅã¥Üªº View µù¥U¶i Displayer ºŞ²z¡C
+	// å°‡æƒ³è¦è¢«é¡¯ç¤ºçš„ View è¨»å†Šé€² Displayer ç®¡ç†ã€‚
 	viewManager.registerView(tony->getHoldMonsterView());
 
-	// ª±®a info ´£¨ÑÃş§O, ·|­t³d¦^¶Ç¤@¨Ç log(std::string).
+	// ç©å®¶ info æä¾›é¡åˆ¥, æœƒè² è²¬å›å‚³ä¸€äº› log(std::string).
 	InfoProvider tonyInfoService(tony, map);
 
-	//=============== ªì©l¤Æ§¹²¦
+	//=============== åˆå§‹åŒ–å®Œç•¢
 	
 	while (1) {
 		
-		// ÁôÂÃ´å¼Ğ
+		// éš±è—æ¸¸æ¨™
 		rlutil::hidecursor();
 
-		// ©ñ¸mª±®a
+		// æ”¾ç½®ç©å®¶
 		// map->movePlayer( tony, x, y);
 
-		// ¬ö¿ı¦ì¸m
+		// ç´€éŒ„ä½ç½®
 		x = tony->getPlayerPosition().x;
 		y = tony->getPlayerPosition().y;
 
-		// ¦L¥X ¦a¹Ï¡A·|ªş±aÃC¦âÅÜ¤Æ
+		// å°å‡º åœ°åœ–ï¼Œæœƒé™„å¸¶é¡è‰²è®ŠåŒ–
 		map->showMap_and_Player(*tony);
 
-		// ¹ï«ü©wªº View µ¹©w °T®§¡C
+		// å°æŒ‡å®šçš„ View çµ¦å®š è¨Šæ¯ã€‚
 		log_Window->print(1, tonyInfoService.getPlayerPositionMsg());
 		log_Window->print(3, " Bush Event = ");
 
-		// ¦L¥X Displayer ©ÒºŞ²zªº viewª«¥ó¡C
+		// å°å‡º Displayer æ‰€ç®¡ç†çš„ viewç‰©ä»¶ã€‚
 		viewManager.showRegisteredView();
 
-		// Player move ±±¨î ¥H¤Î¦U³Bµo¨Æ¥ó
+		// Player move æ§åˆ¶ ä»¥åŠå„è™•ç™¼äº‹ä»¶
 		{
 			while (true) {
 				rlutil::hidecursor();
 				if (kbhit()) {
-					// °»´úÁä½L
+					// åµæ¸¬éµç›¤
 					char k = getch(); // Get character
 					if (k == 'a') { --x; }
 					else if (k == 'd') { ++x; }
 					else if (k == 'w') { --y; }
 					else if (k == 's') { ++y; }
 					else if (k == ' ') { break; }
-					// ©ñ¸mª±®a
+					// æ”¾ç½®ç©å®¶
 					map->movePlayer(tony, x, y);
-					// ¬ö¿ı¦ì¸m
+					// ç´€éŒ„ä½ç½®
 					x = tony->getPlayerPosition().x; y = tony->getPlayerPosition().y;
 					
-					// ¦pªGª±®a¯¸ªº¤£¬OªÅ ¦r¤¸¡C
+					// å¦‚æœç©å®¶ç«™çš„ä¸æ˜¯ç©º å­—å…ƒã€‚
 					if (' ' != map->returnCubeBy(x,y)
 						//&& myutil::X_Probability_get_True(0.1)
 						){
-						// ¥Ñ gameService ¦^³øª±®a²{¦bªº Event
+						// ç”± gameService å›å ±ç©å®¶ç¾åœ¨çš„ Event
 						Event* tonyEvent = gameService.getEvent(tony);
-						// ³o­Ó event get ¨ì®É ¥L¦^¶Çªº Event ´N­n§â ³o­Ó event ©Ò¾Ö¦³ªºªF¦è ³£µ¹­q¦n¡A viewµ¥ ¤@¨Ç³]©w¡C
+						// é€™å€‹ event get åˆ°æ™‚ ä»–å›å‚³çš„ Event å°±è¦æŠŠ é€™å€‹ event æ‰€æ“æœ‰çš„æ±è¥¿ éƒ½çµ¦è¨‚å¥½ï¼Œ viewç­‰ ä¸€äº›è¨­å®šã€‚
 						// Event 
-						tonyEvent->touchOff(); //Ä²µo¸Ó event¡A¨Ã¥B evnet ·|¦³ touchOff() ¤@©w·|¨ê±¼¿Ã¹õ¡A¥L·|§âµe­±¥ı¨ê±¼¡C
+						tonyEvent->touchOff(); //è§¸ç™¼è©² eventï¼Œä¸¦ä¸” evnet æœƒæœ‰ touchOff() ä¸€å®šæœƒåˆ·æ‰è¢å¹•ï¼Œä»–æœƒæŠŠç•«é¢å…ˆåˆ·æ‰ã€‚
 						delete[] tonyEvent;
-					}// ¯S®í®æ §PÂ_§¹²¦¡C
+					}// ç‰¹æ®Šæ ¼ åˆ¤æ–·å®Œç•¢ã€‚
 
-					// ªğ¦^¦a¹Ï µe­±
+					// è¿”å›åœ°åœ– ç•«é¢
 					map->showMap_and_Player(*tony);
 
-					// show log °ò¥»¤Wdebug ¥Î¡C
-					// ¹ï«ü©wªº View µ¹©w °T®§¡C
+					// show log åŸºæœ¬ä¸Šdebug ç”¨ã€‚
+					// å°æŒ‡å®šçš„ View çµ¦å®š è¨Šæ¯ã€‚
 					log_Window->print(1,tonyInfoService.getPlayerPositionMsg()); 
 					log_Window->print(3, " NPC IDX = " + std::to_string(map->return_NPC_idx(x,y)));
 
-					// ¦L¥X Displayer ©ÒºŞ²zªº viewª«¥ó¡C
+					// å°å‡º Displayer æ‰€ç®¡ç†çš„ viewç‰©ä»¶ã€‚
 					viewManager.showRegisteredView();
 				}
 				std::cout.flush();
-			}// break ±±¨îª±®a;
+			}// break æ§åˆ¶ç©å®¶;
 
-			// ¤U­±³B²z ¾Ô°«???
+			// ä¸‹é¢è™•ç† æˆ°é¬¥???
 		}
 	}
 	return 0;

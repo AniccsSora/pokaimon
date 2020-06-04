@@ -11,23 +11,23 @@ Player::Player(std::string name, int x, int y)
 	position.x = x;
 	position.y = y;
 
-	// ªì©l¤Æ¤@¤U¦¹ª±®a ªº holdmonster View¡C
+	// åˆå§‹åŒ–ä¸€ä¸‹æ­¤ç©å®¶ çš„ holdmonster Viewã€‚
 	MySpace::ViewPtr monsterHold_Window = myutil::createView('O', 8, 40);
-	monsterHold_Window->setframeColor(rlutil::YELLOW); // Ãä®ØÃC¦â
-	// monsterHold_Window->setLeftTop(100, 6); // ¨M©w ³o­ÓView ªº¦ì¸m
+	monsterHold_Window->setframeColor(rlutil::YELLOW); // é‚Šæ¡†é¡è‰²
+	// monsterHold_Window->setLeftTop(100, 6); // æ±ºå®š é€™å€‹View çš„ä½ç½®
 	monsterHold_Window->print(1, "  === Player's Monster === ");
 	monsterHold_Window->print(3, "  1. None");
 	monsterHold_Window->print(5, "  2. None");
 	monsterHold_Window->print(7, "  3. None");
-	// ½á¤© playerª«¥ó ªì©l¤Æªº View¡C
+	// è³¦äºˆ playerç‰©ä»¶ åˆå§‹åŒ–çš„ Viewã€‚
 	this->monsterView = monsterHold_Window;
 }
 
 Player::Player(int number_of_monster){
 	
-	// ¨ú±oÃdª«°Ñ¼Æ¹ÏÅ²
+	// å–å¾—å¯µç‰©åƒæ•¸åœ–é‘‘
 	MonsterPropertyList mstPropertyList = myutil::loadMonsterFile();
-	// ¥Í¦¨©Çª«
+	// ç”Ÿæˆæ€ªç‰©
 	for (size_t i = 0; i < number_of_monster; ++i) {
 		monsterList.push_back(new Monster(rand(), mstPropertyList));
 	}
@@ -73,12 +73,12 @@ rlutil_Color Player::getColor()
 
 MySpace::ViewPtr Player::getHoldMonsterView()
 {
-	// «Øºc®É´N¦³¤F ¨S¥²­n¦A¦¸­««Ø¡C
-	//// ¦pªG®Ú¥»¨S¦³ View ³Q«ü¬£¨ì³o­Ó ª±®aª«¥ó¨­¤W¡C
-	//if (this->monsterView == NULL) { // À°ª±®a·s¼W View
+	// å»ºæ§‹æ™‚å°±æœ‰äº† æ²’å¿…è¦å†æ¬¡é‡å»ºã€‚
+	//// å¦‚æœæ ¹æœ¬æ²’æœ‰ View è¢«æŒ‡æ´¾åˆ°é€™å€‹ ç©å®¶ç‰©ä»¶èº«ä¸Šã€‚
+	//if (this->monsterView == NULL) { // å¹«ç©å®¶æ–°å¢ View
 	//	MySpace::ViewPtr monsterHold_Window = myutil::createView('O', 8, 30);
-	//	monsterHold_Window->setframeColor(rlutil::YELLOW); // Ãä®ØÃC¦â
-	//	// monsterHold_Window->setLeftTop(100, 6); // ¼È¤£¨M©w
+	//	monsterHold_Window->setframeColor(rlutil::YELLOW); // é‚Šæ¡†é¡è‰²
+	//	// monsterHold_Window->setLeftTop(100, 6); // æš«ä¸æ±ºå®š
 	//	monsterHold_Window->print(1, "  === Player Monster === ");
 	//	monsterHold_Window->print(3, "  1. None");
 	//	monsterHold_Window->print(5, "  2. None");
@@ -95,62 +95,62 @@ void Player::setMonsterView_FT(int x, int y)
 	this->monsterView->setLeftTop(x, y);
 }
 
-// ¶W¹L¤T­Ó«ç»ò¿ì?
+// è¶…éä¸‰å€‹æ€éº¼è¾¦?
 void Player::addMonster(MonsterPtr monsterCaught) throw(OverThreeMonsterUNHANDLE)
 {
-	// monsterList¡BmonsterView
+	// monsterListã€monsterView
 
 	if (this->monsterList.size() >= 3) {
 		int last_x = -1, last_y;
-		int x = -1, y = -1; // console ´å¼Ğ©w¦ì¥Î¡C
-		// TODO : ­nÅıª±®a¥i¥H¿ï¾Ü­n¨O´«­ş¤@°¦ Monster.
+		int x = -1, y = -1; // console æ¸¸æ¨™å®šä½ç”¨ã€‚
+		// TODO : è¦è®“ç©å®¶å¯ä»¥é¸æ“‡è¦æ±°æ›å“ªä¸€éš» Monster.
 		/*cout << " Over than three monster\n";
-		throw OverThreeMonsterUNHANDLE("TODO : ­nÅıª±®a¥i¥H¿ï¾Ü­n¨O´«­ş¤@°¦ Monster.");*/
+		throw OverThreeMonsterUNHANDLE("TODO : è¦è®“ç©å®¶å¯ä»¥é¸æ“‡è¦æ±°æ›å“ªä¸€éš» Monster.");*/
 
-		// ´å¼Ğ ¸õ¨ì player monster View ªº ²Ä¤@¦æ(1-base:4) ªº³Ì§Àºİ (°ò¥»¤W monsterList ¸ò monsterView ªº¼Æ­È­n¤@¼Ë)
-		int locate_View_X_idx = -1; // ¥H¦¹ ViewªºLF¬°°ò·Ç¡A§Ú­Ì­nlocate ªº X ¦ì¸m¡C
-		char previous_char = ' ';// ¬ö¿ı¤W¤@­Ó char
+		// æ¸¸æ¨™ è·³åˆ° player monster View çš„ ç¬¬ä¸€è¡Œ(1-base:4) çš„æœ€å°¾ç«¯ (åŸºæœ¬ä¸Š monsterList è·Ÿ monsterView çš„æ•¸å€¼è¦ä¸€æ¨£)
+		int locate_View_X_idx = -1; // ä»¥æ­¤ Viewçš„LFç‚ºåŸºæº–ï¼Œæˆ‘å€‘è¦locate çš„ X ä½ç½®ã€‚
+		char previous_char = ' ';// ç´€éŒ„ä¸Šä¸€å€‹ char
 		
-		// À³¸Ó¬O monster View ¬Y element(¦C) ªº¸ê®Æ
+		// æ‡‰è©²æ˜¯ monster View æŸ element(åˆ—) çš„è³‡æ–™
 		MySpace::Vec_1D_<char> target_row = this->monsterView->element[3];
 		if (target_row.size() > 0) {
 			int row_size = target_row.size();
-			for (size_t idx = 1; idx < row_size; ++idx) { // ¨«³X ¸Ó row ¤¸¯À¡A©w¦ì³Ì«á¤@­Ó¦r.(idx=1¬O¦]¬°¦³Ãä®Ø)
-				const char this_char = target_row.at(idx);// ¬ö¿ı¥Ø«e¨«¨ìªº idx.
-				if (isalpha(previous_char) && isspace(this_char)) {// ·í«e¤@­Ó¬O¦r¥À ¥B ¦¹¦ì¸m¬OªÅ¥Õ
+			for (size_t idx = 1; idx < row_size; ++idx) { // èµ°è¨ª è©² row å…ƒç´ ï¼Œå®šä½æœ€å¾Œä¸€å€‹å­—.(idx=1æ˜¯å› ç‚ºæœ‰é‚Šæ¡†)
+				const char this_char = target_row.at(idx);// ç´€éŒ„ç›®å‰èµ°åˆ°çš„ idx.
+				if (isalpha(previous_char) && isspace(this_char)) {// ç•¶å‰ä¸€å€‹æ˜¯å­—æ¯ ä¸” æ­¤ä½ç½®æ˜¯ç©ºç™½
 					locate_View_X_idx = idx;
 					break;
 				}
 				previous_char = this_char;
 			}
-			// ¹w¨¾ ¶]§¹°j°é(locate_View_X_idx)ÁÙ¬OÃz¬µ¡C
+			// é é˜² è·‘å®Œè¿´åœˆ(locate_View_X_idx)é‚„æ˜¯çˆ†ç‚¸ã€‚
 			if (locate_View_X_idx < 0) { throw OverThreeMonsterUNHANDLE(" Err: locate_View_X_idx still < 0.");  }
-			else { // ©w¦ì¦¨¥\
-				//­n§â View ªº ¬Û¹ï®y¼Ğ¡A¶Ç´«¦¨¥ş°ì(console ªº x,y)
-				int MostleftTop_X = 80, holdMonsterView_Y = 23; // Console®y¼Ğ¡Ahardcode from "Event.cpp"
+			else { // å®šä½æˆåŠŸ
+				//è¦æŠŠ View çš„ ç›¸å°åº§æ¨™ï¼Œå‚³æ›æˆå…¨åŸŸ(console çš„ x,y)
+				int MostleftTop_X = 80, holdMonsterView_Y = 23; // Consoleåº§æ¨™ï¼Œhardcode from "Event.cpp"
 				x = MostleftTop_X + locate_View_X_idx;
 				y = holdMonsterView_Y;
-				rlutil::locate(x, y); // ´å¼Ğ¸õÅD§¹¦¨
+				rlutil::locate(x, y); // æ¸¸æ¨™è·³èºå®Œæˆ
 				//rlutil::showcursor();
 			}
 
-		}else { throw OverThreeMonsterUNHANDLE(" Err: ²Ä¤@¦æªº monster °T®§size() < 0"); }
+		}else { throw OverThreeMonsterUNHANDLE(" Err: ç¬¬ä¸€è¡Œçš„ monster è¨Šæ¯size() < 0"); }
 
-		std::vector<int> canLocate_Y = { y , y + 2 , y + 4 }; // «ü¼Ğ¥Î
+		std::vector<int> canLocate_Y = { y , y + 2 , y + 4 }; // æŒ‡æ¨™ç”¨
 		int canLocate_Y_idx = 0;
-		x += 5;// ¦ì²¾¤@¤U®y¼Ğ¡C («Ü¥i¯àÃz¬µ)
-		// ºÊÅ¥Áä½L ¤W¤U ­n¥i¥H²¾°Ê 1~3 °Ï°ì ¨ä¥L Esc (X)ªğ¦^¡AªÅ¥Õ ´À´«¡C(3,5,7)1-base
-		std::string lock_msg = " <- Replace this."; //´å¼Ğ ªº¸ê°T
+		x += 5;// ä½ç§»ä¸€ä¸‹åº§æ¨™ã€‚ (å¾ˆå¯èƒ½çˆ†ç‚¸)
+		// ç›£è½éµç›¤ ä¸Šä¸‹ è¦å¯ä»¥ç§»å‹• 1~3 å€åŸŸ å…¶ä»– Esc (X)è¿”å›ï¼Œç©ºç™½ æ›¿æ›ã€‚(3,5,7)1-base
+		std::string lock_msg = " <- Replace this."; //æ¸¸æ¨™ çš„è³‡è¨Š
 		rlutil::locate(x, canLocate_Y[canLocate_Y_idx]);
 		rlutil::saveDefaultColor();
 		rlutil::setColor(rlutil::GREEN);
-		std::cout << lock_msg; //  ¦L¥X "´å¼Ğ"
+		std::cout << lock_msg; //  å°å‡º "æ¸¸æ¨™"
 		rlutil::resetColor();
 		while (true) {
 			rlutil::hidecursor();
 			if (kbhit()) {
-				// °»´úÁä½L
-				last_y = canLocate_Y[canLocate_Y_idx]; // ¬ö¿ı¤W¦¸ y
+				// åµæ¸¬éµç›¤
+				last_y = canLocate_Y[canLocate_Y_idx]; // ç´€éŒ„ä¸Šæ¬¡ y
 				char k = getch(); // Get character
 				if (k == 'w'||k=='W') { 
 					--canLocate_Y_idx; 
@@ -163,11 +163,11 @@ void Player::addMonster(MonsterPtr monsterCaught) throw(OverThreeMonsterUNHANDLE
 					canLocate_Y_idx %= 3;
 				}
 				else if ( 'r' == k || 'R' == k) {
-					// ´À´« monster List ªº¤¸¯À
+					// æ›¿æ› monster List çš„å…ƒç´ 
 					this->monsterList.at(canLocate_Y_idx) = monsterCaught;
-					// §ó·s¤F¸ê®Æ View ¤]­n§ó·s
-					// 0 1 2  -> 3 5 7 (idx ¹ïÀ³ View ªº¹ê»Ú¦C¼Æ)
-					// §ó·s View ªº ¤º®e
+					// æ›´æ–°äº†è³‡æ–™ View ä¹Ÿè¦æ›´æ–°
+					// 0 1 2  -> 3 5 7 (idx å°æ‡‰ View çš„å¯¦éš›åˆ—æ•¸)
+					// æ›´æ–° View çš„ å…§å®¹
 					std::string ms_name = "  " + std::to_string(canLocate_Y_idx + 1) + ". " + monsterCaught->getName();
 					this->monsterView->print(3 + (canLocate_Y_idx * 2), ms_name);
 					break;
@@ -175,32 +175,32 @@ void Player::addMonster(MonsterPtr monsterCaught) throw(OverThreeMonsterUNHANDLE
 				else if ( 27 == k) { // ESC
 					break; 
 				}
-				rlutil::locate(x, last_y);// §ïÅÜ®y¼Ğ
+				rlutil::locate(x, last_y);// æ”¹è®Šåº§æ¨™
 				
-				std::cout << std::string(lock_msg.size(),' '); //  ²M°£ "´å¼Ğ" 
-				rlutil::locate(x, canLocate_Y[canLocate_Y_idx]);// §ïÅÜ®y¼Ğ
+				std::cout << std::string(lock_msg.size(),' '); //  æ¸…é™¤ "æ¸¸æ¨™" 
+				rlutil::locate(x, canLocate_Y[canLocate_Y_idx]);// æ”¹è®Šåº§æ¨™
 				rlutil::saveDefaultColor();
 				rlutil::setColor(rlutil::GREEN);
-				std::cout << lock_msg; //  ¦L¥X "´å¼Ğ"
+				std::cout << lock_msg; //  å°å‡º "æ¸¸æ¨™"
 				rlutil::resetColor();
 			}
 			std::cout.flush();
 		}
 
 
-		// §â«ü©wªº Monster ¥ı delete ¤§«á´À´« ¦Ü ¥Ø«e­n§ìªº monster¡C
+		// æŠŠæŒ‡å®šçš„ Monster å…ˆ delete ä¹‹å¾Œæ›¿æ› è‡³ ç›®å‰è¦æŠ“çš„ monsterã€‚
 	}
-	else { // ¶¶§Ç¥[¤J ¦Ü monster list
+	else { // é †åºåŠ å…¥ è‡³ monster list
 		// Add monster to list.
 		this->monsterList.push_back(monsterCaught);
 
-		// ¨ú±o²{¦b monsterList ³Ì¤j idx¡C
+		// å–å¾—ç¾åœ¨ monsterList æœ€å¤§ idxã€‚
 		int idx = this->monsterList.size()-1;
 
 		// Add View
-		// ®Ú¾Ú hardcode : ©ÇÃ~¥i¦L¦æ¬° 3, 5, 7¡C
+		// æ ¹æ“š hardcode : æ€ªç¸å¯å°è¡Œç‚º 3, 5, 7ã€‚
 
-		// ®æ¦¡¤j·§¬O "     1.    ©Çª«ªº¦WºÙ    ", ¼Æ¦r1 ·|°ÊºAÅÜ´«¡C
+		// æ ¼å¼å¤§æ¦‚æ˜¯ "     1.    æ€ªç‰©çš„åç¨±    ", æ•¸å­—1 æœƒå‹•æ…‹è®Šæ›ã€‚
 		std::string msg = "  " + std::to_string(idx + 1) + ". " + monsterCaught->getName();
 		this->monsterView->print(3+(idx*2), msg);
 	}

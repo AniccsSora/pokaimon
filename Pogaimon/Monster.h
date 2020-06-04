@@ -5,7 +5,7 @@
 #include "MonsterProperty.h"
 #include <ctime>
 
-// pokemons.csv ¦sªº¦ì¸m¡C
+// pokemons.csv å­˜çš„ä½ç½®ã€‚
 #define monster_define_filePath "./assets/pokemons.csv"
 
 class IMonster;
@@ -18,7 +18,7 @@ public:
 	
 
 protected:
-	// §ğÀ» beAttactedMonster.
+	// æ”»æ“Š beAttactedMonster.
 	virtual void attack(IMonsterPtr beAttactedMonster) = 0; // pure virtual function
 	MonsterProperty property;
 
@@ -27,19 +27,19 @@ protected:
 class Monster : public IMonster {
 public:
 	
-	// «ü©w monsterIdx ªº©Çª«¥Í¦¨, ¶W¥Xªº¥h idx ·Ó¼Ë¥Íµ¹§A¡A´N¶Ã¥Í¡C
+	// æŒ‡å®š monsterIdx çš„æ€ªç‰©ç”Ÿæˆ, è¶…å‡ºçš„å» idx ç…§æ¨£ç”Ÿçµ¦ä½ ï¼Œå°±äº‚ç”Ÿã€‚
 	Monster(int monsterIdx, MonsterPropertyList mstPropertyList){
-		// ³B²z¶W¥X¥hªº idx
+		// è™•ç†è¶…å‡ºå»çš„ idx
 		if (monsterIdx > mstPropertyList.size()-1) { // 0-base > 1-base
 			monsterIdx = (monsterIdx+rand()) % mstPropertyList.size();
 		}
-		// Ãdª«ªº½s¸¹
+		// å¯µç‰©çš„ç·¨è™Ÿ
 		property.setIdx(mstPropertyList.at(monsterIdx)->getIdx());
 
-		// Ãdª«¦WºÙ
+		// å¯µç‰©åç¨±
 		property.setName(mstPropertyList.at(monsterIdx)->getName());
 
-		// Äİ©Ê
+		// å±¬æ€§
 		property.setType(mstPropertyList.at(monsterIdx)->getType());
 		property.setTypeStr(mstPropertyList.at(monsterIdx)->getTypeStr());
 		property.setHp(mstPropertyList.at(monsterIdx)->getHp());
@@ -51,7 +51,7 @@ public:
 
 	void attack(IMonsterPtr beAttactedMonster);
 
-	// ¨ú±oÃdª«¦b¹ÏÅ²¤Wªº½s¸¹
+	// å–å¾—å¯µç‰©åœ¨åœ–é‘‘ä¸Šçš„ç·¨è™Ÿ
 	int getIdx();
 
 	std::string getName();
@@ -70,7 +70,7 @@ public:
 
 	int getAbilityIdx();
 
-	// ±N monster ability idx Âà¦¨¥Lªº¦W¦r¡C
+	// å°‡ monster ability idx è½‰æˆä»–çš„åå­—ã€‚
 	std::string getAbilityNameByAbliIdx(int idx);
 	   
 private:

@@ -8,61 +8,61 @@
 #include "rlutil.h"
 #include "Jym.h"
 
-// Event ¤÷Ãş§O
+// Event çˆ¶é¡åˆ¥
 class Event
 {
 public :
 	// Do nothing
 	Event(){};
 
-	// Ä²µo¦¹¨Æ¥ó¡A¥Ñ¤lÃş§O¹ê°µ
-	virtual void touchOff() = 0; //  = 0, «Å§i¦¨ pure virtual function
+	// è§¸ç™¼æ­¤äº‹ä»¶ï¼Œç”±å­é¡åˆ¥å¯¦åš
+	virtual void touchOff() = 0; //  = 0, å®£å‘Šæˆ pure virtual function
 
 protected:
 	
 };
 
-// ¾D¹J Monster ¨Æ¥ó
+// é­é‡ Monster äº‹ä»¶
 class EncounterMonsterEvent : public Event {
 
 public:
-	// «Øºc¤l
+	// å»ºæ§‹å­
 	EncounterMonsterEvent(MonsterPropertyList mstPropertyList, Player* servicedPlayer);
 
-	// ¹ê§@ ¤÷Ãş§Oªº pure virtual function...(¥²¶·¥[¤W virtual ÃöÁä¦r)
+	// å¯¦ä½œ çˆ¶é¡åˆ¥çš„ pure virtual function...(å¿…é ˆåŠ ä¸Š virtual é—œéµå­—)
 	virtual void touchOff();
 
 private:
-	// ½T»{¬O§_­n§ì©Ç
+	// ç¢ºèªæ˜¯å¦è¦æŠ“æ€ª
 	void showStartBattleDialog();
-	Monster* encounterMonster =NULL; // EncounterMonsterEvent «Øºc¤l·|µ¹¦¹¼Æ­È
-	Displayer* eventViewList = NULL; // ¹CÀ¸µe­±~~
+	Monster* encounterMonster =NULL; // EncounterMonsterEvent å»ºæ§‹å­æœƒçµ¦æ­¤æ•¸å€¼
+	Displayer* eventViewList = NULL; // éŠæˆ²ç•«é¢~~
 	Player* servicedPlayer = NULL;
 	MySpace::ViewPtr log_content_view = NULL;
 };
 
-// ª±®a¹J¨ì NPC¡A·Ç³Æ¹ï¾Ô Event¡C
+// ç©å®¶é‡åˆ° NPCï¼Œæº–å‚™å°æˆ° Eventã€‚
 class EncounterNPCEvent : public Event {
 public:
-	// «Øºc¤l
+	// å»ºæ§‹å­
 	EncounterNPCEvent(Player* player, PlayerPtr encounterNpc);
-	// ¹J¨ì NPC ®Éªº¹ê§@, ³oÃä·|¦³¤@­Ó ¹DÀ](Gym) ª«¥ó¦b¤º³¡¡C
+	// é‡åˆ° NPC æ™‚çš„å¯¦ä½œ, é€™é‚Šæœƒæœ‰ä¸€å€‹ é“é¤¨(Gym) ç‰©ä»¶åœ¨å…§éƒ¨ã€‚
 	virtual void touchOff();
 
 private:
-	// ª±®a¥»¤H
+	// ç©å®¶æœ¬äºº
 	PlayerPtr player = NULL;
-	// ¹J¨ìªº NPC
+	// é‡åˆ°çš„ NPC
 	PlayerPtr encounterNpc;
 };
 
-// ¨S¦³¨Æ¥ó¡A¦pªGª±®a¯¸¦b «D¯S®í¤è¶ô®É·|¦^¶Ç¦¹ª«¥ó¡C
+// æ²’æœ‰äº‹ä»¶ï¼Œå¦‚æœç©å®¶ç«™åœ¨ éç‰¹æ®Šæ–¹å¡Šæ™‚æœƒå›å‚³æ­¤ç‰©ä»¶ã€‚
 class NoneEvent : public Event {
 
-	//«Øºc¤l¤£¥Î¼g~ ¥Î¹w³]ªº¡C
+	//å»ºæ§‹å­ä¸ç”¨å¯«~ ç”¨é è¨­çš„ã€‚
 
-	// µL¹ê§@¡A¦ı¤£¼g¹ê§@³oÃş§O·|³Q»{¬°¬O abstract class.
-	// ¹ê§@ ¤÷Ãş§Oªº pure virtual function...(¥²¶·¥[¤W virtual ÃöÁä¦r)
+	// ç„¡å¯¦ä½œï¼Œä½†ä¸å¯«å¯¦ä½œé€™é¡åˆ¥æœƒè¢«èªç‚ºæ˜¯ abstract class.
+	// å¯¦ä½œ çˆ¶é¡åˆ¥çš„ pure virtual function...(å¿…é ˆåŠ ä¸Š virtual é—œéµå­—)
 	virtual void touchOff() {
 		; // nothing
 	}

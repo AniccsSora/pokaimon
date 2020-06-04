@@ -4,8 +4,8 @@
 #include "Player.h"
 #include <iostream>
 
-// ¦¹Ãþ§O­t³d´£¨ú.
-// ´£¨Ñ¤@¨Ç °T®§¡C¼g¦º¦b³o­ÓÃþ§O¡C
+// æ­¤é¡žåˆ¥è² è²¬æå–.
+// æä¾›ä¸€äº› è¨Šæ¯ã€‚å¯«æ­»åœ¨é€™å€‹é¡žåˆ¥ã€‚
 class InfoProvider
 {
 public:

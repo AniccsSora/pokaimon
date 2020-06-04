@@ -4,14 +4,14 @@
 #include "Player.h"
 GameService::GameService(GameMapPtr map)
 {
-	// ªì©l¤Æ 
+	// åˆå§‹åŒ– 
 	this->map = new GameMap(*map);
 
 	this->mstPropertyList = myutil::loadMonsterFile();
 
-	// ªì©l¤Æ NPC_list
+	// åˆå§‹åŒ– NPC_list
 	for (int i = 0; i < map->get_number_of_NPC(); i++) {
-		this->NPC_list.push_back(new Player(3)); // ¨C­Ó NPC ¦³¤T°¦©Ç
+		this->NPC_list.push_back(new Player(3)); // æ¯å€‹ NPC æœ‰ä¸‰éš»æ€ª
 	}
 	// ===========================
 
@@ -19,17 +19,17 @@ GameService::GameService(GameMapPtr map)
 
 Event* GameService::getEvent(Player* player)
 {
-	// ª`·N ³oÃä·|¨Ì·Ó¤£¦Pªº playerª¬ºA ¦^¶Ç¤£¦Pªº Event ª«¥ó~
+	// æ³¨æ„ é€™é‚Šæœƒä¾ç…§ä¸åŒçš„ playerç‹€æ…‹ å›å‚³ä¸åŒçš„ Event ç‰©ä»¶~
 	Event* rtnEvent = NULL;
 
-	// ª±®a¥Ø«e¯¸¥ßªº ¤è¶ô
+	// ç©å®¶ç›®å‰ç«™ç«‹çš„ æ–¹å¡Š
 	char playerStandCube = this->map->returnCubeBy(player->getPlayerPosition());
 
-	// ¹J¨ì¨ì¯óÂO ';'¡A¬O¦³¾÷²vÄ²µoªº~~ 
+	// é‡åˆ°åˆ°è‰å¢ ';'ï¼Œæ˜¯æœ‰æ©Ÿç‡è§¸ç™¼çš„~~ 
 	if ( ';' == playerStandCube ){
 		if ( 1 ) { //myutil::X_Probability_get_True(ENCOUBTER_MONSTER_P)
 
-			// ¥Í Event , ­n¥] monster ª«¥ó©Ò¥H­n¶Ç Ãdª«¼Æ­È °Ñ¦Òªí¡C
+			// ç”Ÿ Event , è¦åŒ… monster ç‰©ä»¶æ‰€ä»¥è¦å‚³ å¯µç‰©æ•¸å€¼ åƒè€ƒè¡¨ã€‚
 			rtnEvent = new EncounterMonsterEvent(this->mstPropertyList, player);
 		}
 		else {
@@ -37,10 +37,10 @@ Event* GameService::getEvent(Player* player)
 		}
 		
 	}
-	else if ( '#' == playerStandCube) { // ¹J¨ì NPC
-		// ¨ú±o NPC player ª«¥ó¡A¨º­n¥ı¨ú±o NPC ½s¸¹
+	else if ( '#' == playerStandCube) { // é‡åˆ° NPC
+		// å–å¾— NPC player ç‰©ä»¶ï¼Œé‚£è¦å…ˆå–å¾— NPC ç·¨è™Ÿ
 		int npc_id = this->map->return_NPC_idx(player->getPlayerPosition().x, player->getPlayerPosition().y);
-		// ±q GameService ªº¨ú±o¸Ó½s¸¹ NPC ª«¥ó¡C
+		// å¾ GameService çš„å–å¾—è©²ç·¨è™Ÿ NPC ç‰©ä»¶ã€‚
 		PlayerPtr encounterNPC = this->NPC_list.at(npc_id);
 		
 		rtnEvent = new EncounterNPCEvent(player, encounterNPC);

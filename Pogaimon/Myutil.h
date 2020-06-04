@@ -18,47 +18,47 @@ using std::endl;
 typedef MySpace::Vec_2D_<double> TypeTable;
 
 namespace myutil {
-	//´ú¸Õ  // inline can resolve error LNK2005
+	//æ¸¬è©¦  // inline can resolve error LNK2005
 	void inline helloMother(); 
 
-	// Åª¨ú Map¡A¨Ãshow¦b²×ºİ¡A ** ³o­Ó·| new «ü¼Ğ ½Ğª`·N­n DELETE **
+	// è®€å– Mapï¼Œä¸¦showåœ¨çµ‚ç«¯ï¼Œ ** é€™å€‹æœƒ new æŒ‡æ¨™ è«‹æ³¨æ„è¦ DELETE **
     GameMapPtr inline loadMap(std::string filename);
 
-    // ½Ğ¨Ï¥ÎªÌ®Õ¥¿ console¡C
+    // è«‹ä½¿ç”¨è€…æ ¡æ­£ consoleã€‚
     void inline correctionConsole();
 
-	// ¤¹³\ª±®a²¾°Ê¨Ã¨Ì·Ó map ªºÅŞ¿è¥h­­¨î²¾°Ê½d³ò
+	// å…è¨±ç©å®¶ç§»å‹•ä¸¦ä¾ç…§ map çš„é‚è¼¯å»é™åˆ¶ç§»å‹•ç¯„åœ
 	// void inline playerService();
-    // ¦b¿Ã¹õ¤U¤è²K¥[ log¡C one line only¡C
+    // åœ¨è¢å¹•ä¸‹æ–¹æ·»åŠ  logã€‚ one line onlyã€‚
     void inline update_log(std::string msg);
 
-	// ¦L¥X cube
-	// ¥L·|¨Ì·Ó©w¸qªºÃC¦â¨Ó¦L¥X cube¦r¤¸¡C¦pªG x= -1, y= -1 ¥Nªí¤£«ü©w locate
+	// å°å‡º cube
+	// ä»–æœƒä¾ç…§å®šç¾©çš„é¡è‰²ä¾†å°å‡º cubeå­—å…ƒã€‚å¦‚æœ x= -1, y= -1 ä»£è¡¨ä¸æŒ‡å®š locate
 	void inline printCube(int x,int y, char cube);
 
-	// À³¸Ó¤£·|³Qµ{¦¡¨Ï¥Î... ¨S¾÷·|¥Î¨ìXD
+	// æ‡‰è©²ä¸æœƒè¢«ç¨‹å¼ä½¿ç”¨... æ²’æ©Ÿæœƒç”¨åˆ°XD
 	MySpace::View inline createViewByFile(std::string filename, std::string viewName);
 
-	// View ´N¬O¤@­Ó¥Ñ ¬Y­Ó ²Å¸¹³ò¦¨ªº°Ï°ì¡A·|´£¨Ñ ¥i¦L¥X®y¼Ğ¦³´X¦æ¡A³Ì¤jªø«×¤ä´©¨ì¦h¤Ö¡C
-	// row ¥i¥H¼g´X¦æ¦r¡C
-	// column ¤@¦æ¥i¥H¼g¦h¤Ö¦r¡C
-	// default color : ¥Õ¡C
+	// View å°±æ˜¯ä¸€å€‹ç”± æŸå€‹ ç¬¦è™Ÿåœæˆçš„å€åŸŸï¼Œæœƒæä¾› å¯å°å‡ºåº§æ¨™æœ‰å¹¾è¡Œï¼Œæœ€å¤§é•·åº¦æ”¯æ´åˆ°å¤šå°‘ã€‚
+	// row å¯ä»¥å¯«å¹¾è¡Œå­—ã€‚
+	// column ä¸€è¡Œå¯ä»¥å¯«å¤šå°‘å­—ã€‚
+	// default color : ç™½ã€‚
 	MySpace::ViewPtr inline createView(char style,short row, short column);
 
-	// ¦b²×ºİ¾÷ ¦L¥X ¤Ø¼Ğ §U©ó ª©­±°t¸m
+	// åœ¨çµ‚ç«¯æ©Ÿ å°å‡º å°ºæ¨™ åŠ©æ–¼ ç‰ˆé¢é…ç½®
 	void inline screen_ruler();
 
-	// Åª¨ú csvÀÉ®× ªº monster¡C»s§@¦¨ Äİ©Êªí¡A­n«Ø¥ß monster®É ª½±µ¥Î³o­Óª«¥ó§Y¥i°Ñ¦Ò¦U¶µ¼Æ­È¡C
+	// è®€å– csvæª”æ¡ˆ çš„ monsterã€‚è£½ä½œæˆ å±¬æ€§è¡¨ï¼Œè¦å»ºç«‹ monsteræ™‚ ç›´æ¥ç”¨é€™å€‹ç‰©ä»¶å³å¯åƒè€ƒå„é …æ•¸å€¼ã€‚
 	MonsterPropertyList inline loadMonsterFile();
 	
-	// ¨ú±oÄİ©Ê§ğÀ»­¿²vªí~~
+	// å–å¾—å±¬æ€§æ”»æ“Šå€ç‡è¡¨~~
 	TypeTable inline getDamageRatioTable();
 
-	// µ¹ idx¡A°e§A ASCII 2D vec¡C(¥L¥uÀ°§Aµ¹ element ªº¤º®e¦Ó¤w)
+	// çµ¦ idxï¼Œé€ä½  ASCII 2D vecã€‚(ä»–åªå¹«ä½ çµ¦ element çš„å…§å®¹è€Œå·²)
 	MySpace::ViewPtr inline getMonsterASCIIViewPtrbyIdx(int monsterIdx);
 
 
-	// ¦³ X ªº¾÷²v¦^¶Ç True
+	// æœ‰ X çš„æ©Ÿç‡å›å‚³ True
 	bool inline X_Probability_get_True(double x);
 	
 }
@@ -68,7 +68,7 @@ void myutil::helloMother(){
 		std::cout << "hello" << std::endl;
 }
 
-// Åª¨ú Map¡C¤£·|¦L¥X Map¡C
+// è®€å– Mapã€‚ä¸æœƒå°å‡º Mapã€‚
 GameMapPtr myutil::loadMap(std::string filename)
 {
     return new GameMap(filename);
@@ -96,43 +96,43 @@ void myutil::correctionConsole()
     rlutil::cls();
 }
 
-// ¤¹³\ª±®a²¾°Ê¨Ã¨Ì·Ó map ªºÅŞ¿è¥h­­¨î²¾°Ê½d³ò
+// å…è¨±ç©å®¶ç§»å‹•ä¸¦ä¾ç…§ map çš„é‚è¼¯å»é™åˆ¶ç§»å‹•ç¯„åœ
 // void inline playerService();
 
-// ¦b¿Ã¹õ¤U¤è²K¥[ log¡C one line only¡C FOR DEBUG
+// åœ¨è¢å¹•ä¸‹æ–¹æ·»åŠ  logã€‚ one line onlyã€‚ FOR DEBUG
 void myutil::update_log(std::string msg)
 {
     rlutil::locate(1, 32);
-    cout << "\r" << std::string(40,' ')<< endl;// ¶ñ¤J40­Ó ªÅ¥Õ
+    cout << "\r" << std::string(40,' ')<< endl;// å¡«å…¥40å€‹ ç©ºç™½
     rlutil::locate(1, 32);
     cout << "\rlog: "<<msg << endl;
 }
 
 void myutil::printCube(int x, int y, char cube)
 {
-	// ¥ı°O¿ı ¹w³]ªºÃC¦â¡A¤£¥Î handle ÅÜ¼Æ¨SÃö«Y¡C
+	// å…ˆè¨˜éŒ„ é è¨­çš„é¡è‰²ï¼Œä¸ç”¨ handle è®Šæ•¸æ²’é—œä¿‚ã€‚
 	rlutil::saveDefaultColor();
 
-	// ©w¦ì ´å¼Ğ
+	// å®šä½ æ¸¸æ¨™
 	if (x != -1 && y != -1){ rlutil::locate(x, y); }
 	
-	if ('*' == cube) {// * Àğ¾À,µLªk¬ï¶V
-		rlutil::setColor(rlutil::WHITE); // ¥Õ¦â
+	if ('*' == cube) {// * ç‰†å£,ç„¡æ³•ç©¿è¶Š
+		rlutil::setColor(rlutil::WHITE); // ç™½è‰²
 	}
-	else if (';' == cube) {//; ¯ó¦a, green,¥i¥H¬ï¶V
+	else if (';' == cube) {//; è‰åœ°, green,å¯ä»¥ç©¿è¶Š
 		rlutil::setColor(rlutil::GREEN);
 	}
-	else if ('!' == cube) {// ! ¾ğ¤ì, brown,µLªk¬ï¶V
+	else if ('!' == cube) {// ! æ¨¹æœ¨, brown,ç„¡æ³•ç©¿è¶Š
 		rlutil::setColor(rlutil::BROWN);
 	}
-	else if ('~' == cube) {// ~ ¤ô¦À, blue,¥i¥H¬ï¶V
+	else if ('~' == cube) {// ~ æ°´æ± , blue,å¯ä»¥ç©¿è¶Š
 		rlutil::setColor(rlutil::BLUE);
 	}
-	else if ('#' == cube) {// # «Ø¿v¤J¤f, yellow,¥i¥H¬ï¶V
+	else if ('#' == cube) {// # å»ºç¯‰å…¥å£, yellow,å¯ä»¥ç©¿è¶Š
 		rlutil::setColor(rlutil::YELLOW);
 	}
 	else {
-		rlutil::setColor(rlutil::WHITE); // ¥Õ¦â
+		rlutil::setColor(rlutil::WHITE); // ç™½è‰²
 	}
 	cout << cube;
 	rlutil::resetColor();
@@ -140,11 +140,11 @@ void myutil::printCube(int x, int y, char cube)
 
 MySpace::View myutil::createViewByFile(std::string filename, std::string viewName)
 {
-	// ®³¨Ó©ñ ¦r¤¸ ¸ê®Æ¡C
+	// æ‹¿ä¾†æ”¾ å­—å…ƒ è³‡æ–™ã€‚
 	MySpace::Vec_2D_<char> viewData;
-	MySpace::Vec_1D_<char> singleLineTmp; // ¤@¦æªº data tmp
+	MySpace::Vec_1D_<char> singleLineTmp; // ä¸€è¡Œçš„ data tmp
 
-	std::string line; // ¨C¦æªº tmp
+	std::string line; // æ¯è¡Œçš„ tmp
 	std::ifstream viewfile(filename);
 
 	short max_length_of_row = 0;
@@ -152,11 +152,11 @@ MySpace::View myutil::createViewByFile(std::string filename, std::string viewNam
 	{
 		while (getline(viewfile, line))
 		{
-			// ³B²z ¤@¦æ¸ê®Æ¡C
+			// è™•ç† ä¸€è¡Œè³‡æ–™ã€‚
 			for (size_t i = 0; i < line.length(); i++) {
 				singleLineTmp.push_back(line[i]);
 			}cout << "\n";
-			// §ó·s³Ì¤jªø«×
+			// æ›´æ–°æœ€å¤§é•·åº¦
 			if ( (short)singleLineTmp.size() > max_length_of_row) {
 				max_length_of_row = (short)singleLineTmp.size();
 			}
@@ -169,16 +169,16 @@ MySpace::View myutil::createViewByFile(std::string filename, std::string viewNam
 		std::cout << "Unable to open file: " << "\"" << filename << "\"" << std::endl;
 	}
 
-	// ViewStatus ¸ê®Æµ²ºc¡C
+	// ViewStatus è³‡æ–™çµæ§‹ã€‚
 	MySpace::ViewStatus status;
-	// ²{¦bÁÙµLªkµ¹©w ¦¹ view ªº ¦L¥X°ò·ÇÂI¡C
+	// ç¾åœ¨é‚„ç„¡æ³•çµ¦å®š æ­¤ view çš„ å°å‡ºåŸºæº–é»ã€‚
 	status.lefttop.x = -1;
 	status.lefttop.y = -1;
-	// view ªºªø¼e
+	// view çš„é•·å¯¬
 	status.size_w_h.w = max_length_of_row;
 	status.size_w_h.h = (short)viewData.size();
 
-	// ¶}©l²Õ¦X View ¸ê®Æµ²ºc
+	// é–‹å§‹çµ„åˆ View è³‡æ–™çµæ§‹
 	MySpace::View thisView;
 	thisView.element = viewData;
 	thisView.status = status;
@@ -190,20 +190,20 @@ MySpace::View myutil::createViewByFile(std::string filename, std::string viewNam
 
 MySpace::ViewPtr myutil::createView(char style, short rowSize, short columnSize)
 {
-	// «Å§i­Ó View ³Ì«á¦^¶Ç
+	// å®£å‘Šå€‹ View æœ€å¾Œå›å‚³
 	MySpace::ViewPtr rtnView = new MySpace::View();
 
-	// View ¬O·|³Q¦h "³ò"¤@°é¡C ©Ò¥H­n¦U¥[¤W2¡C hard code¡C¼g¦º
+	// View æ˜¯æœƒè¢«å¤š "åœ"ä¸€åœˆã€‚ æ‰€ä»¥è¦å„åŠ ä¸Š2ã€‚ hard codeã€‚å¯«æ­»
 	rowSize += 2;
 	columnSize += 2;
 	
-	// ¾ã­ÓView ªºDATA¡A³Ì«á­n³Q¥]¥h View::element. ¨Ã ªì©l¤Æ vector ¤j¤p¡C
+	// æ•´å€‹View çš„DATAï¼Œæœ€å¾Œè¦è¢«åŒ…å» View::element. ä¸¦ åˆå§‹åŒ– vector å¤§å°ã€‚
 	MySpace::Vec_2D_<char> element(rowSize);
 
 	for (size_t i=0; i < rowSize; ++i) {
 		//rowBuffer.clear();
 		for (size_t j=0; j < columnSize; ++j) {
-			if (i == 0 || i == rowSize-1) {// "´y"¥XÃä®Ø(¤W && ¤U)¡C
+			if (i == 0 || i == rowSize-1) {// "æ"å‡ºé‚Šæ¡†(ä¸Š && ä¸‹)ã€‚
 				element.at(i).push_back(style);
 				continue;
 			}
@@ -211,23 +211,23 @@ MySpace::ViewPtr myutil::createView(char style, short rowSize, short columnSize)
 				element.at(i).push_back(style);
 				continue;
 			}
-			// ¨ä¾l§P©w¬° content area(¥Nªí¥i¥H¶ñ¤J ¦Û¤v¹³­n¸ê®Æªº³¡¤À¡C)
+			// å…¶é¤˜åˆ¤å®šç‚º content area(ä»£è¡¨å¯ä»¥å¡«å…¥ è‡ªå·±åƒè¦è³‡æ–™çš„éƒ¨åˆ†ã€‚)
 			element.at(i).push_back(' ');
 			continue;
 		}// One row data complete.
 	}
 
-	// ¾ã­Ó Viewµ²ºc (°Ñ¼Æ¥]»q)¡C
+	// æ•´å€‹ Viewçµæ§‹ (åƒæ•¸åŒ…è£¹)ã€‚
 	MySpace::ViewStatus status;
 
-	// ¦]¬°¤£ª¾¹D¥Lªº®y¼Ğ ©Ò¥H¤£³]©w¡C
+	// å› ç‚ºä¸çŸ¥é“ä»–çš„åº§æ¨™ æ‰€ä»¥ä¸è¨­å®šã€‚
 	//status.lefttop = ???;
 
-	// View ¾ãÅéªº °ªx¼e (ª`·N: ¸ò ¥i¥H¥´¦L msg ªº°Ï°ì¤j¤p¤£¦P)
+	// View æ•´é«”çš„ é«˜xå¯¬ (æ³¨æ„: è·Ÿ å¯ä»¥æ‰“å° msg çš„å€åŸŸå¤§å°ä¸åŒ)
 	status.size_w_h.h = rowSize;
 	status.size_w_h.w = columnSize;
 
-	//¥´¥] rtnView
+	//æ‰“åŒ… rtnView
 	rtnView->element = element;
 	rtnView->status = status;
 	
@@ -241,20 +241,20 @@ void myutil::screen_ruler()
 	for (size_t row_idx = 0; row_idx < MAX_ROW; ++row_idx) {
 		for (size_t col_idx = 0; col_idx < MAX_COL; ++col_idx) {
 			if (row_idx == 0 || row_idx == MAX_ROW-1 ) { // first row
-				std::cout << (col_idx + 1) % 10; // ¥u¦L¥X ¼Æ¦r...
+				std::cout << (col_idx + 1) % 10; // åªå°å‡º æ•¸å­—...
 				continue;
 			}
 			else { // not first row
 				if (col_idx == 0) { // first item of row, but not first row.
-					std::cout << (row_idx + 1) % 10; // ¨C¦æªº²Ä¤@­Ó¤¸¯À, ¤]¥u¦L¼Æ¦r¡C
+					std::cout << (row_idx + 1) % 10; // æ¯è¡Œçš„ç¬¬ä¸€å€‹å…ƒç´ , ä¹Ÿåªå°æ•¸å­—ã€‚
 					continue;
 				}
 				else { // not first item of row
-					if (col_idx % 10 == 9) { // ¦L¥X ««ª½¤À¹j½u¡C
+					if (col_idx % 10 == 9) { // å°å‡º å‚ç›´åˆ†éš”ç·šã€‚
 						std::cout << '|'; continue;
 					}
 					else {
-						if (row_idx % 10 == 9) { // ¦L¥X ¤ô¥­¤À¹j½u¡C
+						if (row_idx % 10 == 9) { // å°å‡º æ°´å¹³åˆ†éš”ç·šã€‚
 							std::cout << '-'; continue;
 						}
 						else {
@@ -273,16 +273,16 @@ MonsterPropertyList myutil::loadMonsterFile()
 	std::string line;
 	std::ifstream pokemonsTableFile(monster_define_filePath);
 
-	// ¥Î«ü¼Ğ¶Ç¦^¥h
+	// ç”¨æŒ‡æ¨™å‚³å›å»
 	MySpace::Vec_1D_<MonsterProperty*> *rtnList = new MySpace::Vec_1D_<MonsterProperty*>();
 
 	if (pokemonsTableFile.is_open())
 	{
 		while (getline(pokemonsTableFile, line))
 		{
-			// ¼È®É¦s©ñ¥Î¡A³o­Óª«¥ó¤£·|³Q¶Ç»¼¡A§Ú­Ì¥u·|°Ñ¦Ò¨ä¼Æ­È¡C
+			// æš«æ™‚å­˜æ”¾ç”¨ï¼Œé€™å€‹ç‰©ä»¶ä¸æœƒè¢«å‚³éï¼Œæˆ‘å€‘åªæœƒåƒè€ƒå…¶æ•¸å€¼ã€‚
 			std::vector<std::string> tmpList; 
-			tmpList.reserve(8);// ¤@­Ó©Çª«¦³8­ÓÄİ©Ê ¬ÛÀ°¨äªì©l¤Æ¤j¤p¡C
+			tmpList.reserve(8);// ä¸€å€‹æ€ªç‰©æœ‰8å€‹å±¬æ€§ ç›¸å¹«å…¶åˆå§‹åŒ–å¤§å°ã€‚
 
 			// parse line(from csv)
 			std::string delimiter = ",";
@@ -292,17 +292,17 @@ MonsterPropertyList myutil::loadMonsterFile()
 			std::string token;
 			while ((pos = line.find(delimiter)) != std::string::npos) {
 				token = line.substr(0, pos);
-				//std::cout << token << std::endl;// ¨ä¥Lªº ability
+				//std::cout << token << std::endl;// å…¶ä»–çš„ ability
 				tmpList.push_back(token);
 				line.erase(0, pos + delimiter.length());
 			}
-			// ³Ì«á¤@­Ó ability¡C(³o­Ó³B²z¬O·|¯}Ãa line ªº©Ò¥H¥i³o¼Ë¨ú­È)
+			// æœ€å¾Œä¸€å€‹ abilityã€‚(é€™å€‹è™•ç†æ˜¯æœƒç ´å£ line çš„æ‰€ä»¥å¯é€™æ¨£å–å€¼)
 			//std::cout << line << std::endl;
 			tmpList.push_back(line);
 			// End of parse line
 
 			//int idx, std::string name, std::string type, int hp, int atk, int def, int speed, int ability
-			// «Øºc "©Çª«°Ñ¼Æ" ª«¥ó¡A¤@­Ó©Çª«´N¬O¤@­Ó "©Çª«°Ñ¼Æ"¡C(¤£·Q°Ê¸£¤F¡A½Ğ®e§Ô³oºØ«Ø¥ßªk¡CXD)
+			// å»ºæ§‹ "æ€ªç‰©åƒæ•¸" ç‰©ä»¶ï¼Œä¸€å€‹æ€ªç‰©å°±æ˜¯ä¸€å€‹ "æ€ªç‰©åƒæ•¸"ã€‚(ä¸æƒ³å‹•è…¦äº†ï¼Œè«‹å®¹å¿é€™ç¨®å»ºç«‹æ³•ã€‚XD)
 			MonsterProperty *mpElement = new MonsterProperty(
 				std::atoi(tmpList.at(0).c_str()),
 				tmpList.at(1),
@@ -333,7 +333,7 @@ TypeTable myutil::getDamageRatioTable()
 	std::string line;
 	std::ifstream typeTableFile(typeTablePath);
 
-	// ­n¦^¶Çªº ª«¥ó¡C
+	// è¦å›å‚³çš„ ç‰©ä»¶ã€‚
 	TypeTable rtbTable;
 	
 	if (typeTableFile.is_open())
@@ -351,7 +351,7 @@ TypeTable myutil::getDamageRatioTable()
 			std::string token;
 			while ((pos = line.find(delimiter)) != std::string::npos) {
 				token = line.substr(0, pos);
-				//std::cout << token << std::endl;// ¨ä¥Lªº ability
+				//std::cout << token << std::endl;// å…¶ä»–çš„ ability
 				try {
 					vec_row_tmp.push_back(std::atof(token.c_str())); // Exception
 				}
@@ -363,7 +363,7 @@ TypeTable myutil::getDamageRatioTable()
 				line.erase(0, pos + delimiter.length());
 			}
 			try {
-				// ª`·N ³o¬O line¡C ¤£¬O token. ³oÃä¥Îªº csv ¸ÑªR ·|¯}Ãa line¡A¬G³Ì«á line ·|¥u³Ñ¤U¤@­Ó¤¸¯À¡C
+				// æ³¨æ„ é€™æ˜¯ lineã€‚ ä¸æ˜¯ token. é€™é‚Šç”¨çš„ csv è§£æ æœƒç ´å£ lineï¼Œæ•…æœ€å¾Œ line æœƒåªå‰©ä¸‹ä¸€å€‹å…ƒç´ ã€‚
 				vec_row_tmp.push_back(std::atof(line.c_str())); // Exception
 			}
 			catch (...) {
@@ -390,16 +390,16 @@ MySpace::ViewPtr myutil::getMonsterASCIIViewPtrbyIdx(int monsterIdx)
 {
 	MySpace::ViewPtr rtnView = new MySpace::View();
 
-	// °O¿ıµÛ View ªº¤º®e¡C
-	// ¾ã­ÓView ªºDATA¡A³Ì«á­n³Q¥]¥h View::element
+	// è¨˜éŒ„è‘— View çš„å…§å®¹ã€‚
+	// æ•´å€‹View çš„DATAï¼Œæœ€å¾Œè¦è¢«åŒ…å» View::element
 	MySpace::Vec_2D_<char> element;
 
-	// ÅªÀÉ~
+	// è®€æª”~
 	std::string line;
 
-	// ¸É¹s¥Î "1" -> "001"¡C
+	// è£œé›¶ç”¨ "1" -> "001"ã€‚
 	std::string file_name = std::string(3 - std::to_string(monsterIdx).length(), '0') + std::to_string(monsterIdx);
-	// «÷¥X§¹¾ã¸ô®| + ÀÉ®×¦WºÙ¡C
+	// æ‹¼å‡ºå®Œæ•´è·¯å¾‘ + æª”æ¡ˆåç¨±ã€‚
 	std::string file_PTH_NAME = asciiPath + file_name + ".txt";
 	std::ifstream asciifile(file_PTH_NAME);
 
@@ -409,7 +409,7 @@ MySpace::ViewPtr myutil::getMonsterASCIIViewPtrbyIdx(int monsterIdx)
 		while (getline(asciifile, line))
 		{
 			vec_row_tmp.clear();
-			// ³B²z ¤@¦æ¸ê®Æ¡C
+			// è™•ç† ä¸€è¡Œè³‡æ–™ã€‚
 			for (size_t i = 0; i < line.length(); i++) {
 				{
 					vec_row_tmp.push_back(line[i]);
@@ -424,9 +424,9 @@ MySpace::ViewPtr myutil::getMonsterASCIIViewPtrbyIdx(int monsterIdx)
 		std::cout << "Unable to open file: " << "\"" << file_PTH_NAME << "\"" << std::endl;
 	}
 
-	// ¬O ASCII image ??
+	// æ˜¯ ASCII image ??
 	rtnView->isASCII = true;
-	// ¶ë¦^¥h~
+	// å¡å›å»~
 	rtnView->element = element;
 
 	return rtnView;
