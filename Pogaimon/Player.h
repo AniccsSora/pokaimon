@@ -2,6 +2,7 @@
 #include <string>
 #include "Mydefine.h"
 #include "Monster.h"
+#include "MonsterProperty.h"
 
 struct OverThreeMonsterUNHANDLE: public std::exception {
 	std::string s;
@@ -54,6 +55,13 @@ public:
 
 	// 取得玩家分數
 	int getPoint();
+
+	// 取得 monsterList 指定 idx 之 name(string)
+	std::string getMonName_by_MonsList(int idx_of_monsterList);
+
+	// 取得 monsterList 指定 idx 之 怪獸圖鑑的 編號。
+	int getMonIDX_by_MonsList(int idx_of_monsterList);
+	
 
 private:
 	// 玩家在地圖的位置, 1-base。

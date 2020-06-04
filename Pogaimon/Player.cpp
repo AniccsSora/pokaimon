@@ -218,4 +218,14 @@ int Player::getPoint()
 	return this->point;
 }
 
+std::string Player::getMonName_by_MonsList(int idx){
+	
+	return this->monsterList.at(idx)->getName();
+}
+
+int Player::getMonIDX_by_MonsList(int idx_of_monsterList)
+{
+	return this->monsterList.at(idx_of_monsterList)->getIdx();
+}
+
 
