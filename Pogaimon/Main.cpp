@@ -29,6 +29,9 @@ int main() {
 	srand(time(NULL));
 	//================ test~~
 	while (0) {
+
+		
+
 		// 取得寵物參數圖鑑
 		//MonsterPropertyList mstPropertyList = myutil::loadMonsterFile();
 		//// 取得相剋表
@@ -52,6 +55,9 @@ int main() {
 	// 取得MAP物件，用來檢驗碰狀事件，loadMap 會傳回 *map。
 	GameMapPtr map = myutil::loadMap("../Pogaimon/assets/yzumap.txt");
 
+	// 可以服務 玩家  的咚咚物件。(只要一個就可以了)。
+	GameService gameService(map);
+
 	// 玩家站立原點, hardcode
 	int x = 15; int y = 18; // 20, 30
 
@@ -72,16 +78,6 @@ int main() {
 	log_Window->setframeColor(rlutil::GREEN);
 	viewManager.registerView(log_Window);// 將想要被顯示的 View 註冊進 Displayer 管理。
 
-	// 顯示玩家持有寵物用的 View
-	//MySpace::ViewPtr monsterHold_Window = myutil::createView('O', 8, 30);
-	//monsterHold_Window->setframeColor(rlutil::YELLOW); // 邊框顏色
-	//monsterHold_Window->setLeftTop(100, 6); // 決定 這個View 的位置
-	//viewManager.registerView(monsterHold_Window);// 將想要被顯示的 View 註冊進 Displayer 管理。
-	//monsterHold_Window->print(1, "  === Player Monster === ");
-	//monsterHold_Window->print(3, "  1. None");
-	//monsterHold_Window->print(5, "  2. None");
-	//monsterHold_Window->print(7, "  3. None");
-
 	// 決定 玩家 monster View 的位置, 顏色是在建構時給定的。
 	tony->setMonsterView_FT(100, 6);
 	// 將想要被顯示的 View 註冊進 Displayer 管理。
@@ -90,9 +86,6 @@ int main() {
 	// 玩家 info 提供類別, 會負責回傳一些 log(std::string).
 	InfoProvider tonyInfoService(tony, map);
 
-	// 可以服務 玩家  的咚咚物件。(只要一個就可以了)。
-	GameService gameService(map);
-	
 	//=============== 初始化完畢
 	
 	while (1) {
@@ -139,7 +132,6 @@ int main() {
 						//&& myutil::X_Probability_get_True(0.1)
 						){
 						// 由 gameService 回報玩家現在的 Event
-						// gameService 上方 new 出時必須要帶 map(copy的) 進去 因為他必須要參考玩家位置
 						Event* tonyEvent = gameService.getEvent(tony);
 						// 這個 event get 到時 他回傳的 Event 就要把 這個 event 所擁有的東西 都給訂好， view等 一些設定。
 						// Event 
