@@ -2,7 +2,8 @@
 #include "Mydefine.h"
 #include "GameMap.h"
 #include "Myutil.h"
-
+#include <cctype>
+#include <iostream>
 
 Player::Player(std::string name, int x, int y)
 {
@@ -90,9 +91,81 @@ void Player::addMonster(MonsterPtr monsterCaught) throw(OverThreeMonsterUNHANDLE
 	// monsterList、monsterView
 
 	if (this->monsterList.size() >= 3) {
+		int last_x = -1, last_y;
+		int x = -1, y = -1; // console 游標定位用。
 		// TODO : 要讓玩家可以選擇要汰換哪一隻 Monster.
-		cout << " Over than three monster\n";
-		throw OverThreeMonsterUNHANDLE("TODO : 要讓玩家可以選擇要汰換哪一隻 Monster.");
+		/*cout << " Over than three monster\n";
+		throw OverThreeMonsterUNHANDLE("TODO : 要讓玩家可以選擇要汰換哪一隻 Monster.");*/
+
+		// 游標 跳到 player monster View 的 第一行(1-base:4) 的最尾端 (基本上 monsterList 跟 monsterView 的數值要一樣)
+		int locate_View_X_idx = -1; // 以此 View的LF為基準，我們要locate 的 X 位置。
+		char previous_char = ' ';// 紀錄上一個 char
+		
+		// 應該是 monster View 某 element(列) 的資料
+		MySpace::Vec_1D_<char> target_row = this->monsterView->element[3];
+		if (target_row.size() > 0) {
+			int row_size = target_row.size();
+			for (size_t idx = 1; idx < row_size; ++idx) { // 走訪 該 row 元素，定位最後一個字.(idx=1是因為有邊框)
+				const char this_char = target_row.at(idx);// 紀錄目前走到的 idx.
+				if (isalpha(previous_char) && isspace(this_char)) {// 當前一個是字母 且 此位置是空白
+					locate_View_X_idx = idx;
+					break;
+				}
+				previous_char = this_char;
+			}
+			// 預防 跑完迴圈(locate_View_X_idx)還是爆炸。
+			if (locate_View_X_idx < 0) { throw OverThreeMonsterUNHANDLE(" Err: locate_View_X_idx still < 0.");  }
+			else { // 定位成功
+				//要把 View 的 相對座標，傳換成全域(console 的 x,y)
+				int MostleftTop_X = 80, holdMonsterView_Y = 23; // Console座標，hardcode from "Event.cpp"
+				x = MostleftTop_X + locate_View_X_idx;
+				y = holdMonsterView_Y;
+				rlutil::locate(x, y); // 游標跳躍完成
+				//rlutil::showcursor();
+			}
+
+		}else { throw OverThreeMonsterUNHANDLE(" Err: 第一行的 monster 訊息size() < 0"); }
+
+		std::vector<int> canLocate_Y = { y , y + 2 , y + 4 }; // 指標用
+		int canLocate_Y_idx = 0;
+		x += 5;// 位移一下座標。 (很可能爆炸)
+		// 監聽鍵盤 上下 要可以移動 1~3 區域 其他 Esc (X)返回，空白 替換。(3,5,7)1-base
+		std::string lock_msg = " <- Replace this."; //游標 的資訊
+		rlutil::locate(x, canLocate_Y[canLocate_Y_idx]);
+		rlutil::saveDefaultColor();
+		rlutil::setColor(rlutil::GREEN);
+		std::cout << lock_msg; //  印出 "游標"
+		rlutil::resetColor();
+		while (true) {
+			rlutil::hidecursor();
+			if (kbhit()) {
+				// 偵測鍵盤
+				last_y = canLocate_Y[canLocate_Y_idx]; // 紀錄上次 y
+				char k = getch(); // Get character
+				if (k == 'w') { 
+					--canLocate_Y_idx; 
+					canLocate_Y_idx += 3;
+					canLocate_Y_idx %= 3; 
+				}
+				else if (k == 's') {  
+					++canLocate_Y_idx; 
+					canLocate_Y_idx += 3;
+					canLocate_Y_idx %= 3;
+				}
+				else if (k == ' ') { /*break*/; }
+				rlutil::locate(x, last_y);// 改變座標
+				
+				std::cout << std::string(lock_msg.size(),' '); //  清除 "游標" 
+				rlutil::locate(x, canLocate_Y[canLocate_Y_idx]);// 改變座標
+				rlutil::saveDefaultColor();
+				rlutil::setColor(rlutil::GREEN);
+				std::cout << lock_msg; //  印出 "游標"
+				rlutil::resetColor();
+			}
+		}
+
+
+		// 把指定的 Monster 先 delete 之後替換 至 目前要抓的 monster。
 	}
 	else { // 順序加入 至 monster list
 		// Add monster to list.
@@ -110,6 +183,11 @@ void Player::addMonster(MonsterPtr monsterCaught) throw(OverThreeMonsterUNHANDLE
 	}
 	
 
+}
+
+int Player::getMonsterListSize()
+{
+	return this->monsterList.size();
 }
 
 

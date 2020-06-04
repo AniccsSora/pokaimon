@@ -46,6 +46,9 @@ public:
 	// 抓到 Monster 了，會更新 monsterList、monsterView。
 	void addMonster(MonsterPtr monsterCaught) throw(OverThreeMonsterUNHANDLE);
 
+	// 抓到幾隻怪獸了
+	int getMonsterListSize();
+
 private:
 	// 玩家在地圖的位置, 1-base。
 	struct MySpace::Coordi position;
