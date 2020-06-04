@@ -15,7 +15,7 @@ Player::Player(std::string name, int x, int y)
 	MySpace::ViewPtr monsterHold_Window = myutil::createView('O', 8, 40);
 	monsterHold_Window->setframeColor(rlutil::YELLOW); // 邊框顏色
 	// monsterHold_Window->setLeftTop(100, 6); // 決定 這個View 的位置
-	monsterHold_Window->print(1, "  === Player Monster === ");
+	monsterHold_Window->print(1, "  === Player's Monster === ");
 	monsterHold_Window->print(3, "  1. None");
 	monsterHold_Window->print(5, "  2. None");
 	monsterHold_Window->print(7, "  3. None");
@@ -142,17 +142,29 @@ void Player::addMonster(MonsterPtr monsterCaught) throw(OverThreeMonsterUNHANDLE
 				// 偵測鍵盤
 				last_y = canLocate_Y[canLocate_Y_idx]; // 紀錄上次 y
 				char k = getch(); // Get character
-				if (k == 'w') { 
+				if (k == 'w'||k=='W') { 
 					--canLocate_Y_idx; 
 					canLocate_Y_idx += 3;
 					canLocate_Y_idx %= 3; 
 				}
-				else if (k == 's') {  
+				else if (k == 's'|| k=='S') {  
 					++canLocate_Y_idx; 
 					canLocate_Y_idx += 3;
 					canLocate_Y_idx %= 3;
 				}
-				else if (k == ' ') { /*break*/; }
+				else if ( 'r' == k || 'R' == k) {
+					// 替換 monster List 的元素
+					this->monsterList.at(canLocate_Y_idx);
+					// 更新了資料 View 也要更新
+					// 0 1 2  -> 3 5 7 (idx 對應 View 的實際列數)
+					// 更新 View 的 內容
+					std::string ms_name = "  " + std::to_string(canLocate_Y_idx + 1) + ". " + monsterCaught->getName();
+					this->monsterView->print(3 + (canLocate_Y_idx * 2), ms_name);
+					break;
+				}
+				else if ( 27 == k) { // ESC
+					break; 
+				}
 				rlutil::locate(x, last_y);// 改變座標
 				
 				std::cout << std::string(lock_msg.size(),' '); //  清除 "游標" 
@@ -162,6 +174,7 @@ void Player::addMonster(MonsterPtr monsterCaught) throw(OverThreeMonsterUNHANDLE
 				std::cout << lock_msg; //  印出 "游標"
 				rlutil::resetColor();
 			}
+			std::cout.flush();
 		}
 
 

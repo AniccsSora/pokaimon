@@ -88,13 +88,10 @@ void EncounterMonsterEvent::touchOff(){
 	rlutil::cls();
 
 	this->eventViewList->showRegisteredView();
+	
+	//this->monster
 	rlutil::locate(84, 41);
 	rlutil::showcursor();
-	//this->monster
-
-	/*
-	
-	*/
 
 	while (true) {
 		if (kbhit()) {
@@ -106,7 +103,7 @@ void EncounterMonsterEvent::touchOff(){
 					cout << "  Start Catch-> " + this->encounterMonster->getName();
 					rlutil::msleep(500);
 				}
-				else { // Hardcode 修改 Message View 的訊息。
+				else { // Hardcode 修改 Message View 的訊息。 就是這麼難看XD。
 					int view_x_ptr, view_y_ptr;
 					view_x_ptr = this->log_content_view->status.lefttop.x+1; 
 					view_y_ptr = this->log_content_view->status.lefttop.y + 2;//
@@ -127,12 +124,13 @@ void EncounterMonsterEvent::touchOff(){
 					cout << "Use the \'W\',\'S\' buttons to replace.";
 					rlutil::resetColor();
 				}
-				this->servicedPlayer->addMonster(this->encounterMonster);
+				this->servicedPlayer->addMonster(this->encounterMonster); // 會作 大於 3的檢查
 				
 				break;
 			}
 			else if (k == ' ') { 
 				this->log_content_view->print(6, "  Cancel catch...");
+				rlutil::locate(84, 41); //harcode.
 				cout << "  Cancel catch...";
 				//this->eventViewList->showRegisteredView();// 改個字 整圖重印...// 消耗過多效能
 				rlutil::hidecursor();
