@@ -22,14 +22,14 @@ GameMap::GameMap(std::string filename)
 			vec_row_tmp.clear();
 			row_cnt += 1;
 			// 處理 一行資料。
-			for (size_t i = 0; i < line.length(); i++) {
+			for (size_t i = 0; i < line.length(); ++i) {
 				vec_row_tmp.push_back(std::string(1, line[i]));// push 1 string in vector, size() only 1.
 				
 				// 尋找 此行 地圖資料 有無包含 NPC_CUBE。
 				if (this->NPC_CUBE == line[i]) {
 					MySpace::Coordi cod;
-					// 1-base
-					cod.x = i + 1; cod.y = row_cnt + 1;
+					// 1-base    
+					cod.x = i + 1; cod.y = row_cnt; // row_cnt 一開始就是 1-base
 					this->npc_stand_corrdi_list.push_back(cod);
 				}
 			}
@@ -153,5 +153,36 @@ char GameMap::returnCubeBy(MySpace::Coordi coordi)
 		cout << "... target index size()= " << terrain.at(y - 1).at(x - 1).size() << ".\n";
 		exit(0);
 	}
+}
+
+bool GameMap::isNPCstanding(int x, int y){
+	bool flag = false;
+
+	if (this->returnCubeBy(x, y) == this->NPC_CUBE) {
+		flag = true;
+	}
+
+	return flag;
+}
+
+int GameMap::return_NPC_idx(int x, int y){
+	int rtnIdx = -1;
+
+	if (isNPCstanding(x,y)){
+		// 走訪 npc_stand_corrdi_list
+		for (size_t i = 0; i < this->npc_stand_corrdi_list.size(); ++i) {
+			// 比對摟
+			if ( npc_stand_corrdi_list[i].x == x && 
+				 npc_stand_corrdi_list[i].y == y) {
+				rtnIdx = i;
+				break;
+			}
+		}
+	}
+	else {
+		rtnIdx = -1;
+	}
+
+	return rtnIdx;
 }
 

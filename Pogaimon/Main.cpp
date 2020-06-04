@@ -53,7 +53,7 @@ int main() {
 	GameMapPtr map = myutil::loadMap("../Pogaimon/assets/yzumap.txt");
 
 	// 玩家站立原點, hardcode
-	int x = 30; int y = 20; // 20, 30
+	int x = 15; int y = 18; // 20, 30
 
 	// 建立玩家, 給名字 給生成座標。
 	Player* tony = new Player("tony", x, y);
@@ -135,7 +135,9 @@ int main() {
 					x = tony->getPlayerPosition().x; y = tony->getPlayerPosition().y;
 					
 					// 如果玩家站的不是空 字元。
-					if (' ' != map->returnCubeBy(x,y)){
+					if (' ' != map->returnCubeBy(x,y)
+						//&& myutil::X_Probability_get_True(0.1)
+						){
 						// 由 gameService 回報玩家現在的 Event
 						// gameService 上方 new 出時必須要帶 map(copy的) 進去 因為他必須要參考玩家位置
 						Event* tonyEvent = gameService.getEvent(tony);
@@ -148,9 +150,10 @@ int main() {
 					// 返回地圖 畫面
 					map->showMap_and_Player(*tony);
 
-					// show log
+					// show log 基本上debug 用。
 					// 對指定的 View 給定 訊息。
-					log_Window->print(1,tonyInfoService.getPlayerPositionMsg()); // 
+					log_Window->print(1,tonyInfoService.getPlayerPositionMsg()); 
+					log_Window->print(3, " NPC IDX = " + std::to_string(map->return_NPC_idx(x,y)));
 
 					// 印出 Displayer 所管理的 view物件。
 					viewManager.showRegisteredView();
