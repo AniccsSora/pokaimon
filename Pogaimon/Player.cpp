@@ -228,4 +228,10 @@ int Player::getMonIDX_by_MonsList(int idx_of_monsterList)
 	return this->monsterList.at(idx_of_monsterList)->getIdx();
 }
 
+MySpace::Vec_1D_<MonsterPtr> Player::getMonsterList()
+{
+	MySpace::Vec_1D_<MonsterPtr> rtn(this->monsterList);
+	return rtn;
+}
+
 

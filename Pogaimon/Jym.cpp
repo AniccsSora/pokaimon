@@ -1,4 +1,5 @@
 #include "Jym.h"
+#include <algorithm>
 
 Jym::Jym(PlayerPtr P1, PlayerPtr P2)
 {
@@ -12,7 +13,7 @@ Jym::Jym(PlayerPtr P1, PlayerPtr P2)
 	// 初始化
 	this->P1 = P1;
 	this->P2 = P2;
-	// 初始化 P1_ascii_veiwList
+	// 初始化 P1_ascii_veiwList(裡面存著 ascii 的彩圖)
 	for (size_t i = 0; i < P1->getMonsterListSize(); ++i) {
 		int mos_idx = P1->getMonIDX_by_MonsList(i);// 從玩家物件 所持有的 monsterList 中去選我要第幾(i)個，怪物的圖鑑編號。 
 		MySpace::ViewPtr mos = myutil::getMonsterASCIIViewPtrbyIdx(mos_idx);
@@ -44,8 +45,23 @@ Jym::Jym(PlayerPtr P1, PlayerPtr P2)
 	// 寵物圖示 ASCII 無法 確定高度 
 	;
 	// ===================== 
-	// 當前寵物屬性
-	
+	// 當前寵物屬性 P1 (左)
+	MySpace::ViewPtr monsterProperty = myutil::createView('*', 15, 40);
+	MySpace::Vec_1D_<MonsterPtr> p1_monster_list = P1->getMonsterList();
+	MonsterPtr p1_current_mos = p1_monster_list.back();// 取得 最後一個怪獸
+	monsterProperty->setLeftTop(1, 2);
+	monsterProperty->print(2, " ~~~~~~~~  Monater Property  ~~~~~~~~ ");
+	monsterProperty->print(4, " ************************************ ");
+	monsterProperty->print(5, "  Index - : " + std::to_string(p1_current_mos->getIdx()));
+	monsterProperty->print(6, "  Name -- : " + p1_current_mos->getName());
+	monsterProperty->print(7, "  Type -- : " + p1_current_mos->getTypeStr());
+	monsterProperty->print(8, "  HP ---- : " + std::to_string(p1_current_mos->getHp()));
+	monsterProperty->print(9, "  ATK --- : " + std::to_string(p1_current_mos->getAtk()));
+	monsterProperty->print(10, "  DEF --- : " + std::to_string(p1_current_mos->getDef()));
+	monsterProperty->print(11, "  SPEED - : " + std::to_string(p1_current_mos->getSpeed()));
+	monsterProperty->print(12, "  Ability : " + p1_current_mos->getAbilityNameByAbliIdx(p1_current_mos->getAbilityIdx()));
+	P1_ViewManager.registerView(monsterProperty);// 寵物屬性 的 View
+
 	// ===================== 
 	// 當 持有寵物清單 (是否要個人化?)
 

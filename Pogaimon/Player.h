@@ -62,6 +62,8 @@ public:
 	// 取得 monsterList 指定 idx 之 怪獸圖鑑的 編號。
 	int getMonIDX_by_MonsList(int idx_of_monsterList);
 	
+	// 回傳玩家的 monsterList 的 "副本"。
+	MySpace::Vec_1D_<MonsterPtr> getMonsterList();
 
 private:
 	// 玩家在地圖的位置, 1-base。
