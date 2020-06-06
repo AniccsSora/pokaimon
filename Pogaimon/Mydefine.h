@@ -84,13 +84,15 @@ namespace MySpace {
 
 	}; typedef View*  ViewPtr;
 
-	inline View::View(const View& src)
+	inline View::View(const View& src) // copy constructor
 	{
-		this->element = src.element;
-		this->frameColor = src.frameColor;
-		this->isASCII = src.isASCII;
-		this->msgColor = src.msgColor;
-		this->status = src.status;
+		if (this != &src) { //防護自我參考
+			this->element = src.element;
+			this->frameColor = src.frameColor;
+			this->isASCII = src.isASCII;
+			this->msgColor = src.msgColor;
+			this->status = src.status;
+		}
 	}
 
 	inline void View::setLeftTop(short x, short y) {
