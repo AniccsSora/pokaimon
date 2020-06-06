@@ -16,6 +16,8 @@ class Player
 public:
 	// 玩家建構子，提供名字 以及其生成點座標。
 	Player(std::string name,int x,int y);
+	// Copy constructor
+	Player(const Player& p);
 
 	// 給 NPC用 的建構子，會幫他的 monsterList 初始化 number_of_monster 隻怪物。
 	Player(int number_of_monster, std::string npc_name);

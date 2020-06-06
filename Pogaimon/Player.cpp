@@ -23,6 +23,20 @@ Player::Player(std::string name, int x, int y)
 	this->monsterView = monsterHold_Window;
 }
 
+Player::Player(const Player& p)
+{
+	if (this != &p) {
+		this->position = p.position;
+		this->playerName = p.playerName;
+		this->notation = p.notation;
+		this->color = p.color;
+		MySpace::Vec_1D_<MonsterPtr> aaa(p.monsterList);//Vector copy constructor.
+		this->monsterList = aaa;
+		MySpace::ViewPtr bbb(p.monsterView); // View copy constructor.
+		this->monsterView = bbb;
+	}
+}
+
 
 Player::Player(int number_of_monster, std::string npc_name){
 	
