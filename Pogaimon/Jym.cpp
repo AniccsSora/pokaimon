@@ -122,26 +122,19 @@ Jym::Jym(PlayerPtr P1, PlayerPtr P2)
 	this->battle_log.registerView(battleLog_view);
 	// ===================== 
 
-	rlutil::cls();
-	this->P1_DisplayerList[0].showRegisteredView();
-	this->P1_holdMonster_Displayer.showRegisteredView();
-	
-	this->P2_DisplayerList[0].showRegisteredView();
-	this->P2_holdMonster_Displayer.showRegisteredView();
-	this->battle_log.showRegisteredView();
-	rlutil::anykey(" wait... ");
 }
 
 void Jym::battle_start()
 {
-	//for (size_t i = 0; i < P1->getMonsterListSize(); ++i) {
-	//	this->P1_mons_asciiManager.clearALLview();// 先清乾淨，ascii displayer。
-	//	MySpace::ViewPtr v_ptr = this->P1_ascii_veiwList.at(i);// 取得該玩家的 ascii
-	//	v_ptr->setLeftTop(1,1);//沒設定 左上角的 是不得被註冊進去的。
-	//	this->P1_mons_asciiManager.registerView(v_ptr);// 註冊
-	//	rlutil::cls(); // 清畫面
-	//	this->P1_mons_asciiManager.showRegisteredView(); // 印出ASCII
-	//	rlutil::anykey("\n press any to next");
-	//	rlutil::cls();
-	//}
+	if (P1 == nullptr || P2 == nullptr) {
+		return;
+	}
+	rlutil::cls();
+	this->P1_DisplayerList[0].showRegisteredView();
+	this->P1_holdMonster_Displayer.showRegisteredView();
+
+	this->P2_DisplayerList[0].showRegisteredView();
+	this->P2_holdMonster_Displayer.showRegisteredView();
+	this->battle_log.showRegisteredView();
+	rlutil::anykey(" wait... ");
 }
