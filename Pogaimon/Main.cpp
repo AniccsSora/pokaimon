@@ -27,11 +27,22 @@ char chargen() {
 
 int main() {
 	srand(time(NULL));
+	rlutil::saveDefaultColor();
 	//================ test~~
 	while (0) {
 
-		
-
+		MySpace::ViewPtr tv = myutil::createView('X', 5, 3);
+		Displayer dd;
+		tv->setLeftTop(1,1);
+		dd.registerView(tv);
+		tv->setframeColor(rlutil::GREEN);
+		tv->print(1, "123");
+		tv->print_c(2, "222", rlutil::LIGHTRED);
+		tv->print(3, "333");
+		dd.showRegisteredView();
+		tv->print_c(4, "444", rlutil::CYAN);
+		tv->print(5, "555");
+		dd.showRegisteredView();
 		// 取得寵物參數圖鑑
 		//MonsterPropertyList mstPropertyList = myutil::loadMonsterFile();
 		//// 取得相剋表
@@ -47,7 +58,7 @@ int main() {
 		rlutil::anykey("test end...");
 	}
 	//================
-	rlutil::saveDefaultColor();
+	
 	//myutil::screen_ruler(); waitkey;
 
 	// 初始化 一些物件，地圖、玩家、遊戲輔助類別(滿多的)...
