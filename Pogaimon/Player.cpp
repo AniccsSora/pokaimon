@@ -25,12 +25,25 @@ Player::Player(std::string name, int x, int y)
 
 Player::Player(int number_of_monster){
 	
+	this->playerName = "NPC";
+
 	// 取得寵物參數圖鑑
 	MonsterPropertyList mstPropertyList = myutil::loadMonsterFile();
 	// 生成怪物
 	for (size_t i = 0; i < number_of_monster; ++i) {
 		monsterList.push_back(new Monster(rand(), mstPropertyList));
 	}
+
+	// 也要幫他 生 monster View。
+	// 初始化一下此NPC 的 holdmonster View。
+	MySpace::ViewPtr monsterHold_Window = myutil::createView('O', 8, 40);
+	monsterHold_Window->setframeColor(rlutil::LIGHTMAGENTA); // 邊框顏色
+	monsterHold_Window->print(1, "  === NPC's Monster === ");
+	monsterHold_Window->print(3, "  1. "+ monsterList[0]->getName());
+	monsterHold_Window->print(5, "  2. "+ monsterList[1]->getName());
+	monsterHold_Window->print(7, "  3. "+ monsterList[2]->getName());
+	// 賦予 player物件 初始化的 View。
+	this->monsterView = monsterHold_Window;
 }
 
 MySpace::Coordi Player::getPlayerPosition()
@@ -73,20 +86,6 @@ rlutil_Color Player::getColor()
 
 MySpace::ViewPtr Player::getHoldMonsterView()
 {
-	// 建構時就有了 沒必要再次重建。
-	//// 如果根本沒有 View 被指派到這個 玩家物件身上。
-	//if (this->monsterView == NULL) { // 幫玩家新增 View
-	//	MySpace::ViewPtr monsterHold_Window = myutil::createView('O', 8, 30);
-	//	monsterHold_Window->setframeColor(rlutil::YELLOW); // 邊框顏色
-	//	// monsterHold_Window->setLeftTop(100, 6); // 暫不決定
-	//	monsterHold_Window->print(1, "  === Player Monster === ");
-	//	monsterHold_Window->print(3, "  1. None");
-	//	monsterHold_Window->print(5, "  2. None");
-	//	monsterHold_Window->print(7, "  3. None");
-
-	//	this->monsterView = monsterHold_Window;
-	//}
-
 	return this->monsterView;
 }
 
