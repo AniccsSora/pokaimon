@@ -23,7 +23,8 @@ Player::Player(std::string name, int x, int y)
 	this->monsterView = monsterHold_Window;
 }
 
-Player::Player(int number_of_monster){
+
+Player::Player(int number_of_monster, std::string npc_name){
 	
 	this->playerName = "NPC";
 
@@ -34,7 +35,8 @@ Player::Player(int number_of_monster){
 		monsterList.push_back(new Monster(rand(), mstPropertyList));
 	}
 
-	// 也要幫他 生 monster View。
+    // set NPC name
+	this->playerName = npc_name;	// 也要幫他 生 monster View。
 	// 初始化一下此NPC 的 holdmonster View。
 	MySpace::ViewPtr monsterHold_Window = myutil::createView('O', 8, 40);
 	monsterHold_Window->setframeColor(rlutil::LIGHTMAGENTA); // 邊框顏色
@@ -43,8 +45,7 @@ Player::Player(int number_of_monster){
 	monsterHold_Window->print(5, "  2. "+ monsterList[1]->getName());
 	monsterHold_Window->print(7, "  3. "+ monsterList[2]->getName());
 	// 賦予 player物件 初始化的 View。
-	this->monsterView = monsterHold_Window;
-}
+	this->monsterView = monsterHold_Window;}
 
 MySpace::Coordi Player::getPlayerPosition()
 {

@@ -18,7 +18,7 @@ public:
 	Player(std::string name,int x,int y);
 
 	// 給 NPC用 的建構子，會幫他的 monsterList 初始化 number_of_monster 隻怪物。
-	Player(int number_of_monster);
+	Player(int number_of_monster, std::string npc_name);
 
 	// 回傳玩家現在在的座標，跟GameMap沒有半毛關係，這只是一組 "座標"。
 	struct MySpace::Coordi getPlayerPosition();
