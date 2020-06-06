@@ -59,7 +59,7 @@ int main() {
 	GameService gameService(map);
 
 	// 玩家站立原點, hardcode
-	int x = 15; int y = 18; // 20, 30
+	int x = 15; int y = 12; // 20, 30
 
 	// 建立玩家, 給名字 給生成座標。
 	Player* tony = new Player("tony", x, y);
@@ -122,6 +122,7 @@ int main() {
 					else if (k == 'w') { --y; }
 					else if (k == 's') { ++y; }
 					else if (k == ' ') { break; }
+					else { continue; }
 					// 放置玩家
 					map->movePlayer(tony, x, y);
 					// 紀錄位置
