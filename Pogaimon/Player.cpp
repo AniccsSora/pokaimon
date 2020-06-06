@@ -37,10 +37,11 @@ Player::Player(int number_of_monster, std::string npc_name){
 
     // set NPC name
 	this->playerName = npc_name;	// 也要幫他 生 monster View。
+
 	// 初始化一下此NPC 的 holdmonster View。
 	MySpace::ViewPtr monsterHold_Window = myutil::createView('O', 8, 40);
 	monsterHold_Window->setframeColor(rlutil::LIGHTMAGENTA); // 邊框顏色
-	monsterHold_Window->print(1, "  === NPC's Monster === ");
+	monsterHold_Window->print(1, "  === " + npc_name + "'s Monster === ");
 	monsterHold_Window->print(3, "  1. "+ monsterList[0]->getName());
 	monsterHold_Window->print(5, "  2. "+ monsterList[1]->getName());
 	monsterHold_Window->print(7, "  3. "+ monsterList[2]->getName());
