@@ -53,6 +53,8 @@ namespace MySpace {
 
 		// 記錄著 View 的內容。
 		Vec_2D_<char> element;
+		// 格式為 : "{row}:{rlutil number};", 紀錄{row}行的 顏色({rlutil number})，有呼叫 print_c() 才會在紀錄在此。
+		Vec_1D_<std::string> color_flg;
 
 		// 出現的位置 以及 長寬。 1-base。
 		ViewStatus status;
@@ -81,6 +83,9 @@ namespace MySpace {
 
 		// 在此 view 的 第 pos 行 插入 msg。(不會印在 console)
 		inline void print(short pos, std::string msg);
+
+		// 在此 view 的 第 pos 行 插入 msg且該行會有特別顏色。(不會印在 console)
+		inline void print_c(short pos, std::string msg,int c);
 
 	}; typedef View*  ViewPtr;
 
@@ -125,9 +130,6 @@ namespace MySpace {
 			rlutil::anykey("Exception happened!!\n");
 		}
 
-		//short target_x = status.lefttop.x + 1; // view 的 左上角 +1
-		//short target_y = status.lefttop.y + pos;// log 真正在 console 的高度。
-
 		// 覆寫該 view, 第 pos 行的所有字元如果超出 msg 則補 ' '。
 		for (size_t view_col_idx = 0; view_col_idx < status.size_w_h.w-2; ++view_col_idx) {
 			if ( (int)msg.size()-1 >= view_col_idx ) {
@@ -138,18 +140,42 @@ namespace MySpace {
 				element.at(pos).at(view_col_idx + 1) = ' ';
 			} 
 		}
+	}
 
-		// 最大可印區域。-2:去頭尾, -1: 1-base(status) to 0-base(.at()).
-		//short max_can_printIdx_of_view_col = status.size_w_h.w -2 -1;
-		//for (size_t msg_idx = 0; msg_idx <= msg.size(); ++msg_idx) {// i = 1, 因為 最左邊邊框不希望變空; -2 同理。
-		//	if ( msg_idx < view_col_idx) {
-		//		// (i + 1): 跟左邊邊框多一格(好看用); (i - 1):msg是 0-base.
-		//		element.at(pos).at(view_col_idx + 1) = msg.at(view_col_idx - 1);
-		//	}
-		//	else {  // .at(pos) 0-base, 跟多出的 上框剛好 計數抵銷 (-1 + 1) = 0。
-		//		element.at(pos).at(view_col_idx + 1) = ' ';
-		//	}
-		//}
+	inline void View::print_c(short pos, std::string msg, int c){
+		short max_idx = status.size_w_h.h - 2;
+
+		//"{row}:{rlutil number};"
+		View::color_flg.push_back( std::to_string(pos)+":"+std::to_string(c)+";");
+
+		// 檢查 要 print 的位置 及大小 在 此 view 的容許範圍。
+		try {
+			if (msg.size() > status.size_w_h.w - 2) {// -2, 去除左右邊框後，剩下的空白大小。
+				std::string errMsg = " Max of massage legth = " + std::to_string(status.size_w_h.w - 4) +
+					", but your length = " + std::to_string(msg.size());
+				throw ViewOutOfRangeException(errMsg);
+			}
+			if (pos > max_idx) {
+				std::string errMsg = "Max of idx=" + std::to_string(max_idx) + ", but your idx = " +
+					std::to_string(pos);
+				throw ViewOutOfRangeException(errMsg);
+			}
+		}
+		catch (ViewOutOfRangeException& caught) {
+			std::cout << caught.what() << std::endl;
+			rlutil::anykey("Exception happened!!\n");
+		}
+
+		// 覆寫該 view, 第 pos 行的所有字元如果超出 msg 則補 ' '。
+		for (size_t view_col_idx = 0; view_col_idx < status.size_w_h.w - 2; ++view_col_idx) {
+			if ((int)msg.size() - 1 >= view_col_idx) {
+				// (i + 1): 因為有左邊邊框; (i - 1):msg是 0-base.
+				element.at(pos).at(view_col_idx + 1) = msg.at(view_col_idx);
+			}
+			else {  // .at(pos) 0-base, 跟多出的 上框剛好 計數抵銷 (-1 + 1) = 0。
+				element.at(pos).at(view_col_idx + 1) = ' ';
+			}
+		}
 	}
 
 
