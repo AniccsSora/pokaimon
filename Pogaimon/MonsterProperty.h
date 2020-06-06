@@ -47,6 +47,8 @@ public:
 		this->ability = ability;
 	}
 
+	MonsterProperty(const MonsterProperty& mp);
+
 	int getIdx() {
 		return idx;
 	}

@@ -48,7 +48,8 @@ public:
 		property.setSpeed(mstPropertyList.at(monsterIdx)->getSpeed());
 		property.setAbilityIdx(mstPropertyList.at(monsterIdx)->getAbilityIdx());
 	};
-
+	// copy
+	Monster(const Monster& mos);
 	void attack(IMonsterPtr beAttactedMonster);
 
 	// 取得寵物在圖鑑上的編號
