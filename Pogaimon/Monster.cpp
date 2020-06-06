@@ -3,6 +3,14 @@
 
 
 
+Monster::Monster(const Monster& mos)
+{
+	if (this != &mos) {
+		MonsterProperty* mp = new MonsterProperty(mos.property);
+		this->property = *mp;
+	}
+}
+
 void Monster::attack(IMonsterPtr beAttactedMonster) {
 
 		// YA 從父類繼承下的
