@@ -145,7 +145,11 @@ void EncounterMonsterEvent::touchOff(){
 
 EncounterNPCEvent::EncounterNPCEvent(Player* player, PlayerPtr encounterNpc)
 {
-	// 初始化
+	// 因為每次打完都要復原。 Event 是用複製過的 Player 物件。
+	Player copied_player = Player(*player);
+	Player copied_NPC = Player(*encounterNpc);
+
+	// 初始化, 使用複製過的。
 	this->player = player;
 	this->encounterNpc = encounterNpc;
 }
