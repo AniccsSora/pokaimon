@@ -14,14 +14,15 @@ typedef IMonster* IMonsterPtr;
 class IMonster
 {
 public:
+
+	friend class Jym;// 需要直接取得 Monster 的各個屬性作更動。
+
 	IMonster() = default;
 	
-
 protected:
 	// 攻擊 beAttactedMonster.
 	virtual void attack(IMonsterPtr beAttactedMonster) = 0; // pure virtual function
 	MonsterProperty property;
-
 };
 
 class Monster : public IMonster {

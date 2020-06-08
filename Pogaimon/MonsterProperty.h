@@ -32,6 +32,10 @@ class Property {
 
 class MonsterProperty :	public Property{
 public:
+
+	// Jym 需要直接做 參數操作。
+	friend class Jym;
+
 	MonsterProperty() = default; // compile 說我沒寫預設建構子，好 我寫給他。
 	MonsterProperty(int idx, std::string name, std::string type, int hp, int atk, int def, int speed, int ability) 
 		:Property (){

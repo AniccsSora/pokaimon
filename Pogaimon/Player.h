@@ -14,6 +14,9 @@ struct OverThreeMonsterUNHANDLE: public std::exception {
 class Player
 {
 public:
+
+	friend class Jym;// Jym 需要直接取得 monsterList
+
 	// 玩家建構子，提供名字 以及其生成點座標。
 	Player(std::string name,int x,int y);
 	// Copy constructor

@@ -13,8 +13,53 @@ public:
 	void battle_start();
 
 private:
+
+	// ===================== < 對戰畫面 View 參數設定區>
+	// 這些參數是依照 PDF 開的規格去評估的。
+
+	//決定 多少高度 "開始"印出 屬性 View，因為 ASCII 高度有待評估。
+	int limit_of_property = 30;
+	// 決定 console 的哪邊開始要分一半。開始印出 P2 的資料
+	int half_x = 70;
+
+	// P1,P2 開始印 ascii View 的座標
+	int P1_asciiView_X = 1, P1_asciiView_Y = 1;
+	int P2_asciiView_X = 92, P2_asciiView_Y = 1;
+
+	// P1, P2 寵物屬性 Property View 座標
+	int P1_pp_view_X = 41, P1_pp_view_Y = 5;
+	int P2_pp_view_X = 134, P2_pp_view_Y = 5;
+
+	// P1，P2 開始印 持有寵物 View 的座標
+	int P1_ViewHoldMos_X = P1_pp_view_X, P1_ViewHoldMos_Y = 26;
+	int P2_ViewHoldMos_X = P2_pp_view_X, P2_ViewHoldMos_Y = 26;
+
+	// Log 開始印的高度
+	int log_x = 40, log_y = 37;
+	// ===================== </對戰畫面 View 參數設定區>
+
 	PlayerPtr P1 = NULL;
 	PlayerPtr P2 = NULL;
+
+	int P1_hold_mosterN = -1;// P1 持有的怪物總數
+	int P2_hold_mosterN = -1;// P2 持有的怪物總數
+
+	int P1_canBattle_mon_idx = -1;// P1 目前可以戰鬥的 怪物 指標。
+	int P2_canBattle_mon_idx = -1;// P2 目前可以戰鬥的 怪物 指標。
+
+	// 一些在 Jym 裡面呼叫的函式。
+
+	// 是否雙方玩家都可以戰鬥?
+	bool bothPlayerCanFight();
+
+	// 確認雙方 怪獸 是否可以戰鬥
+	bool bothMonsterCanFight(MonsterPtr P1_mons, MonsterPtr P2_mons);
+
+	// 根據現在的形情 Property 去更新 View, 兩位玩家都更新。
+	void updatePropertyView();
+
+	// 取得玩家目前可以戰鬥的寵物。(參考 P?_canBattle_mon_idx 的數值做決定)
+	MonsterPtr pickCanBattleMonster(PlayerPtr player);
 
 	// 一個玩家會有對應於 monsterList 數量的 Displayer,
 	// 每個 Displayer 都有 ASCII, 寵物屬性。
@@ -31,6 +76,7 @@ private:
 	
 	// 戰鬥訊息總是會更新，所以不必不同怪獸不同 Displayer。											
 	Displayer battle_log;
+	// 放到 battle_log 的 View
+	MySpace::ViewPtr battleLog_view = myutil::createView('=', 7, 100);
 };
-
 
