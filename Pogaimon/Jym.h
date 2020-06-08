@@ -18,9 +18,13 @@ private:
 
 	// 一個玩家會有對應於 monsterList 數量的 Displayer,
 	// 每個 Displayer 都有 ASCII, 寵物屬性。
-	MySpace::Vec_1D_<Displayer> P1_DisplayerList;
-	MySpace::Vec_1D_<Displayer> P2_DisplayerList;
+	MySpace::Vec_1D_<Displayer> P1_ASCII_DList;
+	MySpace::Vec_1D_<Displayer> P2_ASCII_DList;
 
+	// 寵物屬性 Displayer List
+	MySpace::Vec_1D_<Displayer> P1_MProperty_DList;
+	MySpace::Vec_1D_<Displayer> P2_MProperty_DList;
+	
 	// 持有寵物清單
 	Displayer P1_holdMonster_Displayer;
 	Displayer P2_holdMonster_Displayer;

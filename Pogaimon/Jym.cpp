@@ -47,7 +47,7 @@ Jym::Jym(PlayerPtr P1, PlayerPtr P2)
 		MySpace::ViewPtr mos = myutil::getMonsterASCIIViewPtrbyIdx(mos_idx);
 		mos->setLeftTop(P1_asciiView_X, P1_asciiView_Y);// 註冊View 前要 設定 LT。
 		tmp_dis->registerView(mos);
-		this->P1_DisplayerList.push_back(*tmp_dis);
+		this->P1_ASCII_DList.push_back(*tmp_dis);
 	}
 	// 初始化 P2_DisplayerList
 	for (size_t i = 0; i < P2->getMonsterListSize(); ++i) {
@@ -56,11 +56,11 @@ Jym::Jym(PlayerPtr P1, PlayerPtr P2)
 		MySpace::ViewPtr mos = myutil::getMonsterASCIIViewPtrbyIdx(mos_idx);
 		mos->setLeftTop(P2_asciiView_X, P2_asciiView_Y);// 註冊View 前要 設定 LT。
 		tmp_dis->registerView(mos);
-		this->P2_DisplayerList.push_back(*tmp_dis);
+		this->P2_ASCII_DList.push_back(*tmp_dis);
 	}
 	
 	// 上方有幫每個 P1 ,Displayer 註冊 ASCII View，這邊要註冊 Monster Propterty View.
-	for (size_t i = 0; i < this->P1_DisplayerList.size(); ++i){
+	for (size_t i = 0; i < this->P1_ASCII_DList.size(); ++i){
 		MySpace::ViewPtr property = myutil::createView('*', 13, 40);
 		MonsterPtr mos = P1->getMonsterList().at(i);//取得一隻怪獸
 
@@ -77,11 +77,13 @@ Jym::Jym(PlayerPtr P1, PlayerPtr P2)
 		property->print(12, "  Ability : " + mos->getAbilityNameByAbliIdx(mos->getAbilityIdx()));
 
 		property->setLeftTop(P1_pp_view_X, P1_pp_view_Y);// 設定 Property 座標
-		this->P1_DisplayerList[i].registerView(property);
+		Displayer* tmp_dis = new Displayer();//生一個暫存的 Displayer
+		tmp_dis->registerView(property);
+		this->P1_MProperty_DList.push_back(*tmp_dis);
 	}
 	
 	// 上方有幫每個 P2 ,Displayer 註冊 ASCII View，這邊要註冊 Monster Propterty View.
-	for (size_t i = 0; i < this->P2_DisplayerList.size(); ++i) {
+	for (size_t i = 0; i < this->P2_ASCII_DList.size(); ++i) {
 		MySpace::ViewPtr property = myutil::createView('*', 13, 40);
 		MonsterPtr mos = P2->getMonsterList().at(i);//取得一隻怪獸
 
@@ -98,7 +100,9 @@ Jym::Jym(PlayerPtr P1, PlayerPtr P2)
 		property->print(12, "  Ability : " + mos->getAbilityNameByAbliIdx(mos->getAbilityIdx()));
 
 		property->setLeftTop(P2_pp_view_X, P2_pp_view_Y);// 設定 Property 座標
-		this->P2_DisplayerList[i].registerView(property);
+		Displayer* tmp_dis = new Displayer();//
+		tmp_dis->registerView(property);
+		this->P2_MProperty_DList.push_back(*tmp_dis);
 	}
 	// ===================== 
 
@@ -130,11 +134,29 @@ void Jym::battle_start()
 		return;
 	}
 	rlutil::cls();
-	this->P1_DisplayerList[0].showRegisteredView();
+	this->P1_ASCII_DList[0].showRegisteredView();
+	this->P1_MProperty_DList[0].showRegisteredView();
 	this->P1_holdMonster_Displayer.showRegisteredView();
 
-	this->P2_DisplayerList[0].showRegisteredView();
+	this->P2_ASCII_DList[0].showRegisteredView();
+	this->P2_MProperty_DList[0].showRegisteredView();
 	this->P2_holdMonster_Displayer.showRegisteredView();
+
 	this->battle_log.showRegisteredView();
+	/*
+	while ( 雙方都還有怪物 ){
+		// 挑一隻出來
+
+		while(對戰的任何一隻怪物 血量 都 > 0){
+			// 開始打架
+
+			// 隨時更新
+		}
+		// 更新 HoldMonster List
+	}
+
+	// 決定誰獲勝?
+
+	*/
 	rlutil::anykey(" wait... ");
 }
