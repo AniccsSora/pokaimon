@@ -8,7 +8,7 @@
 class Jym{
 public:
 	// 建構子
-	Jym(PlayerPtr P1, PlayerPtr P2);
+	Jym(Player& P1, Player& P2);
 	// 直接開打
 	void battle_start();
 

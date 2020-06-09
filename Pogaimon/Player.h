@@ -86,7 +86,7 @@ private:
 	// 裡面存放著 monster 指標。
 	MySpace::Vec_1D_<MonsterPtr> monsterList;
 
-	// 玩家的 ViewPtr, 從 monsterList 取得資料來顯示。// 不要是 null 就好
+	// 持有怪物 ViewPtr, 從 monsterList 取得資料來顯示。// 不要是 null 就好
 	MySpace::ViewPtr monsterView = NULL;
 
 	// 玩家的對戰點數，打贏NPC 才會獲得。

@@ -30,10 +30,45 @@ Player::Player(const Player& p)
 		this->playerName = p.playerName;
 		this->notation = p.notation;
 		this->color = p.color;
-		MySpace::Vec_1D_<MonsterPtr> aaa(p.monsterList);//Vector copy constructor.
-		this->monsterList = aaa;
-		MySpace::ViewPtr bbb(p.monsterView); // View copy constructor.
-		this->monsterView = bbb;
+		MySpace::Vec_1D_<MonsterPtr> aaa(p.monsterList);//Vector copy constructor. 根本沒有做動。
+		for (MonsterPtr m: p.monsterList) { // 手動 COPY～
+			// 用 Monster copy constructor
+			Monster *tmpMonster = new Monster(*m);
+			this->monsterList.push_back(tmpMonster);
+		}
+
+		// 暴力複製 p.monsterView 的元素，但是 Player 一開始預設的 是 NULL ptr。
+		// 我們生出一個大小跟  p.monsterView 一樣大的。Vector。
+		this->monsterView = myutil::createView(p.monsterView->frameSymbol, p.monsterView->rowSize, p.monsterView->columnSize);
+		
+		this->monsterView->color_flg;
+		for (size_t i = 0; i < p.monsterView->color_flg.size(); i++)
+		{
+			this->monsterView->color_flg.push_back(p.monsterView->color_flg.at(i));
+		}
+		
+		// 複製 element 內元素
+		//this->monsterView->element;
+		MySpace::Vec_1D_<char> rowTmp;
+		for (size_t row = 0; row < p.monsterView->element.size(); row++)
+		{
+			for (size_t col = 0; col < p.monsterView->element.at(row).size(); col++)
+			{
+				rowTmp.clear();
+				rowTmp.push_back(p.monsterView->element[row][col]);
+			}// End each row
+			this->monsterView->element.at(row) = (rowTmp);
+		}
+		this->monsterView->frameColor = p.monsterView->frameColor;
+		this->monsterView->isASCII = p.monsterView->isASCII;
+		this->monsterView->msgColor = p.monsterView->msgColor;
+		// 複製 struct 元素。
+		this->monsterView->status.lefttop.x =  p.monsterView->status.lefttop.x;
+		this->monsterView->status.lefttop.y =  p.monsterView->status.lefttop.x;
+		this->monsterView->status.size_w_h.w = p.monsterView->status.lefttop.x;
+		this->monsterView->status.size_w_h.h = p.monsterView->status.lefttop.x;
+		// end
+		this->monsterView->viewName = p.monsterView->viewName;
 	}
 }
 

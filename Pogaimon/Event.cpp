@@ -146,15 +146,16 @@ void EncounterMonsterEvent::touchOff(){
 EncounterNPCEvent::EncounterNPCEvent(Player* player, PlayerPtr encounterNpc)
 {
 	// 因為每次打完都要復原。 Event 是用複製過的 Player 物件。
-	Player copied_player = Player(*player);
-	Player copied_NPC = Player(*encounterNpc);
+	PlayerPtr debug = player; // 確定跟  copied_player 不同。
+	PlayerPtr copied_player = new Player(*player);
+	PlayerPtr copied_NPC = new Player(*encounterNpc);
 
 	// 初始化, 使用複製過的。
-	this->player = player;
-	this->encounterNpc = encounterNpc;
+	this->player = copied_player;
+	this->encounterNpc = copied_NPC;
 }
 
 void EncounterNPCEvent::touchOff(){
-	Jym *myJJ = new Jym(player, encounterNpc); // TODO: 要記得刪掉。
+	Jym *myJJ = new Jym(*(this->player), *(this->encounterNpc)); // TODO: 要記得刪掉。
 	myJJ->battle_start();
 }

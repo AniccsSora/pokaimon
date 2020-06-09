@@ -190,9 +190,14 @@ MySpace::View myutil::createViewByFile(std::string filename, std::string viewNam
 
 MySpace::ViewPtr myutil::createView(char style, short rowSize, short columnSize)
 {
+	
 	// 宣告個 View 最後回傳
 	MySpace::ViewPtr rtnView = new MySpace::View();
 
+	// 設定邊框參數
+	rtnView->frameSymbol = style;
+	rtnView->rowSize = rowSize;
+	rtnView->columnSize = columnSize;
 	// View 是會被多 "圍"一圈。 所以要各加上2。 hard code。寫死
 	rowSize += 2;
 	columnSize += 2;
@@ -397,8 +402,18 @@ MySpace::ViewPtr myutil::getMonsterASCIIViewPtrbyIdx(int monsterIdx)
 	// 讀檔~
 	std::string line;
 
+	std::string file_name="\0";
 	// 補零用 "1" -> "001"。
-	std::string file_name = std::string(3 - std::to_string(monsterIdx).length(), '0') + std::to_string(monsterIdx);
+	/*try {
+		file_name = std::string(3 - std::to_string(monsterIdx).length(), '0') + std::to_string(monsterIdx);
+	}
+	catch (std::exception e) {
+		cout << e.what() << endl;
+		rlutil::anykey("\n\nException!! \"file_name\" = \'"+ file_name +"\'\nmonsterIdx=\'"+ std::to_string(monsterIdx) +"\'");
+		
+	}*/
+	file_name = std::string(3 - std::to_string(monsterIdx).length(), '0') + std::to_string(monsterIdx);
+
 	// 拼出完整路徑 + 檔案名稱。
 	std::string file_PTH_NAME = asciiPath + file_name + ".txt";
 	std::ifstream asciifile(file_PTH_NAME);

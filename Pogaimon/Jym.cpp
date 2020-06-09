@@ -1,29 +1,29 @@
 #include "Jym.h"
 #include <algorithm>
 
-Jym::Jym(PlayerPtr P1, PlayerPtr P2)
+Jym::Jym(Player& P1, Player &P2)
 {
 
 	// P1(玩家如果沒有抓半隻怪獸就進去道館 叫他去吃屎)
-	if (P1->getMonsterListSize() <= 0) {
+	if (P1.getMonsterListSize() <= 0) {
 		rlutil::cls();
 		rlutil::anykey("\n\n     You don't seem to have any Monster. Are you going to fight boxing?     ");
 		return;
 	}
 
-	this->P1_hold_mosterN = P1->getMonsterListSize();
-	this->P2_hold_mosterN = P2->getMonsterListSize();
+	this->P1_hold_mosterN = P1.getMonsterListSize();
+	this->P2_hold_mosterN = P2.getMonsterListSize();
 
 	this->P1_canBattle_mon_idx = this->P1_hold_mosterN > 0 ? 0 : -1;
 	this->P2_canBattle_mon_idx = this->P2_hold_mosterN > 0 ? 0 : -1;
 
 	// 初始化
-	this->P1 = P1;
-	this->P2 = P2;
+	this->P1 = &P1;
+	this->P2 = &P2;
 
 	// 初始化 P1_DisplayerList (裡面存著 ascii View Displayer; 不同的 view 不同的 Displayer)
-	for (size_t i = 0; i < P1->getMonsterListSize(); ++i) {
-		int mos_idx = P1->getMonIDX_by_MonsList(i);// 從玩家物件 所持有的 monsterList 中去選我要第幾(i)個，怪物的圖鑑編號。 
+	for (size_t i = 0; i < P1.getMonsterListSize(); ++i) {
+		int mos_idx = P1.getMonIDX_by_MonsList(i);// 從玩家物件 所持有的 monsterList 中去選我要第幾(i)個，怪物的圖鑑編號。 
 		Displayer* tmp_dis = new Displayer();
 		MySpace::ViewPtr mos = myutil::getMonsterASCIIViewPtrbyIdx(mos_idx);
 		mos->setLeftTop(P1_asciiView_X, P1_asciiView_Y);// 註冊View 前要 設定 LT。
@@ -31,8 +31,8 @@ Jym::Jym(PlayerPtr P1, PlayerPtr P2)
 		this->P1_ASCII_DList.push_back(*tmp_dis);
 	}
 	// 初始化 P2_DisplayerList
-	for (size_t i = 0; i < P2->getMonsterListSize(); ++i) {
-		int mos_idx = P2->getMonIDX_by_MonsList(i);// 從玩家物件 所持有的 monsterList 中去選我要第幾(i)個，怪物的圖鑑編號。 
+	for (size_t i = 0; i < P2.getMonsterListSize(); ++i) {
+		int mos_idx = P2.getMonIDX_by_MonsList(i);// 從玩家物件 所持有的 monsterList 中去選我要第幾(i)個，怪物的圖鑑編號。 
 		Displayer* tmp_dis = new Displayer();
 		MySpace::ViewPtr mos = myutil::getMonsterASCIIViewPtrbyIdx(mos_idx);
 		mos->setLeftTop(P2_asciiView_X, P2_asciiView_Y);// 註冊View 前要 設定 LT。
@@ -43,7 +43,7 @@ Jym::Jym(PlayerPtr P1, PlayerPtr P2)
 	// 上方有幫每個 P1 ,Displayer 註冊 ASCII View，這邊要註冊 Monster Propterty View.
 	for (size_t i = 0; i < this->P1_ASCII_DList.size(); ++i){
 		MySpace::ViewPtr property = myutil::createView('*', 13, 40);
-		MonsterPtr mos = P1->getMonsterList().at(i);//取得一隻怪獸
+		MonsterPtr mos = P1.getMonsterList().at(i);//取得一隻怪獸
 
 		// 資料寫入View
 		property->print(2, " ~~~~~~~~  Monater Property  ~~~~~~~~ ");
@@ -66,7 +66,7 @@ Jym::Jym(PlayerPtr P1, PlayerPtr P2)
 	// 上方有幫每個 P2 ,Displayer 註冊 ASCII View，這邊要註冊 Monster Propterty View.
 	for (size_t i = 0; i < this->P2_ASCII_DList.size(); ++i) {
 		MySpace::ViewPtr property = myutil::createView('*', 13, 40);
-		MonsterPtr mos = P2->getMonsterList().at(i);//取得一隻怪獸
+		MonsterPtr mos = P2.getMonsterList().at(i);//取得一隻怪獸
 
 		// 資料寫入View
 		property->print(2, " ~~~~~~~~  Monater Property  ~~~~~~~~ ");
@@ -91,11 +91,11 @@ Jym::Jym(PlayerPtr P1, PlayerPtr P2)
 
 	// P1，P2 持有寵物清單。
 	// 當 持有寵物清單，因為要用複製constructor。
-	MySpace::ViewPtr P1_monsterList_view(P1->getHoldMonsterView());
+	MySpace::ViewPtr P1_monsterList_view(P1.getHoldMonsterView());
 	P1_monsterList_view->setLeftTop(P1_ViewHoldMos_X, P1_ViewHoldMos_Y);
 	this->P1_holdMonster_Displayer.registerView(P1_monsterList_view);
 
-	MySpace::ViewPtr P2_monsterList_view(P2->getHoldMonsterView());
+	MySpace::ViewPtr P2_monsterList_view(P2.getHoldMonsterView());
 	P2_monsterList_view->setLeftTop(P2_ViewHoldMos_X, P2_ViewHoldMos_Y);
 	this->P2_holdMonster_Displayer.registerView(P2_monsterList_view);
 

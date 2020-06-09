@@ -25,6 +25,14 @@ namespace MySpace {
 	struct Coordi {
 		short x = -1;
 		short y = -1;
+
+		Coordi() = default;
+		Coordi(const Coordi& c) {
+			if (this != &c) {
+				this->x = c.x;
+				this->y = c.y;
+			}
+		}
 	};
 
 	// 記錄著 寬跟高
@@ -32,6 +40,13 @@ namespace MySpace {
 
 		// 1-base
 		short w = -1; short h = -1;
+		ViewSize() = default;
+		ViewSize(const ViewSize& v) {
+			if (this != &v) {
+				this->w = v.w;
+				this->h = v.h;
+			}
+		}
 	};
 	
 	// 某個 view 的位置資訊
@@ -42,6 +57,12 @@ namespace MySpace {
 
 		// view 所佔有空間大小。
 		ViewSize size_w_h;
+
+		ViewStatus() = default;
+		ViewStatus(const ViewStatus& s) {
+			this->lefttop = Coordi(s.lefttop);
+			this->size_w_h = ViewSize(s.size_w_h);
+		}
 	};
 
 	struct View {
@@ -68,6 +89,13 @@ namespace MySpace {
 		// 字體顏色
 		rlutil_Color msgColor = rlutil::WHITE;
 
+		// 邊框字體
+		char frameSymbol = '*';
+
+		// 可以寫字的區間，最大可寫寬度 與 最大可寫行數。
+		int rowSize = -1;
+		int columnSize = -1;
+
 		// set frameColor
 		void setframeColor(rlutil_Color tarC) { frameColor = tarC;}
 
@@ -92,11 +120,11 @@ namespace MySpace {
 	inline View::View(const View& src) // copy constructor
 	{
 		if (this != &src) { //防護自我參考
-			this->element = src.element;
+			this->element = Vec_2D_<char>(src.element);
 			this->frameColor = src.frameColor;
 			this->isASCII = src.isASCII;
+			this->status = *(new ViewStatus(src.status));
 			this->msgColor = src.msgColor;
-			this->status = src.status;
 		}
 	}
 
