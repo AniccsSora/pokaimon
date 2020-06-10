@@ -111,6 +111,8 @@ Jym::Jym(Player& P1, Player &P2)
 
 void Jym::battle_start()
 {
+	// 最後 log 的開頭空白。
+	std::string margin = std::string(50, ' ');
 	if (P1 == nullptr || P2 == nullptr) {
 		return;
 	}
@@ -127,46 +129,74 @@ void Jym::battle_start()
 
 	// P1_canBattle_mon_idx 要更動。
 	while (bothPlayerCanFight()){
+		// View 給他印出來。
+		// 印出 ASCII color。
+		this->P1_ASCII_DList[P1_canBattle_mon_idx].showRegisteredView();
+		this->P2_ASCII_DList[P2_canBattle_mon_idx].showRegisteredView();
+		// 印出 寵物屬性
+		this->P1_MProperty_DList[P1_canBattle_mon_idx].showRegisteredView();
+		this->P2_MProperty_DList[P2_canBattle_mon_idx].showRegisteredView();
+		// 印出 持有寵物列表
+		this->P1_holdMonster_Displayer.showRegisteredView();
+		this->P2_holdMonster_Displayer.showRegisteredView();
+		// 印出 Battle log, 這是簡化呼叫。因為log 會常常更新。
+		showlog();
+		
 
 		// 各 玩家 挑一隻出來
 		MonsterPtr p1CurrentMons = pickCanBattleMonster(P1);
 		MonsterPtr p2CurrentMons = pickCanBattleMonster(P2);
-		cout << "====================== BATTLE ROUND ======================" << endl;
-		cout << "P1: " << p1CurrentMons->getName() << endl;
-		cout << "P2: " << p2CurrentMons->getName() << endl;
+		// 修改 battle_log_view
+		//cout << "====================== BATTLE ROUND ======================" << endl;
+		this->battleLog_view->print(1," ====================== BATTLE ROUND ====================== ");
+		this->battleLog_view->print(2, " P1: " + p1CurrentMons->getName());
+		this->battleLog_view->print(3, " P2: " + p2CurrentMons->getName());
+		showlog();
 		while( bothMonsterCanFight(p1CurrentMons,p2CurrentMons) ){
 			// 開始打架
-			cout << " fack Battle LALALA~~~ " << endl;
+			this->battleLog_view->print(4, "  fack Battle LALALA~~~ ");
 			// P2 88
 			p2CurrentMons->property.hp = 0;
-			rlutil::anykey("wait to updatePropertyView()...");
-
-			// 更新 View
+			this->battleLog_view->print_c(9, margin + "  wait to updatePropertyView()...", rlutil::LIGHTCYAN);
+			showlog();
+			rlutil::anykey();
+		
+			// 更新 Property View
 			updatePropertyView();
-			// Show PropertyVie.
+			// Show PropertyView.
 			P1_MProperty_DList.at(P1_canBattle_mon_idx).showRegisteredView();
 			P2_MProperty_DList.at(P2_canBattle_mon_idx).showRegisteredView();
-			rlutil::anykey("wait to update paramater...");
+			this->battleLog_view->print(9, margin +" paramater view updated !");
+			showlog();
+			rlutil::anykey(); 
 
-			// 更新參數
+			// 更新參數, 確認有無人死亡
 			if (p1CurrentMons->getHp() <= 0) { P1_canBattle_mon_idx++; }
 			if (p2CurrentMons->getHp() <= 0) { P2_canBattle_mon_idx++; }
-			rlutil::anykey("wait to update log...");
-
-			// 隨時更新
-			this->battleLog_view->print(2, " P2:"+ p2CurrentMons->getName() + " Dead.");
-			this->battle_log.showRegisteredView();
-			rlutil::anykey("wait to next battle...");
+			this->battleLog_view->print(9, margin + " wait to update log...");
+			showlog();
+			rlutil::anykey(); 
+			
+			// 更新 log 並告訴戰鬥結果
+			this->battleLog_view->print(8, " P2:"+ p2CurrentMons->getName() + " Dead.");
+			this->battleLog_view->print(9, margin + " wait to next battle...");
+			showlog();
+			rlutil::anykey();
 			rlutil::cls();
+			// 記得要清空 log View 訊息。
+			for (size_t i = 1; i <= logRowSize; i++)
+			{
+				//this->battleLog_view->print(i, std::string(logColSize, ' '));
+			}
 		}
 
-		// 更新 HoldMonster List
+		// 更新 HoldMonster List 需要用到 顏色嗎?
 	}
 
 	// 決定誰獲勝?
 
-	
-	rlutil::anykey(" wait... ");
+	std::cout.flush();
+	rlutil::anykey(" Who win?? wait... ");
 }
 
 bool Jym::bothPlayerCanFight()
@@ -258,4 +288,9 @@ MonsterPtr Jym::pickCanBattleMonster(PlayerPtr player)
 		exit(987678);
 		return MonsterPtr();
 	}
+}
+
+void Jym::showlog()
+{
+	this->battle_log.showRegisteredView();
 }

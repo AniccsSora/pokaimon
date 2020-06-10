@@ -11,7 +11,9 @@ GameService::GameService(GameMapPtr map)
 
 	// 初始化 NPC_list
 	for (int i = 0; i < map->get_number_of_NPC(); i++) {
-		this->NPC_list.push_back(new Player(3, std::string("NPC_"+ std::to_string(i)))); // 每個 NPC 有三隻怪
+		PlayerPtr npc = new Player(3, std::string("NPC_" + std::to_string(i)));
+		npc->setPosition(this->map->getNPC_Corri_by_idx(i));
+		this->NPC_list.push_back(npc); // 每個 NPC 有三隻怪
 	}
 	// ===========================
 
