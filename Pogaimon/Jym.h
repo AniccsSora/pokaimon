@@ -41,10 +41,10 @@ private:
 	PlayerPtr P1 = NULL;
 	PlayerPtr P2 = NULL;
 
-	int P1_hold_mosterN = -1;// P1 持有的怪物總數
+	int P1_hold_mosterN = -1;// P1 持有的怪物總數。1-base
 	int P2_hold_mosterN = -1;// P2 持有的怪物總數
 
-	int P1_canBattle_mon_idx = -1;// P1 目前可以戰鬥的 怪物 指標。
+	int P1_canBattle_mon_idx = -1;// P1 目前可以戰鬥的 怪物 指標。0-base
 	int P2_canBattle_mon_idx = -1;// P2 目前可以戰鬥的 怪物 指標。
 
 	// 一些在 Jym 裡面呼叫的函式。
@@ -61,6 +61,9 @@ private:
 	// 取得玩家目前可以戰鬥的寵物。(參考 P?_canBattle_mon_idx 的數值做決定)
 	MonsterPtr pickCanBattleMonster(PlayerPtr player);
 
+	// 印出 log, 簡化呼叫用的。
+	inline void showlog();
+
 	// 一個玩家會有對應於 monsterList 數量的 Displayer,
 	// 每個 Displayer 都有 ASCII, 寵物屬性。
 	MySpace::Vec_1D_<Displayer> P1_ASCII_DList;
@@ -76,7 +79,9 @@ private:
 	
 	// 戰鬥訊息總是會更新，所以不必不同怪獸不同 Displayer。											
 	Displayer battle_log;
-	// 放到 battle_log 的 View
-	MySpace::ViewPtr battleLog_view = myutil::createView('=', 7, 100);
+	// 放到 battle_log 的 View, 因為放入的指標，所以直接修改battleLog_view 就可以影響到 Displayer.
+	int logRowSize = 9;
+	int logColSize = 120;
+	MySpace::ViewPtr battleLog_view = myutil::createView('=', logRowSize, logColSize);
 };
 

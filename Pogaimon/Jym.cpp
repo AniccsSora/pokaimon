@@ -3,7 +3,6 @@
 
 Jym::Jym(Player& P1, Player &P2)
 {
-
 	// P1(玩家如果沒有抓半隻怪獸就進去道館 叫他去吃屎)
 	if (P1.getMonsterListSize() <= 0) {
 		rlutil::cls();
@@ -186,17 +185,23 @@ void Jym::battle_start()
 			// 記得要清空 log View 訊息。
 			for (size_t i = 1; i <= logRowSize; i++)
 			{
-				//this->battleLog_view->print(i, std::string(logColSize, ' '));
+				this->battleLog_view->print(i, std::string(logColSize, ' '));
 			}
 		}
 
 		// 更新 HoldMonster List 需要用到 顏色嗎?
 	}
 
-	// 決定誰獲勝?
+	// 已有其中一方 不能戰鬥。
+	// 決定誰獲勝? 隨便判定 P1 or P2 的參數就可以。 這邊用 P1判斷。
+	// if 可以戰鬥的 monster idx < 持有總數 。 EX: 2 < 3。 
+	if (P1_canBattle_mon_idx < P1_hold_mosterN) {
+		// 勝利數量 ++, 注意 這邊的是 Player 副本。
+		P1->addPoint();
+	}
 
 	std::cout.flush();
-	rlutil::anykey(" Who win?? wait... ");
+	rlutil::anykey(" Who win?? wait... P1's Point: " + std::to_string(P1->getPoint()) + "\.");
 }
 
 bool Jym::bothPlayerCanFight()
