@@ -192,6 +192,7 @@
     <ClCompile Include="MonsterProperty.cpp" />
     <ClCompile Include="Myutil.h" />
     <ClCompile Include="Player.cpp" />
+    <ClCompile Include="Skill.cpp" />
     <ClCompile Include="test.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
     </ClCompile>
@@ -209,6 +210,7 @@
     <ClInclude Include="Player.h" />
     <ClInclude Include="resource.h" />
     <ClInclude Include="rlutil.h" />
+    <ClInclude Include="Skill.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="Pogaimon.rc" />

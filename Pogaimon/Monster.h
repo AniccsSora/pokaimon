@@ -4,6 +4,7 @@
 #include <iostream>
 #include "MonsterProperty.h"
 #include <ctime>
+#include "Skill.h"
 
 // pokemons.csv 存的位置。
 #define monster_define_filePath "./assets/pokemons.csv"

@@ -116,7 +116,9 @@ void Jym::battle_start()
 		return;
 	}
 	rlutil::cls();
-	/*this->P1_ASCII_DList[0].showRegisteredView();
+
+	/*
+	this->P1_ASCII_DList[0].showRegisteredView();
 	this->P1_MProperty_DList[0].showRegisteredView();
 	this->P1_holdMonster_Displayer.showRegisteredView();
 
@@ -124,7 +126,8 @@ void Jym::battle_start()
 	this->P2_MProperty_DList[0].showRegisteredView();
 	this->P2_holdMonster_Displayer.showRegisteredView();
 
-	this->battle_log.showRegisteredView();*/
+	this->battle_log.showRegisteredView();
+	*/
 
 	// P1_canBattle_mon_idx 要更動。
 	while (bothPlayerCanFight()){
@@ -141,16 +144,15 @@ void Jym::battle_start()
 		// 印出 Battle log, 這是簡化呼叫。因為log 會常常更新。
 		showlog();
 		
-
 		// 各 玩家 挑一隻出來
 		MonsterPtr p1CurrentMons = pickCanBattleMonster(P1);
 		MonsterPtr p2CurrentMons = pickCanBattleMonster(P2);
 		// 修改 battle_log_view
-		//cout << "====================== BATTLE ROUND ======================" << endl;
 		this->battleLog_view->print(1," ====================== BATTLE ROUND ====================== ");
 		this->battleLog_view->print(2, " P1: " + p1CurrentMons->getName());
 		this->battleLog_view->print(3, " P2: " + p2CurrentMons->getName());
 		showlog();
+
 		while( bothMonsterCanFight(p1CurrentMons,p2CurrentMons) ){
 			// 開始打架
 			this->battleLog_view->print(4, "  fack Battle LALALA~~~ ");

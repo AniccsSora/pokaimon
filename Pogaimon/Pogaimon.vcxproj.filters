@@ -172,6 +172,9 @@
     <ClCompile Include="Jym.cpp">
       <Filter>來源檔案</Filter>
     </ClCompile>
+    <ClCompile Include="Skill.cpp">
+      <Filter>來源檔案</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="rlutil.h">
@@ -208,6 +211,9 @@
       <Filter>標頭檔</Filter>
     </ClInclude>
     <ClInclude Include="Jym.h">
+      <Filter>標頭檔</Filter>
+    </ClInclude>
+    <ClInclude Include="Skill.h">
       <Filter>標頭檔</Filter>
     </ClInclude>
   </ItemGroup>
