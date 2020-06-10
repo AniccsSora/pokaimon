@@ -21,6 +21,9 @@ Player::Player(std::string name, int x, int y)
 	monsterHold_Window->print(7, "  3. None");
 	// 賦予 player物件 初始化的 View。
 	this->monsterView = monsterHold_Window;
+
+	// 初始化 point 指標。
+	this->point = new int(0);
 }
 
 Player::Player(const Player& p)
@@ -70,6 +73,10 @@ Player::Player(const Player& p)
 		this->monsterView->status.size_w_h.h = p.monsterView->status.lefttop.x;
 		// end
 		this->monsterView->viewName = p.monsterView->viewName;
+
+		// 即使是複製 point 指標 依然唯一。
+		this->point = p.point;
+		cout << "";
 	}
 }
 
@@ -267,7 +274,7 @@ int Player::getMonsterListSize()
 
 int Player::getPoint()
 {
-	return this->point;
+	return *(this->point);
 }
 
 std::string Player::getMonName_by_MonsList(int idx){
@@ -284,6 +291,11 @@ MySpace::Vec_1D_<MonsterPtr> Player::getMonsterList()
 {
 	MySpace::Vec_1D_<MonsterPtr> rtn(this->monsterList);
 	return rtn;
+}
+
+void Player::addPoint()
+{
+	*(this->point) += 1;
 }
 
 

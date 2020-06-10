@@ -70,6 +70,9 @@ public:
 	// 回傳玩家的 monsterList 的 "副本"。
 	MySpace::Vec_1D_<MonsterPtr> getMonsterList();
 
+	// 幫玩家的勝利點數 +1。
+	void addPoint();
+
 private:
 	// 玩家在地圖的位置, 1-base。
 	struct MySpace::Coordi position;
@@ -89,8 +92,8 @@ private:
 	// 持有怪物 ViewPtr, 從 monsterList 取得資料來顯示。// 不要是 null 就好
 	MySpace::ViewPtr monsterView = NULL;
 
-	// 玩家的對戰點數，打贏NPC 才會獲得。
-	int point = 0;
+	// 玩家的對戰點數，打贏NPC 才會獲得。這個 ptr 不用在 copy 建構子複製。因為這樣 副本的加不到。
+	int* point = 0;
 };
 typedef Player* PlayerPtr;
 
