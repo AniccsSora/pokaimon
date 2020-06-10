@@ -52,10 +52,11 @@ Player::Player(const Player& p)
 		MySpace::Vec_1D_<char> rowTmp;
 		for (size_t row = 0; row < p.monsterView->element.size(); row++)
 		{
+			rowTmp.clear();
 			for (size_t col = 0; col < p.monsterView->element.at(row).size(); col++)
 			{
-				rowTmp.clear();
-				rowTmp.push_back(p.monsterView->element[row][col]);
+				char cc = p.monsterView->element[row][col];
+				rowTmp.push_back(cc);
 			}// End each row
 			this->monsterView->element.at(row) = (rowTmp);
 		}
@@ -137,6 +138,7 @@ rlutil_Color Player::getColor()
 
 MySpace::ViewPtr Player::getHoldMonsterView()
 {
+	this->monsterView->viewName = "Hold monster View";
 	return this->monsterView;
 }
 
