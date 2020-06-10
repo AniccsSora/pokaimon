@@ -2,7 +2,7 @@
 #include <string>
 #include "Mydefine.h"
 
-// hardcode by AsciiPokeGo.xlsx ...
+// hardcode(order) by AsciiPokeGo.xlsx ...
 enum monType{
 	Undefined = -1,
 	Normal,
@@ -212,7 +212,17 @@ private:
 	int def = -1;
 	int speed = -1;
 	int ability = -1;
-	
+
+	// 這邊的參數 是給 怪物與怪物 之間 技能互動所用到的私有變數，如果沒有用到 都會是 -1。
+	// 並且由多個 私有函式 幫助確認。(檢查 ability)
+
+	// 有一些技能會 只能發動一次，或者固定次數， -1 代表不屬於此技能，0代表屬於且尚未使用， 大於0代表已經觸發過 此數 次
+	int sk_usedSkill_cnt = -1; 
+	// 特殊狀態 抗性，免疫降低能力值得特殊能力
+	int sk_Immun_propertyDebuff = -1;
+
+	// 提供方法來 扣除或者 增加能力??
+
 };
 
 typedef MySpace::Vec_1D_<MonsterProperty*> MonsterPropertyList;
