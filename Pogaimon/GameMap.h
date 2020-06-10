@@ -45,6 +45,8 @@ public:
 	// 回傳 現在地圖上有的 NPC數量。
 	int get_number_of_NPC();
 
+	// 回傳 某 idx 的 NPC 座標(Coordi)。 亂丟會爆炸。
+	MySpace::Coordi getNPC_Corri_by_idx(int idx);
 private:
 	// 紀錄地形，其實就是地圖。
 	MySpace::Vec_2D_<std::string> terrain;

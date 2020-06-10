@@ -192,3 +192,8 @@ int GameMap::get_number_of_NPC()
 	return this->npc_stand_corrdi_list.size();
 }
 
+MySpace::Coordi GameMap::getNPC_Corri_by_idx(int idx)
+{
+	return this->npc_stand_corrdi_list.at(idx);
+}
+
