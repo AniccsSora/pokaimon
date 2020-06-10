@@ -75,7 +75,7 @@ int main() {
 	// 建立玩家, 給名字 給生成座標。
 	Player* tony = new Player("tony", x, y);
 
-	// 控制 console 內 View 的顯示。
+	// 控制 console 內 View 的顯示。應該是拆開來比較好
 	Displayer viewManager;
 
 	// 設定一些View... 
@@ -149,10 +149,9 @@ int main() {
 						// Event 
 						tonyEvent->touchOff(); //觸發該 event，並且 evnet 會有 touchOff() 一定會刷掉螢幕，他會把畫面先刷掉。
 						delete[] tonyEvent;
+						// 返回地圖 畫面
+						map->showMap_and_Player(*tony);
 					}// 特殊格 判斷完畢。
-
-					// 返回地圖 畫面
-					map->showMap_and_Player(*tony);
 
 					// show log 基本上debug 用。
 					// 對指定的 View 給定 訊息。
