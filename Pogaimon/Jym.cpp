@@ -155,9 +155,10 @@ void Jym::battle_start()
 
 		while( bothMonsterCanFight(p1CurrentMons,p2CurrentMons) ){
 			// 開始打架
-			this->battleLog_view->print(4, "  fack Battle LALALA~~~ ");
-			// P2 88
-			p2CurrentMons->property.hp = 0;
+			this->battleLog_view->print(4, "   Battle Start LALALA~~~ ");
+			// 開始打架
+			fight(p1CurrentMons, p2CurrentMons);
+			//
 			this->battleLog_view->print_c(9, margin + "  wait to updatePropertyView()...", rlutil::LIGHTCYAN);
 			showlog();
 			rlutil::anykey();
@@ -273,6 +274,29 @@ void Jym::updatePropertyView(){
 	// 用新的 View 去取代  P1_MProperty_DLis t現在的 idx 的 Displayer 的持有 View。
 	this->P2_MProperty_DList.at(P2_canBattle_mon_idx).clearALLview();// 更新 Displayer。
 	this->P2_MProperty_DList.at(P2_canBattle_mon_idx).registerView(property2);
+}
+
+void Jym::fight(MonsterPtr M1, MonsterPtr M2)
+{
+	//M1->property
+
+	// 決定誰先後攻擊，把變數放到 list 而已，0 數字越小越先攻擊。
+	MySpace::Vec_1D_<MonsterPtr> fight_list;
+
+	if (M1->property.getSpeed() >= M2->property.getSpeed()) {
+		fight_list.push_back(M1); fight_list.push_back(M2);
+	}
+	else {
+		fight_list.push_back(M2); fight_list.push_back(M1);
+	}
+
+	// 打架摟~
+	while ( bothMonsterCanFight(fight_list[0], fight_list[1]) ) {
+		for (;;) {
+			//SkillToken tk_0 = fight_list[0]->useSkill();
+		}
+	}
+
 }
 
 MonsterPtr Jym::pickCanBattleMonster(PlayerPtr player)

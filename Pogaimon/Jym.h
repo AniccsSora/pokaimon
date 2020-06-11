@@ -58,8 +58,8 @@ private:
 	// 根據現在的形情 Property 去更新 View, 兩位玩家都更新。
 	void updatePropertyView();
 
-	// 寵物攻擊 的方法，內部會直接修改 寵物的 Property，並且回傳戰鬥結果的文字，因為不能保證有多少文字回傳，所底先傳Vec。
-	MySpace::Vec_1D_<std::string> fight(MonsterPtr M1, MonsterPtr M2);
+	// 寵物攻擊 的方法，內部會直接修改 寵物的 Property。
+	void fight(MonsterPtr M1, MonsterPtr M2);
 
 
 	// 取得玩家目前可以戰鬥的寵物。(參考 P?_canBattle_mon_idx 的數值做決定)
