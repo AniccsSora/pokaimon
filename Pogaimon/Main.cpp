@@ -26,6 +26,9 @@ char chargen() {
 }
 
 int main() {
+	rlutil::anykey("\n\n  Please use full screen to playing this game.\n\n");
+	rlutil::cls();
+	rlutil::anykey("\n\n  Use W A S D let the player move.  \n\n  And press any key to start the game.");
 	srand(time(NULL));
 	rlutil::saveDefaultColor();
 	//================ test~~
