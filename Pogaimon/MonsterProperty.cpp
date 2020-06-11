@@ -12,7 +12,7 @@ MonsterProperty* MonsterProperty::operator=(MonsterProperty& pp)
 	this->speed = pp.speed;
 	this->ability = pp.ability;
 	this->sk_Immun_propertyDebuff = pp.sk_Immun_propertyDebuff;
-	this->sk_usedSkill_cnt = pp.sk_usedSkill_cnt;
+	// this->sk_usedSkill_cnt = pp.sk_usedSkill_cnt; 改為 Skill類別 計算。
 	return this;
 }
 

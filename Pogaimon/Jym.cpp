@@ -129,8 +129,15 @@ void Jym::battle_start()
 	this->battle_log.showRegisteredView();
 	*/
 
+	// 決定誰先後攻擊，把變數放到 list 而已，0 數字越小越先攻擊。
+	MySpace::Vec_1D_<MonsterPtr> fight_list;
+
+	// ------------------------------------------
+
 	// P1_canBattle_mon_idx 要更動。
 	while (bothPlayerCanFight()){
+		// 清空怪獸暫存。
+		fight_list.clear();
 		// View 給他印出來。
 		// 印出 ASCII color。
 		this->P1_ASCII_DList[P1_canBattle_mon_idx].showRegisteredView();
@@ -153,25 +160,55 @@ void Jym::battle_start()
 		this->battleLog_view->print(3, " P2: " + p2CurrentMons->getName());
 		showlog();
 
-		while( bothMonsterCanFight(p1CurrentMons,p2CurrentMons) ){
+		// 初始化 陣列
+		if (p1CurrentMons->property.getSpeed() >= p2CurrentMons->property.getSpeed()) {
+			fight_list.push_back(p1CurrentMons); fight_list.push_back(p2CurrentMons);
+		}
+		else {
+			fight_list.push_back(p2CurrentMons); fight_list.push_back(p1CurrentMons);
+		}
+
+		int round_cnt = 1;// 回合計數
+		while( bothMonsterCanFight(fight_list[0], fight_list[1]) ){
 			// 開始打架
-			this->battleLog_view->print(4, "   Battle Start LALALA~~~ ");
-			// 開始打架
-			fight(p1CurrentMons, p2CurrentMons);
-			//
-			this->battleLog_view->print_c(9, margin + "  wait to updatePropertyView()...", rlutil::LIGHTCYAN);
+			this->battleLog_view->print(4, "    Battle "+ std::to_string(round_cnt) +" Start ");
+			
+			// 打架摟~
+			// 速度高的怪獸 先攻擊
+			SkillToken tk_0 = fight_list[0]->attack(*fight_list[1]);
+			
+			//--------------------------
+			this->battleLog_view->print_c(9, margin + "  wait to update "+ fight_list[1]->getMasterName() +" Property View()...", rlutil::LIGHTCYAN);
 			showlog();
 			rlutil::anykey();
-		
+			
 			// 更新 Property View
 			updatePropertyView();
 			// Show PropertyView.
 			P1_MProperty_DList.at(P1_canBattle_mon_idx).showRegisteredView();
 			P2_MProperty_DList.at(P2_canBattle_mon_idx).showRegisteredView();
-			this->battleLog_view->print(9, margin +" paramater view updated !");
+			this->battleLog_view->print(9, margin +" Paramater " + fight_list[1]->getMasterName() + " view updated !");
 			showlog();
 			rlutil::anykey(); 
 
+			// -------- 後攻擊的人
+
+			SkillToken tk_2 = fight_list[1]->attack(*fight_list[0]);
+
+			this->battleLog_view->print_c(9, margin + "  wait to update " + fight_list[0]->getMasterName() + " Property View()...", rlutil::LIGHTCYAN);
+			showlog();
+			rlutil::anykey();
+			
+			// 更新 Property View
+			updatePropertyView();
+			// Show PropertyView.
+			P1_MProperty_DList.at(P1_canBattle_mon_idx).showRegisteredView();
+			P2_MProperty_DList.at(P2_canBattle_mon_idx).showRegisteredView();
+			this->battleLog_view->print(9, margin + " Paramater " + fight_list[0]->getMasterName() + " view updated !");
+			showlog();
+			rlutil::anykey();
+
+			// ------------ 一輪打完了
 			// 更新參數, 確認有無人死亡
 			if (p1CurrentMons->getHp() <= 0) { P1_canBattle_mon_idx++; }
 			if (p2CurrentMons->getHp() <= 0) { P2_canBattle_mon_idx++; }
@@ -180,20 +217,26 @@ void Jym::battle_start()
 			rlutil::anykey(); 
 			
 			// 更新 log 並告訴戰鬥結果
-			this->battleLog_view->print(8, " P2:"+ p2CurrentMons->getName() + " Dead.");
-			this->battleLog_view->print(9, margin + " wait to next battle...");
+			this->battleLog_view->print(8, " Round " + std::to_string(round_cnt) + " finish! ");
+			this->battleLog_view->print(9, margin + " wait to next Round...");
 			showlog();
 			rlutil::anykey();
-			rlutil::cls();
 			// 記得要清空 log View 訊息。
-			for (size_t i = 1; i <= logRowSize; i++)
-			{
-				this->battleLog_view->print(i, std::string(logColSize, ' '));
-			}
+			clearLog();
+			// 一輪正式結束
+			round_cnt++; //更新回合數
 		}
-
+		// 勝利的 monster idx
+		int winner_idx = fight_list[0]->getHp() <= 0 ? 1:0;
+		
+		this->battleLog_view->print(9, std::string(10, ' ') +
+			fight_list[0]->getName() + " v.s. "+ fight_list[1]->getName() + " battle End.  " +
+			fight_list[winner_idx]->getMasterName() + "\'s Monster \"" + fight_list[winner_idx]->getName() + "\" is Winner");
+		showlog();
+		rlutil::anykey();
+		rlutil::cls();
 		// 更新 HoldMonster List 需要用到 顏色嗎?
-	}
+	}// 雙方繼續戰鬥<loop>
 
 	// 已有其中一方 不能戰鬥。
 	// 決定誰獲勝? 隨便判定 P1 or P2 的參數就可以。 這邊用 P1判斷。
@@ -292,10 +335,12 @@ void Jym::fight(MonsterPtr M1, MonsterPtr M2)
 
 	// 打架摟~
 	while ( bothMonsterCanFight(fight_list[0], fight_list[1]) ) {
-		for (;;) {
-			//SkillToken tk_0 = fight_list[0]->useSkill();
-		}
+		// 速度高的怪獸 先攻擊
+		SkillToken tk_0 = fight_list[0]->attack(*fight_list[1]);
+
+		rlutil::anykey("Press anykey to next round");
 	}
+
 
 }
 
@@ -324,4 +369,12 @@ MonsterPtr Jym::pickCanBattleMonster(PlayerPtr player)
 void Jym::showlog()
 {
 	this->battle_log.showRegisteredView();
+}
+
+inline void Jym::clearLog()
+{
+	for (size_t i = 1; i <= logRowSize; i++)
+	{
+		this->battleLog_view->print(i, std::string(logColSize, ' '));
+	}
 }

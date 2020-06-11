@@ -2,6 +2,10 @@
 #include <string>
 #include <ctime>
 
+#define YES_INCREASE 1
+#define NO 0
+#define YES_DECREASE -1
+
 // Monster::useSkill() 所會回傳的物件，這個不是技能
 class SkillToken {
 public:
@@ -14,7 +18,7 @@ public:
 	//  ~ canCauseOtherMonsterInfluence 不為 false 時，以下兩個參數才有意義。 ~ 
 	// @influence_property: 造成哪一類影響。
 	// @influence_value: 影響的數值。
-	SkillToken(std::string skname, std::string msg, bool canCauseOtherMonsterInfluence
+	SkillToken(std::string skname, std::string msg, int canCauseOtherMonsterInfluence
 		, propertyType influence_property, int influence_value) {
 
 		this->skname = skname;
@@ -29,7 +33,12 @@ public:
 	std::string getUsedMsg() { return std::string(this->msg); }
 
 	//此 token 是否可以造成其他怪物影響
-	bool canCauseOtherMonsterInfluence() { return canCauseOtherMonsterInfluence_F; }
+	int canCauseOtherMonsterInfluence() { return canCauseOtherMonsterInfluence_F; }
+
+	// 會被影響的屬性
+	propertyType get_influence_property() { return this->influence_property; }
+
+	int get_influence_value() { return this->influence_value; }
 
 private:
 
@@ -39,8 +48,8 @@ private:
 	// 使用技能後的訊息
 	std::string msg = "Default message";
 
-	// 此 token 是否可以造成其他怪物影響
-	bool canCauseOtherMonsterInfluence_F = false;
+	// 此 token 是否可以造成其他怪物影響， 0代表不能，1代表正影響，-1代表負影響。
+	int canCauseOtherMonsterInfluence_F = NO;
 
 	// 如果  可以造成影響，那是哪一類?
 	propertyType influence_property = UNK;
@@ -56,11 +65,22 @@ public:
 		this->pp = pp;
 		this->skillName = getSKname();
 	}
+
+	// 主動技能
 	virtual void use() = 0;
+
+	// 被攻擊後所觸發的技能
+	virtual void beAttacked() = 0;
 
 	std::string getSKmsg() { return this->skillMsg; };
 
 protected:
+
+	// 當沒有此動作時，就是生成空 token。
+	virtual SkillToken getEmptyToken() {
+		return SkillToken("", "", false, HP, 0);
+	}
+
 	MonsterProperty pp;
 	std::string skillName = "defalult name";
 
@@ -70,7 +90,10 @@ protected:
 	// 呼叫 use() 後 才會指定。
 	SkillToken st;
 
+	int skillUsedTimes = 0;
+
 private:
+
 	// 取得 技能名稱。建構式會執行此 function.
 	std::string getSKname() {
 		if (HEAL == pp.getAbilityIdx()) {
@@ -140,7 +163,11 @@ public:
 		// 更改實際 數值
 		pp.increaseAbility(HP, 3);
 		// 製造 token
-		this->st = SkillToken(this->skillName, this->skillMsg, false, UNK, 0);
+		this->st = SkillToken(this->skillName, this->skillMsg, NO, UNK, 0);
+	}
+	// 覆寫父類別 被攻擊時所觸發的技能
+	virtual void beAttacked()override {
+		this->st = getEmptyToken();
 	}
 };
 
@@ -160,18 +187,28 @@ public:
 		this->skillMsg = "Caused extra " + std::to_string(exDamege) + point + " damege.";
 		
 		// 製造 token
-		this->st = SkillToken(this->skillName, this->skillMsg, true, HP, exDamege);
+		this->st = SkillToken(this->skillName, this->skillMsg, YES_DECREASE, HP, exDamege);
+	}
+	// 覆寫父類別 被攻擊時所觸發的技能
+	virtual void beAttacked()override {
+		// 製造 token
+		this->st = getEmptyToken();
 	}
 };
 
-//反擊1 / 5所受傷害
+//反擊 1/5 所受傷害
 class SK_Counter_Attack : public Skill {
 public:
 	// 建構子
 	SK_Counter_Attack(MonsterProperty& pp) :Skill(pp) {};
 	// 覆寫父類別
 	virtual void use()override {
-
+		// 別人沒有攻擊你你不應該用 主動技能，所以 技能名字應該就是 ""空字串。
+		this->st = getEmptyToken();
+	}
+	// 覆寫父類別 被攻擊時所觸發的技能
+	virtual void beAttacked()override {
+		;
 	}
 };
 
@@ -182,7 +219,16 @@ public:
 	SK_Immunology(MonsterProperty& pp) :Skill(pp) {};
 	// 覆寫父類別
 	virtual void use()override {
-
+		// 使用技能後訊息
+		//this->skillMsg = "heal 3 hp.";
+		// 更改實際 數值
+		//pp.increaseAbility(HP, 3);
+		// 製造 token
+		//this->st = SkillToken(this->skillName, this->skillMsg, NO, UNK, 0);
+	}
+	// 覆寫父類別 被攻擊時所觸發的技能
+	virtual void beAttacked()override {
+		//this->st = getEmptyToken();
 	}
 };
 
@@ -193,7 +239,16 @@ public:
 	SK_Leech_Life(MonsterProperty& pp) :Skill(pp) {};
 	// 覆寫父類別
 	virtual void use()override {
-
+		// 使用技能後訊息
+		//this->skillMsg = "heal 3 hp.";
+		// 更改實際 數值
+		//pp.increaseAbility(HP, 3);
+		// 製造 token
+		//this->st = SkillToken(this->skillName, this->skillMsg, NO, UNK, 0);
+	}
+	// 覆寫父類別 被攻擊時所觸發的技能
+	virtual void beAttacked()override {
+		//this->st = getEmptyToken();
 	}
 };
 
@@ -204,7 +259,16 @@ public:
 	SK_Avoid(MonsterProperty& pp) :Skill(pp) {};
 	// 覆寫父類別
 	virtual void use()override {
-
+		// 使用技能後訊息
+		//this->skillMsg = "heal 3 hp.";
+		// 更改實際 數值
+		//pp.increaseAbility(HP, 3);
+		// 製造 token
+		//this->st = SkillToken(this->skillName, this->skillMsg, NO, UNK, 0);
+	}
+	// 覆寫父類別 被攻擊時所觸發的技能
+	virtual void beAttacked()override {
+		//this->st = getEmptyToken();
 	}
 };
 
@@ -215,7 +279,16 @@ public:
 	SK_Double_Attack(MonsterProperty& pp) :Skill(pp) {};
 	// 覆寫父類別
 	virtual void use()override {
-
+		// 使用技能後訊息
+		//this->skillMsg = "heal 3 hp.";
+		// 更改實際 數值
+		//pp.increaseAbility(HP, 3);
+		// 製造 token
+		//this->st = SkillToken(this->skillName, this->skillMsg, NO, UNK, 0);
+	}
+	// 覆寫父類別 被攻擊時所觸發的技能
+	virtual void beAttacked()override {
+		//this->st = getEmptyToken();
 	}
 };
 
@@ -226,7 +299,16 @@ public:
 	SK_Poison(MonsterProperty& pp) :Skill(pp) {};
 	// 覆寫父類別
 	virtual void use()override {
-
+		// 使用技能後訊息
+		//this->skillMsg = "heal 3 hp.";
+		// 更改實際 數值
+		//pp.increaseAbility(HP, 3);
+		// 製造 token
+		//this->st = SkillToken(this->skillName, this->skillMsg, NO, UNK, 0);
+	}
+	// 覆寫父類別 被攻擊時所觸發的技能
+	virtual void beAttacked()override {
+		//this->st = getEmptyToken();
 	}
 };
 
@@ -237,7 +319,16 @@ public:
 	SK_Lower_Speed(MonsterProperty& pp) :Skill(pp) {};
 	// 覆寫父類別
 	virtual void use()override {
-
+		// 使用技能後訊息
+		//this->skillMsg = "heal 3 hp.";
+		// 更改實際 數值
+		//pp.increaseAbility(HP, 3);
+		// 製造 token
+		//this->st = SkillToken(this->skillName, this->skillMsg, NO, UNK, 0);
+	}
+	// 覆寫父類別 被攻擊時所觸發的技能
+	virtual void beAttacked()override {
+		//this->st = getEmptyToken();
 	}
 };
 
@@ -247,8 +338,18 @@ public:
 	// 建構子
 	SK_Rock_Skin(MonsterProperty& pp) :Skill(pp) {};
 	// 覆寫父類別
+	// 覆寫父類別
 	virtual void use()override {
-
+		// 使用技能後訊息
+		//this->skillMsg = "heal 3 hp.";
+		// 更改實際 數值
+		//pp.increaseAbility(HP, 3);
+		// 製造 token
+		//this->st = SkillToken(this->skillName, this->skillMsg, NO, UNK, 0);
+	}
+	// 覆寫父類別 被攻擊時所觸發的技能
+	virtual void beAttacked()override {
+		//this->st = getEmptyToken();
 	}
 };
 
@@ -259,7 +360,16 @@ public:
 	SK_Lower_Defence(MonsterProperty& pp) :Skill(pp) {};
 	// 覆寫父類別
 	virtual void use()override {
-
+		// 使用技能後訊息
+		//this->skillMsg = "heal 3 hp.";
+		// 更改實際 數值
+		//pp.increaseAbility(HP, 3);
+		// 製造 token
+		//this->st = SkillToken(this->skillName, this->skillMsg, NO, UNK, 0);
+	}
+	// 覆寫父類別 被攻擊時所觸發的技能
+	virtual void beAttacked()override {
+		//this->st = getEmptyToken();
 	}
 };
 
@@ -270,7 +380,16 @@ public:
 	SK_Lower_Attack(MonsterProperty& pp) :Skill(pp) {};
 	// 覆寫父類別
 	virtual void use()override {
-
+		// 使用技能後訊息
+		//this->skillMsg = "heal 3 hp.";
+		// 更改實際 數值
+		//pp.increaseAbility(HP, 3);
+		// 製造 token
+		//this->st = SkillToken(this->skillName, this->skillMsg, NO, UNK, 0);
+	}
+	// 覆寫父類別 被攻擊時所觸發的技能
+	virtual void beAttacked()override {
+		//this->st = getEmptyToken();
 	}
 };
 

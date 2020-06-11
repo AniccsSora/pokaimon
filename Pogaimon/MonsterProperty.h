@@ -62,12 +62,15 @@ public:
 	// @ type: 要增加 的屬性。
 	// @ reduce_value: 要增加多少數值。
 	virtual void increaseAbility(propertyType type, int increase_value) = 0;
+
+	// 使此怪獸不會被降能力
+	void set_sk_Immun_propertyDebuff_isTrue() {
+		this->sk_Immun_propertyDebuff = 1;
+	}
+
 protected:
 	// 這邊的參數 是給 怪物與怪物 之間 技能互動所用到的私有變數，如果沒有用到 都會是 -1。
 	// 並且由多個 私有函式 幫助確認。(檢查 ability)
-
-	// 有一些技能會 只能發動一次，或者固定次數， -1 代表不屬於此技能，0代表屬於且尚未使用， 大於0代表已經觸發過 此數 次
-	int sk_usedSkill_cnt = -1;
 
 	// 特殊狀態 抗性，免疫降低能力值的特殊能力(HP,ATK,DEF,SPEED, )
 	int sk_Immun_propertyDebuff = -1;

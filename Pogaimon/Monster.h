@@ -22,7 +22,8 @@ public:
 	
 protected:
 	// 攻擊 beAttactedMonster.
-	virtual void attack(IMonsterPtr beAttactedMonster) = 0; // pure virtual function
+	//virtual SkillToken attack(Monster& beAttactedMonster) = 0; // pure virtual function
+
 	MonsterProperty property;
 };
 
@@ -34,9 +35,6 @@ public:
 
 	// copy 建構子
 	Monster(const Monster& mos);
-
-	// ??? 沒實作
-	void attack(IMonsterPtr beAttactedMonster);
 
 	// 取得寵物在圖鑑上的編號
 	int getIdx();
@@ -57,20 +55,35 @@ public:
 
 	int getAbilityIdx();
 
+	// 寵物是否死亡?
+	bool isDead();
+
 	// 將 monster ability idx 轉成他的名字。
 	std::string getAbilityNameByAbliIdx(int idx);
 
+	// 普通攻擊
+	SkillToken attack(Monster& beAttactedMonster);
+
 	// 使用技能
 	SkillToken useSkill();
-	// 使用技能
-	SkillToken useSkill(SkillToken tk);
 	
+	// 處理敵人的攻擊，扣除自己的屬性 or 做 相對應的動作
+	SkillToken processEnemyToken(SkillToken emyTk);
+	
+	// 取得主人名
+	std::string getMasterName();
+
+	// 設定主人名
+	void setMasterName(std::string masterName);
+
 private:
 	int aaa = 0;
 
 	// 建構時給定。
 	Skill* skill = NULL;
-
+	
+	// 主人的名稱
+	std::string masterName = "Undefined";
 };
 
 typedef Monster* MonsterPtr;

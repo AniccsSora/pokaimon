@@ -68,6 +68,8 @@ private:
 	// 印出 log, 簡化呼叫用的。
 	inline void showlog();
 
+	inline void clearLog();
+
 	// 一個玩家會有對應於 monsterList 數量的 Displayer,
 	// 每個 Displayer 都有 ASCII, 寵物屬性。
 	MySpace::Vec_1D_<Displayer> P1_ASCII_DList;

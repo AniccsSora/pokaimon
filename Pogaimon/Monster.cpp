@@ -36,6 +36,8 @@ Monster::Monster(int monsterIdx, MonsterPropertyList mstPropertyList)
 		this->skill = new SK_Counter_Attack(this->property);
 	}
 	else if (property.getAbilityIdx() == skillType::IMMUNOLOGY) {
+		// 特殊能力
+		this->property.set_sk_Immun_propertyDebuff_isTrue();
 		this->skill = new SK_Immunology(this->property);
 	}
 	else if (property.getAbilityIdx() == skillType::LEECH_LIFE) {
@@ -71,14 +73,10 @@ Monster::Monster(int monsterIdx, MonsterPropertyList mstPropertyList)
 Monster::Monster(const Monster& mos)
 {
 	if (this != &mos) {
+		this->masterName = mos.masterName;
 		MonsterProperty* mp = new MonsterProperty(mos.property);
 		this->property = *mp;
 	}
-}
-
-void Monster::attack(IMonsterPtr beAttactedMonster) {
-
-		// YA 從父類繼承下的
 }
 
 int Monster::getIdx() {
@@ -120,6 +118,15 @@ int Monster::getSpeed() {
 
 int Monster::getAbilityIdx() {
 	return property.getAbilityIdx();
+}
+
+bool Monster::isDead()
+{
+	bool flg = false;
+	if (getHp() <= 0) {
+		flg = true;
+	}
+	return flg;
 }
 
 std::string Monster::getAbilityNameByAbliIdx(int idx)
@@ -170,13 +177,61 @@ std::string Monster::getAbilityNameByAbliIdx(int idx)
 	return rtnName;
 }
 
+SkillToken Monster::attack(Monster& beAttactedMonster)
+{
+	SkillToken* rtnSkillToken;
+
+	// 計算造成傷害
+	int causeDamage = this->getAtk() - beAttactedMonster.getDef();
+
+	// 造成敵人的 HP 下降。
+	beAttactedMonster.property.reduceAbility(HP, causeDamage);
+
+	std::string msg = this->getName() + " caused " + std::to_string(causeDamage) 
+									  + " damage to " + beAttactedMonster.getName();
+
+	// 本來會扣寫 但是這邊已經 扣完了，所以不用 再把旗標設為 YES_XXX
+	rtnSkillToken = new SkillToken("attack", msg, NO, HP, 0);
+
+	return *rtnSkillToken;
+}
+
 SkillToken Monster::useSkill()
 {
 	SkillToken *rtnSkillToken = new  SkillToken();
-	//rtnSkillToken->msg = " " + this->getName() + " use Skill \"";
 	
-	// 依照 此 Monster 做出不同的 Skill
-
+	this->skill->use();
 
 	return *rtnSkillToken;
+}
+
+SkillToken Monster::processEnemyToken(SkillToken emyTk)
+{
+	SkillToken* rtnSkillToken = new  SkillToken();
+
+	// 可以對其他怪獸造成影響。
+	if (emyTk.canCauseOtherMonsterInfluence() != 0) {
+		// 造成 負影響。
+		if (emyTk.canCauseOtherMonsterInfluence() < 0 ){
+			this->property.reduceAbility(emyTk.get_influence_property(), emyTk.get_influence_value());
+		}
+		// 造成 正影響。
+		else {
+			this->property.increaseAbility(emyTk.get_influence_property(), emyTk.get_influence_value());
+		}
+	}
+
+	// 拼 token
+
+	return *rtnSkillToken;
+}
+
+std::string Monster::getMasterName()
+{
+	return this->masterName;
+}
+
+void Monster::setMasterName(std::string masterName)
+{
+	this->masterName = masterName;
 }

@@ -83,13 +83,13 @@ Player::Player(const Player& p)
 
 Player::Player(int number_of_monster, std::string npc_name){
 	
-	this->playerName = "NPC";
-
 	// 取得寵物參數圖鑑
 	MonsterPropertyList mstPropertyList = myutil::loadMonsterFile();
 	// 生成怪物
 	for (size_t i = 0; i < number_of_monster; ++i) {
-		monsterList.push_back(new Monster(rand(), mstPropertyList));
+		MonsterPtr tmpM = new Monster(rand(), mstPropertyList);
+		tmpM->setMasterName(npc_name);
+		monsterList.push_back(tmpM);
 	}
 
     // set NPC name
@@ -157,6 +157,9 @@ void Player::setMonsterView_FT(int x, int y)
 // 超過三個怎麼辦?
 void Player::addMonster(MonsterPtr monsterCaught) throw(OverThreeMonsterUNHANDLE)
 {
+	// 設定此怪獸 的 主人姓名
+	monsterCaught->setMasterName(this->playerName);
+
 	// monsterList、monsterView
 
 	if (this->monsterList.size() >= 3) {
