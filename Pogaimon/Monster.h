@@ -4,7 +4,7 @@
 #include <iostream>
 #include "MonsterProperty.h"
 #include <ctime>
-#include "Skill.h"
+#include "Skill.cpp"
 
 // pokemons.csv 存的位置。
 #define monster_define_filePath "./assets/pokemons.csv"
@@ -30,28 +30,12 @@ class Monster : public IMonster {
 public:
 	
 	// 指定 monsterIdx 的怪物生成, 超出的去 idx 照樣生給你，就亂生。
-	Monster(int monsterIdx, MonsterPropertyList mstPropertyList){
-		// 處理超出去的 idx
-		if (monsterIdx > mstPropertyList.size()-1) { // 0-base > 1-base
-			monsterIdx = (monsterIdx+rand()) % mstPropertyList.size();
-		}
-		// 寵物的編號
-		property.setIdx(mstPropertyList.at(monsterIdx)->getIdx());
+	Monster(int monsterIdx, MonsterPropertyList mstPropertyList);
 
-		// 寵物名稱
-		property.setName(mstPropertyList.at(monsterIdx)->getName());
-
-		// 屬性
-		property.setType(mstPropertyList.at(monsterIdx)->getType());
-		property.setTypeStr(mstPropertyList.at(monsterIdx)->getTypeStr());
-		property.setHp(mstPropertyList.at(monsterIdx)->getHp());
-		property.setAtk(mstPropertyList.at(monsterIdx)->getAtk());
-		property.setDef(mstPropertyList.at(monsterIdx)->getDef());
-		property.setSpeed(mstPropertyList.at(monsterIdx)->getSpeed());
-		property.setAbilityIdx(mstPropertyList.at(monsterIdx)->getAbilityIdx());
-	};
-	// copy
+	// copy 建構子
 	Monster(const Monster& mos);
+
+	// ??? 沒實作
 	void attack(IMonsterPtr beAttactedMonster);
 
 	// 取得寵物在圖鑑上的編號
@@ -75,12 +59,19 @@ public:
 
 	// 將 monster ability idx 轉成他的名字。
 	std::string getAbilityNameByAbliIdx(int idx);
-	   
+
+	// 使用技能
+	SkillToken useSkill();
+	// 使用技能
+	SkillToken useSkill(SkillToken tk);
+	
 private:
 	int aaa = 0;
 
-	
+	// 建構時給定。
+	Skill* skill = NULL;
 
 };
+
 typedef Monster* MonsterPtr;
 
