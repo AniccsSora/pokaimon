@@ -175,7 +175,7 @@ void Jym::battle_start()
 			
 			// 打架摟~
 			// 速度高的怪獸 先攻擊
-			SkillToken tk_0 = fight_list[0]->attack(*fight_list[1]);
+			//SkillToken tk_0 = fight_list[0]->attack(*fight_list[1]);
 			
 			//--------------------------
 			this->battleLog_view->print_c(9, margin + "  wait to update "+ fight_list[1]->getMasterName() +" Property View()...", rlutil::LIGHTCYAN);
@@ -193,7 +193,7 @@ void Jym::battle_start()
 
 			// -------- 後攻擊的人
 
-			SkillToken tk_2 = fight_list[1]->attack(*fight_list[0]);
+			//SkillToken tk_2 = fight_list[1]->attack(*fight_list[0]);
 
 			this->battleLog_view->print_c(9, margin + "  wait to update " + fight_list[0]->getMasterName() + " Property View()...", rlutil::LIGHTCYAN);
 			showlog();
@@ -247,7 +247,7 @@ void Jym::battle_start()
 	}
 
 	std::cout.flush();
-	rlutil::anykey(" Who win?? wait... P1's Point: " + std::to_string(P1->getPoint()) + "\.");
+	rlutil::anykey(" Who win?? wait... P1's Point: " + std::to_string(P1->getPoint()) + ".");
 }
 
 bool Jym::bothPlayerCanFight()
@@ -336,7 +336,7 @@ void Jym::fight(MonsterPtr M1, MonsterPtr M2)
 	// 打架摟~
 	while ( bothMonsterCanFight(fight_list[0], fight_list[1]) ) {
 		// 速度高的怪獸 先攻擊
-		SkillToken tk_0 = fight_list[0]->attack(*fight_list[1]);
+		//SkillToken tk_0 = fight_list[0]->attack(*fight_list[1]);
 
 		rlutil::anykey("Press anykey to next round");
 	}

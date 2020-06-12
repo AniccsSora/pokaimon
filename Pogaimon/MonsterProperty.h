@@ -68,12 +68,33 @@ public:
 		this->sk_Immun_propertyDebuff = 1;
 	}
 
+	// 可以迴避下次攻擊
+	void setCanAvoidNextATK() {
+		this->can_avoid_next_attack_flg = 1;
+	}
+
+	// 不可迴避下次攻擊
+	void setCanAvoidNextATK_FALSE() {
+		this->can_avoid_next_attack_flg = 0;
+	}
+
+	// 檢查是否可以迴避下次攻擊
+	bool canAvoidNextAtk() {
+		if (can_avoid_next_attack_flg > 0)
+			return true;
+		else
+			return false;
+	}
+
 protected:
 	// 這邊的參數 是給 怪物與怪物 之間 技能互動所用到的私有變數，如果沒有用到 都會是 -1。
 	// 並且由多個 私有函式 幫助確認。(檢查 ability)
 
 	// 特殊狀態 抗性，免疫降低能力值的特殊能力(HP,ATK,DEF,SPEED, )
 	int sk_Immun_propertyDebuff = -1;
+
+	// 是否可以迴避下次攻擊? 0 不能 1 可以。
+	int can_avoid_next_attack_flg = 0;
 
 	// 使否可以降低能力。
 	bool canReduceAbility() {
@@ -262,6 +283,7 @@ public:
 	// 降低指定數值
 	void reduceAbility(propertyType type, int reduce_value)override;
 
+	// 增加指定數值
 	void  increaseAbility(propertyType type, int increase_value)override;
 
 private:

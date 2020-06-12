@@ -32,8 +32,13 @@ MonsterProperty::MonsterProperty(const MonsterProperty& mp){
 void MonsterProperty::reduceAbility(propertyType type, int reduce_value)
 {
 	if ( canReduceAbility() ) {
-		if (type == HP) {
-			this->hp -= reduce_value;
+		if (type == HP ) {
+			if (canAvoidNextAtk()) { 
+				can_avoid_next_attack_flg = 0; //旗標重設為 0;
+			}
+			else {
+				this->hp -= reduce_value;
+			}
 		}
 		else if (type == ATK){
 			this->atk -= reduce_value;

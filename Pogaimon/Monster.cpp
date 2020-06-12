@@ -1,7 +1,350 @@
 #include "Monster.h"
 #include "iostream"
+#include <ctime>
+#include <cmath>
+
+// *********************  AttackBehavior(父) ******************  
+
+AttackBehavior::AttackBehavior(IMonster& attacker)
+{
+	this->attacker = &attacker;
+}
+
+AttackBehavior::AttackBehavior()
+{
+}
+
+const std::string AttackBehavior::getAtkStr()
+{
+	return std::to_string(attack_point);
+}
+
+const int AttackBehavior::getAtk()
+{
+	return this->attack_point;
+}
+
+void AttackBehavior::setAttack_point(int atkPoint)
+{
+	this->attack_point = atkPoint;
+}
+
+void AttackBehavior::execute(IMonster& enemy)
+{
+	;// 預設 AttackBehavior 是不執行任何動作的。
+}
+
+const std::string AttackBehavior::getAfterAttackMsg()
+{
+	return atkMessage;
+}
 
 
+
+std::string AttackBehavior::d2str(int d)
+{
+	if (d > 1) {
+		return " " + std::to_string(d) + " damages.";
+	}
+	else {
+		return " " + std::to_string(d) + " damage.";
+	}
+}
+
+MonsterPtr AttackBehavior::trans2monsterPtr(IMonster& input)
+{
+	try {
+		MonsterPtr rtn = static_cast<MonsterPtr>(&input);
+		return rtn;
+	}
+	catch (...) {
+		std::cout << "\nbad_cast IMonster -> Monster cast failed." << std::endl;
+	}
+}
+
+// ************************************************************  
+
+// *********************  NormalAttack(子) ******************  
+
+NormalAttack::NormalAttack(IMonster& im_attacker) :AttackBehavior(im_attacker)
+{
+	// IMonster 先轉 Monster
+	MonsterPtr enemyMonsterPtr = trans2monsterPtr(im_attacker);
+
+	// 更新攻擊力
+	this->attack_point = enemyMonsterPtr->getAtk();
+}
+
+void NormalAttack::execute(IMonster& enemy)
+{
+	MonsterPtr enemyMonsterPtr = trans2monsterPtr(enemy);
+
+	int damage = enemyMonsterPtr->getDef() - attack_point;
+
+	// 造成 XXX ??? 傷害訊息。
+	this->atkMessage = "cause " + enemyMonsterPtr->getName() + d2str(damage);
+
+}
+// **********************************************************  
+//                             ------
+// *********************  SkillBehavior(父) ******************  
+
+SkillBehavior::SkillBehavior(IMonster& attacker)
+{
+	this->attacker = &attacker;
+}
+
+SkillBehavior::SkillBehavior()
+{
+}
+
+void SkillBehavior::execute(IMonster& enemy)
+{
+	;// 預設 SkillBehavior 是不執行任何動作的。
+}
+
+const std::string SkillBehavior::getAfterSkillMsg()
+{
+	return usedskillMsg;
+}
+
+std::string SkillBehavior::getSkillName()
+{
+	// 技能持有者
+	Monster mos = *trans2monsterPtr(*attacker);
+
+	// 回傳用
+	std::string skName = "";
+
+	if (HEAL == mos.getAbilityIdx()) {
+		skName = "Heal";
+	}
+	else if (BURNING == mos.getAbilityIdx()) {
+		skName = "Burning";
+	}
+	else if (BURNING == mos.getAbilityIdx()) {
+		skName = "Counter Attack";
+	}
+	else if (BURNING == mos.getAbilityIdx()) {
+		skName = "Immunology";
+	}
+	else if (BURNING == mos.getAbilityIdx()) {
+		skName = "Leech Life";
+	}
+	else if (BURNING == mos.getAbilityIdx()) {
+		skName = "Avoid";
+	}
+	else if (BURNING == mos.getAbilityIdx()) {
+		skName = "Double Attack";
+	}
+	else if (BURNING == mos.getAbilityIdx()) {
+		skName = "Poison";
+	}
+	else if (BURNING == mos.getAbilityIdx()) {
+		skName = "Lower Speed";
+	}
+	else if (BURNING == mos.getAbilityIdx()) {
+		skName = "Rock Skin";
+	}
+	else if (BURNING == mos.getAbilityIdx()) {
+		skName = "Lower Defence";
+	}
+	else if (BURNING == mos.getAbilityIdx()) {
+		skName = "Lower Attack";
+	}
+	else {
+		skName = "Not defined skill name";
+	}
+
+	return skName;
+}
+
+int SkillBehavior::useTimes()
+{
+	return this->skillusedTimes;
+}
+
+bool SkillBehavior::is_attribute_defuff()
+{
+	return this->is_attribute_defuff_flg;
+}
+
+std::string SkillBehavior::d2str(int d)
+{
+	if (d > 1) {
+		return " " + std::to_string(d) + " damages.";
+	}
+	else {
+		return " " + std::to_string(d) + " damage.";
+	}
+}
+#pragma warning(disable:4172)
+MonsterPtr SkillBehavior::trans2monsterPtr(IMonster input)
+{
+	MonsterPtr rtn = nullptr;
+	try {
+		rtn = static_cast<MonsterPtr>(&input);
+	}
+	catch (...) {
+		std::cout << "\nbad_cast IMonster -> Monster cast failed." << std::endl;
+	}
+	return rtn;
+	#pragma warning(default:4172)
+}
+
+// ***********************************************************  
+
+// *********************  Skill_Heal ******************  
+
+Skill_Heal::Skill_Heal(IMonster& im_attacker) :SkillBehavior(im_attacker)
+{
+	;// 用父建構 初始化即可
+}
+
+void Skill_Heal::execute(IMonster& enemy)
+{
+	// 技能使用者
+	MonsterPtr mos = trans2monsterPtr(*attacker);
+
+	// 要是 IMonster 的 friend 才能直接更動 property。
+
+	// 實作技能
+	mos->property.increaseAbility(HP, 3);
+	// 拼 使用技能後的字串
+	this->usedskillMsg = mos->getName() + " used skills \'" + getSkillName() + "\' cure 3 hp.";
+	this->skillusedTimes++;
+}
+
+// ************************************************************* 
+
+// *********************  Skill_Burning ******************  
+
+Skill_Burning::Skill_Burning(IMonster& im_attacker) :SkillBehavior(im_attacker)
+{
+	;// 用父建構 初始化即可
+}
+
+void Skill_Burning::execute(IMonster& enemy)
+{
+	// 技能使用者
+	MonsterPtr mos = trans2monsterPtr(*attacker);
+	// 被施法者
+	MonsterPtr victim = trans2monsterPtr(enemy);
+
+	// 要是 IMonster 的 friend 才能直接更動 property。
+
+	// 實作技能
+	// 製造 隨機攻擊
+	int ExDamage = rand() % 3 + 1;
+	victim->property.reduceAbility(HP, ExDamage);
+
+	// 拼 使用技能後的字串
+	this->usedskillMsg = mos->getName() + " used skills \'" + getSkillName() +
+		"\' caused " + victim->getName() + std::to_string(ExDamage) + " extra damage.";
+
+	this->skillusedTimes++;
+}
+
+// *******************************************************
+
+// *********************  Skill_Counter_Attack ******************  
+Skill_Counter_Attack::Skill_Counter_Attack(IMonster& im_attacker) :SkillBehavior(im_attacker)
+{
+	;// 用父建構 初始化即可
+}
+
+void Skill_Counter_Attack::execute(IMonster& enemy)
+{
+	// 技能使用者
+	MonsterPtr mos = trans2monsterPtr(*attacker);
+	// 被施法者
+	MonsterPtr victim = trans2monsterPtr(enemy);
+
+	// 要是 IMonster 的 friend 才能直接更動 property。
+
+	// 實作技能
+	// 製造 被攻擊的 1/5(4捨5入).
+	int damage = round((mos->getDef() - victim->getAtk()) / 5);
+	victim->property.reduceAbility(HP, damage);
+
+	// 拼 使用技能後的字串
+	this->usedskillMsg = mos->getName() + " used skills \'" + getSkillName() +
+		"\' caused " + victim->getName() + std::to_string(damage) + " extra damage.";
+
+	this->skillusedTimes++;
+}
+
+
+// **************************************************************
+
+// *********************  Skill_Counter_Attack ****************** 
+
+Skill_Immunology::Skill_Immunology(IMonster& im_attacker) :SkillBehavior(im_attacker)
+{
+	;// 用父建構 初始化即可
+}
+
+void Skill_Immunology::execute(IMonster& enemy)
+{
+	// 技能使用者
+	MonsterPtr mos = trans2monsterPtr(*attacker);
+	// 被施法者
+	MonsterPtr victim = trans2monsterPtr(enemy);
+
+	// 要是 IMonster 的 friend 才能直接更動 property。
+
+	// 實作技能
+	mos->property.set_sk_Immun_propertyDebuff_isTrue();
+
+	// 拼 使用技能後的字串
+	this->usedskillMsg = mos->getName() + " used skills \'" + getSkillName() +
+		"\' it have immunity of " + victim->getName() + " reduction attribute skill";
+
+	this->skillusedTimes++;
+}
+
+// **************************************************************
+
+// *********************  Skill_Leech_Life ****************** 
+
+Skill_Leech_Life::Skill_Leech_Life(IMonster& im_attacker) :SkillBehavior(im_attacker)
+{
+	;// 用父建構 初始化即可
+}
+
+void Skill_Leech_Life::execute(IMonster& enemy)
+{
+	// 技能使用者
+	MonsterPtr mos = trans2monsterPtr(*attacker);
+	// 被施法者
+	MonsterPtr victim = trans2monsterPtr(enemy);
+
+	// 要是 IMonster 的 friend 才能直接更動 property。
+
+	// 實作技能
+
+	// 如果不能攻擊到 目標 則不能發動技能。
+	if (victim->property.canAvoidNextAtk()) {
+		// 已經迴避這次攻擊了，所以旗標歸0
+		victim->property.setCanAvoidNextATK_FALSE();
+
+		// 技能使用 miss
+		this->usedskillMsg = mos->getName() + " used skills \'" + getSkillName() +
+			"\', but " + victim->getName() + " avoid this skill.";
+	}
+	else {
+		// 2~3 點吸收 HP
+		int suuHp = rand() % 2 + 2;
+		mos->property.increaseAbility(HP, suuHp);
+		// 拼 使用技能後的字串
+		this->usedskillMsg = mos->getName() + " used skills \'" + getSkillName() +
+			"\' heal " + std::to_string(suuHp) + " HP.";
+	}
+
+	this->skillusedTimes++;
+}
+
+// ***********************************************************
 
 Monster::Monster(int monsterIdx, MonsterPropertyList mstPropertyList)
 {
@@ -24,7 +367,7 @@ Monster::Monster(int monsterIdx, MonsterPropertyList mstPropertyList)
 	property.setDef(mstPropertyList.at(monsterIdx)->getDef());
 	property.setSpeed(mstPropertyList.at(monsterIdx)->getSpeed());
 	property.setAbilityIdx(mstPropertyList.at(monsterIdx)->getAbilityIdx());
-
+	/*
 	// 指定生成 何種 Skill 物件。
 	if (property.getAbilityIdx() == skillType::HEAL) {
 		this->skill = new SK_Heal(this->property);
@@ -68,6 +411,7 @@ Monster::Monster(int monsterIdx, MonsterPropertyList mstPropertyList)
 		rlutil::anykey(" Err(Monster.cpp): wrong skill initialize : property.getAbilityIdx()=\'" + std::to_string(property.getAbilityIdx()) + "\'");
 		exit(887);
 	}
+	*/
 }
 
 Monster::Monster(const Monster& mos)
@@ -177,55 +521,6 @@ std::string Monster::getAbilityNameByAbliIdx(int idx)
 	return rtnName;
 }
 
-SkillToken Monster::attack(Monster& beAttactedMonster)
-{
-	SkillToken* rtnSkillToken;
-
-	// 計算造成傷害
-	int causeDamage = this->getAtk() - beAttactedMonster.getDef();
-
-	// 造成敵人的 HP 下降。
-	beAttactedMonster.property.reduceAbility(HP, causeDamage);
-
-	std::string msg = this->getName() + " caused " + std::to_string(causeDamage) 
-									  + " damage to " + beAttactedMonster.getName();
-
-	// 本來會扣寫 但是這邊已經 扣完了，所以不用 再把旗標設為 YES_XXX
-	rtnSkillToken = new SkillToken("attack", msg, NO, HP, 0);
-
-	return *rtnSkillToken;
-}
-
-SkillToken Monster::useSkill()
-{
-	SkillToken *rtnSkillToken = new  SkillToken();
-	
-	this->skill->use();
-
-	return *rtnSkillToken;
-}
-
-SkillToken Monster::processEnemyToken(SkillToken emyTk)
-{
-	SkillToken* rtnSkillToken = new  SkillToken();
-
-	// 可以對其他怪獸造成影響。
-	if (emyTk.canCauseOtherMonsterInfluence() != 0) {
-		// 造成 負影響。
-		if (emyTk.canCauseOtherMonsterInfluence() < 0 ){
-			this->property.reduceAbility(emyTk.get_influence_property(), emyTk.get_influence_value());
-		}
-		// 造成 正影響。
-		else {
-			this->property.increaseAbility(emyTk.get_influence_property(), emyTk.get_influence_value());
-		}
-	}
-
-	// 拼 token
-
-	return *rtnSkillToken;
-}
-
 std::string Monster::getMasterName()
 {
 	return this->masterName;
@@ -234,4 +529,27 @@ std::string Monster::getMasterName()
 void Monster::setMasterName(std::string masterName)
 {
 	this->masterName = masterName;
+}
+
+void Monster::setEnemy(IMonster& enemy)
+{
+	this->encounterEnemy = &enemy;
+}
+
+void Monster::setNoEnemy()
+{
+	this->encounterEnemy = NULL;
+}
+
+IMonster& Monster::getEnemyInstance()
+{
+	if (this->encounterEnemy == nullptr)
+		throw  NOT_EXIST_ENEMY("Does not exists enemy!");
+
+	return *(this->encounterEnemy);
+}
+
+void Monster::setAttackBehavior(AttackBehavior& AB)
+{
+	this->attackBehavior = &AB;
 }
