@@ -41,7 +41,7 @@ public:
 	virtual void execute(IMonster& enemy);
 
 	// 取得攻擊完成後的 資訊。
-	virtual const std::string getAfterAttackMsg();
+	virtual const std::string getExecutedMsg();
 
 	// ******************************************************
 protected:
@@ -66,7 +66,7 @@ protected:
 
 // 普通攻擊，直接看自己的攻擊數值。
 class NormalAttack : public AttackBehavior {
-
+public:
 	// 建構子
 	// 擁有基礎攻擊，im_attacker 代表攻擊者
 	NormalAttack(IMonster& im_attacker);
@@ -89,7 +89,7 @@ public:
 	virtual void execute(IMonster& enemy); // 必定要覆寫，不設定 純虛擬 因為這樣不能持有此類別參照。
 
 	// 取得攻擊完成後的 資訊。
-	virtual const std::string getAfterSkillMsg();
+	virtual const std::string getExecutedMsg();
 
 	// 取得技能名稱
 	virtual std::string getSkillName();
@@ -136,6 +136,14 @@ protected:
 	bool is_attribute_defuff_flg = false;
 };
 
+// 沒有行為
+class NoneBehavior : public SkillBehavior {
+public:
+	NoneBehavior(IMonster& im_attacker);
+
+	virtual void execute(IMonster& enemy)override;
+};
+
 // 每回合回復HP3
 class Skill_Heal : public SkillBehavior {
 public:
@@ -153,18 +161,6 @@ public:
 
 	virtual void execute(IMonster& enemy)override;
 };
-
-/*
-templete
-
-class templete: public SkillBehavior {
-public:
-	templete(IMonster& im_attacker);
-
-	virtual void execute(IMonster& enemy)override;
-};
-
-*/
 
 // 反擊1/5所受傷害
 class Skill_Counter_Attack : public SkillBehavior {
@@ -190,16 +186,83 @@ public:
 	virtual void execute(IMonster& enemy)override;
 };
 
+// 1/5機率迴避攻擊
+class Skill_Avoid: public SkillBehavior {
+public:
+	Skill_Avoid(IMonster& im_attacker);
+
+	virtual void execute(IMonster& enemy)override;
+};
+
+// 1/5機率兩次攻擊
+class Skill_Double_Attack: public SkillBehavior {
+public:
+	Skill_Double_Attack(IMonster& im_attacker);
+
+	virtual void execute(IMonster& enemy)override;
+};
+
+// 被攻擊的敵方中毒每回合-2HP(一場只發動一次, 產生影響的下一回合開始計算，持續2回合)
+class Skill_Poison : public SkillBehavior {
+public:
+	Skill_Poison(IMonster& im_attacker);
+
+	virtual void execute(IMonster& enemy)override;
+};
+
+// 攻擊時降低敵方速度值2(一場只發動一次, 產生影響的下一回合開始計算，持續2回合)
+class Skill_Lower_Speed: public SkillBehavior {
+public:
+	Skill_Lower_Speed(IMonster& im_attacker);
+
+	virtual void execute(IMonster& enemy)override;
+};
+
+// 每次受到的傷害-2
+class Skill_Rock_Skin: public SkillBehavior {
+public:
+	Skill_Rock_Skin(IMonster& im_attacker);
+
+	virtual void execute(IMonster& enemy)override;
+};
+
+// 攻擊時降低敵方防禦力2(一場只發動一次, 產生影響的下一回合開始計算，持續2回合)
+class Skill_Lower_Defence: public SkillBehavior {
+public:
+	Skill_Lower_Defence(IMonster& im_attacker);
+
+	virtual void execute(IMonster& enemy)override;
+};
+
+// 攻擊時降低敵方攻擊力2(一場只發動一次, 產生影響的下一回合開始計算，持續2回合)
+class Skill_Lower_Attack: public SkillBehavior {
+public:
+	Skill_Lower_Attack(IMonster& im_attacker);
+
+	virtual void execute(IMonster& enemy)override;
+};
+
+
 class IMonster
 {
 public:
 
 	friend class Jym;// 需要直接取得 Monster 的各個屬性作更動。
+	friend class NormalAttack;
 	friend class Skill_Heal;
 	friend class Skill_Burning;
 	friend class Skill_Counter_Attack;
 	friend class Skill_Immunology;
 	friend class Skill_Leech_Life;
+	friend class Skill_Avoid;
+	friend class Skill_Double_Attack;
+	friend class Skill_Poison;
+	friend class Skill_Lower_Speed;
+	friend class Skill_Rock_Skin;
+	friend class Skill_Lower_Defence;
+	friend class Skill_Lower_Attack;
+
+
 	IMonster() = default;
 	
 protected:
@@ -265,13 +328,28 @@ public:
 	// 取得敵人，如果沒有敵人，直接跳例外，阻止接下來的執行。
 	IMonster& getEnemyInstance();
 
-	// 該改 攻擊行為
+	// 修改 攻擊行為
 	void setAttackBehavior(AttackBehavior& AB);
 
-private:
+	// 執行 普通攻擊
+	void exeAttackBehavior();
+
+	// 執行 技能
+	void exeSkillBehavior();
 	
-	// 建構時給定。
-	//Skill* skill = NULL;
+	// 執行 敵人攻擊後的被動技能
+	void exeAfterBeAttackedBehavior();
+
+	// 取得 執行完普通攻擊的 回傳訊息。
+	std::string getExeAttackBehaviorMessage();
+
+	// 取得 技能的 回傳訊息。
+	std::string getExeSkillBehaviorMessage();
+
+	// 取得 敵人攻擊後的被動技能的 回傳訊息。
+	std::string getExeAfterBeAttackedBehaviorMessage();
+
+private:
 	
 	// 主人的名稱
 	std::string masterName = "Undefined Master";

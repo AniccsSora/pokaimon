@@ -1,4 +1,5 @@
 #include "Monster.h"
+#include "Myutil.h"
 #include "iostream"
 #include <ctime>
 #include <cmath>
@@ -34,7 +35,7 @@ void AttackBehavior::execute(IMonster& enemy)
 	;// 預設 AttackBehavior 是不執行任何動作的。
 }
 
-const std::string AttackBehavior::getAfterAttackMsg()
+const std::string AttackBehavior::getExecutedMsg()
 {
 	return atkMessage;
 }
@@ -69,20 +70,24 @@ MonsterPtr AttackBehavior::trans2monsterPtr(IMonster& input)
 NormalAttack::NormalAttack(IMonster& im_attacker) :AttackBehavior(im_attacker)
 {
 	// IMonster 先轉 Monster
-	MonsterPtr enemyMonsterPtr = trans2monsterPtr(im_attacker);
+	MonsterPtr mos = trans2monsterPtr(im_attacker);
 
 	// 更新攻擊力
-	this->attack_point = enemyMonsterPtr->getAtk();
+	this->attack_point = mos->getAtk();
 }
 
 void NormalAttack::execute(IMonster& enemy)
 {
+	// 敵人
 	MonsterPtr enemyMonsterPtr = trans2monsterPtr(enemy);
 
-	int damage = enemyMonsterPtr->getDef() - attack_point;
+	// 對敵人造成的傷害
+	int damage = enemyMonsterPtr->getDef() - this->attack_point;
 
 	// 造成 XXX ??? 傷害訊息。
 	this->atkMessage = "cause " + enemyMonsterPtr->getName() + d2str(damage);
+
+	enemyMonsterPtr->property.reduceAbility(HP, damage);
 
 }
 // **********************************************************  
@@ -103,7 +108,7 @@ void SkillBehavior::execute(IMonster& enemy)
 	;// 預設 SkillBehavior 是不執行任何動作的。
 }
 
-const std::string SkillBehavior::getAfterSkillMsg()
+const std::string SkillBehavior::getExecutedMsg()
 {
 	return usedskillMsg;
 }
@@ -194,6 +199,21 @@ MonsterPtr SkillBehavior::trans2monsterPtr(IMonster input)
 
 // ***********************************************************  
 
+// *********************  NoneBehavior ****************** 
+
+NoneBehavior::NoneBehavior(IMonster& im_attacker)
+{
+	;// 用父建構 初始化即可
+}
+
+void NoneBehavior::execute(IMonster& enemy)
+{
+	;// 因為沒有行為所以不實作
+	this->skillusedTimes++;
+}
+
+// ******************************************************
+
 // *********************  Skill_Heal ******************  
 
 Skill_Heal::Skill_Heal(IMonster& im_attacker) :SkillBehavior(im_attacker)
@@ -236,7 +256,8 @@ void Skill_Burning::execute(IMonster& enemy)
 	// 實作技能
 	// 製造 隨機攻擊
 	int ExDamage = rand() % 3 + 1;
-	victim->property.reduceAbility(HP, ExDamage);
+	// 直接降低
+	victim->property.reduceDirectly(HP, ExDamage);
 
 	// 拼 使用技能後的字串
 	this->usedskillMsg = mos->getName() + " used skills \'" + getSkillName() +
@@ -344,6 +365,239 @@ void Skill_Leech_Life::execute(IMonster& enemy)
 	this->skillusedTimes++;
 }
 
+// **************************************************************
+
+// *********************  Skill_Avoid ****************** 
+
+Skill_Avoid::Skill_Avoid(IMonster& im_attacker)
+{
+	;// 用父建構 初始化即可
+}
+
+void Skill_Avoid::execute(IMonster& enemy)
+{
+	// 技能使用者
+	MonsterPtr mos = trans2monsterPtr(*attacker);
+	// 被施法者
+	//MonsterPtr victim = trans2monsterPtr(enemy);
+
+	// 要是 IMonster 的 friend 才能直接更動 property。
+
+	// 實作技能
+	if ( myutil::X_Probability_get_True(0.2) ) {
+		mos->property.setCanAvoidNextATK();
+
+		// 拼 使用技能後的字串
+		this->usedskillMsg = mos->getName() + " used skills \'" + getSkillName() +
+			"\' success!";
+		this->skillusedTimes++;
+	}
+	else {
+		;// 技能沒觸發就不做事
+		this->usedskillMsg = mos->getName() + " used skills \'" + getSkillName() +
+			"\' fail. ";
+	}
+	
+}
+// **************************************************************
+
+// *********************  Double_Attack ****************** 
+
+Skill_Double_Attack::Skill_Double_Attack(IMonster& im_attacker)
+{
+	;// 用父建構 初始化即可
+}
+
+void Skill_Double_Attack::execute(IMonster& enemy)
+{
+	// 技能使用者
+	MonsterPtr mos = trans2monsterPtr(*attacker);
+	// 被施法者
+	//MonsterPtr victim = trans2monsterPtr(enemy);
+
+	// 要是 IMonster 的 friend 才能直接更動 property。
+
+	// 實作技能
+	if (myutil::X_Probability_get_True(0.2)) {
+		mos->property.setDoubleAttackOnce();
+
+		// 拼 使用技能後的字串
+		this->usedskillMsg = mos->getName() + " used skills \'" + getSkillName() +
+			"\' success!";
+		this->skillusedTimes++;
+	}
+	else {
+		;// 技能沒觸發就不做事
+		this->usedskillMsg = mos->getName() + " used skills \'" + getSkillName() +
+			"\' fail. ";
+	}
+
+}
+
+// *******************************************************
+
+// *********************  Skill_Poison ****************** 
+Skill_Poison::Skill_Poison(IMonster& im_attacker)
+{
+	;// 用父建構 初始化即可
+}
+
+void Skill_Poison::execute(IMonster& enemy)
+{
+	// 技能使用者
+	MonsterPtr mos = trans2monsterPtr(*attacker);
+	// 被施法者
+	MonsterPtr victim = trans2monsterPtr(enemy);
+
+	if (this->skillusedTimes == 0) {
+		this->usedskillMsg = mos->getName() + " used skills \'" + getSkillName() + "\'";
+	}
+	else if (this->skillusedTimes < 2) {
+		this->usedskillMsg = victim->getName() + " is poisoned, reduced by 2 HP.";
+		victim->property.reduceDirectly(HP, 2);
+	}
+	else {
+		this->usedskillMsg = "";
+		;// 已經過了兩回合
+	}
+
+	this->skillusedTimes ++ ;
+}
+
+// *******************************************************
+
+// *********************  Skill_Lower_Speed ****************** 
+Skill_Lower_Speed::Skill_Lower_Speed(IMonster& im_attacker)
+{
+	;// 用父建構 初始化即可
+}
+
+void Skill_Lower_Speed::execute(IMonster& enemy)
+{
+	// 技能使用者
+	MonsterPtr mos = trans2monsterPtr(*attacker);
+	// 被施法者
+	MonsterPtr victim = trans2monsterPtr(enemy);
+
+	// 目標免疫
+	if (victim->property.canImmun_propertyDebuff()) { 
+		this->usedskillMsg = victim->getName() + " immune \'" + getSkillName() + "\' skill.";
+	}
+	// 目標可以降低速度
+	else { 
+		if (this->skillusedTimes == 0) {
+			this->usedskillMsg = mos->getName() + " used skills \'" + getSkillName() + "\'";
+		}
+		else if (this->skillusedTimes < 2) {
+			this->usedskillMsg = victim->getName() + " is solwed, reduced by 2 speed.";
+			victim->property.reduceAbility(SPEED, 2);
+		}
+		else {
+			this->usedskillMsg = "";
+			;// 已經過了兩回合
+		}
+	}
+
+	this->skillusedTimes++;
+}
+// *******************************************************
+
+// *********************  Skill_Rock_Skin ****************** 
+Skill_Rock_Skin::Skill_Rock_Skin(IMonster& im_attacker)
+{
+	;// 用父建構 初始化即可
+}
+
+void Skill_Rock_Skin::execute(IMonster& enemy)
+{
+	// 技能使用者
+	MonsterPtr mos = trans2monsterPtr(*attacker);
+	// 被施法者
+	//MonsterPtr victim = trans2monsterPtr(enemy);
+
+	// 技能實作
+	mos->property.setImmune_final_damage_amount(2);
+	
+	// 技能使用後訊息
+	this->usedskillMsg = mos->getName() + " used skills \'" + getSkillName() +
+		 "\' damage taken reduced by 2.";
+	
+	this->skillusedTimes++;
+}
+// *******************************************************
+
+// *********************  Skill_Lower_Defence ****************** 
+Skill_Lower_Defence::Skill_Lower_Defence(IMonster& im_attacker)
+{
+	;// 用父建構 初始化即可
+}
+
+void Skill_Lower_Defence::execute(IMonster& enemy)
+{
+	// 技能使用者
+	MonsterPtr mos = trans2monsterPtr(*attacker);
+	// 被施法者
+	MonsterPtr victim = trans2monsterPtr(enemy);
+
+	// 目標免疫
+	if (victim->property.canImmun_propertyDebuff()) {
+		this->usedskillMsg = victim->getName() + " immune \'" + getSkillName() + "\' skill.";
+	}
+	// 目標可以降低速度
+	else {
+		if (this->skillusedTimes == 0) {
+			this->usedskillMsg = mos->getName() + " used skills \'" + getSkillName() + "\'";
+		}
+		else if (this->skillusedTimes < 2) {
+			this->usedskillMsg = victim->getName() + " reduced by 2 defence.";
+			victim->property.reduceAbility(DEF, 2);
+		}
+		else {
+			this->usedskillMsg = "";
+			;// 已經過了兩回合
+		}
+	}
+
+	this->skillusedTimes++;
+}
+// ********************************************************** 
+
+// *********************  Skill_Lower_Attack ****************** 
+Skill_Lower_Attack::Skill_Lower_Attack(IMonster& im_attacker)
+{
+	;// 用父建構 初始化即可
+}
+
+void Skill_Lower_Attack::execute(IMonster& enemy)
+{
+	// 技能使用者
+	MonsterPtr mos = trans2monsterPtr(*attacker);
+	// 被施法者
+	MonsterPtr victim = trans2monsterPtr(enemy);
+
+	// 目標免疫
+	if (victim->property.canImmun_propertyDebuff()) {
+		this->usedskillMsg = victim->getName() + " immune \'" + getSkillName() + "\' skill.";
+	}
+	// 目標可以降低速度
+	else {
+		if (this->skillusedTimes == 0) {
+			this->usedskillMsg = mos->getName() + " used skills \'" + getSkillName() + "\'";
+		}
+		else if (this->skillusedTimes < 2) {
+			this->usedskillMsg = victim->getName() + " reduced by 2 attack point.";
+			victim->property.reduceAbility(ATK, 2);
+		}
+		else {
+			this->usedskillMsg = "";
+			;// 已經過了兩回合
+		}
+	}
+
+	this->skillusedTimes++;
+}
+// *******************************************************
+
 // ***********************************************************
 
 Monster::Monster(int monsterIdx, MonsterPropertyList mstPropertyList)
@@ -367,51 +621,110 @@ Monster::Monster(int monsterIdx, MonsterPropertyList mstPropertyList)
 	property.setDef(mstPropertyList.at(monsterIdx)->getDef());
 	property.setSpeed(mstPropertyList.at(monsterIdx)->getSpeed());
 	property.setAbilityIdx(mstPropertyList.at(monsterIdx)->getAbilityIdx());
-	/*
+	
 	// 指定生成 何種 Skill 物件。
-	if (property.getAbilityIdx() == skillType::HEAL) {
-		this->skill = new SK_Heal(this->property);
+	if (property.getAbilityIdx() == SkillBehavior::HEAL) {
+		// 給定 攻擊行為
+		this->attackBehavior = new NormalAttack(*this);
+		// 給定 技能行為
+		this->skillBehavior = new Skill_Heal(*this);
+		// 給定 被攻擊後的行為
+		this->afterBeAttackedBehavior = new NoneBehavior(*this);
 	}
-	else if (property.getAbilityIdx() == skillType::BURNING) {
-		this->skill = new SK_Burning(this->property);
+	
+	else if (property.getAbilityIdx() == SkillBehavior::BURNING) {
+		// 給定 攻擊行為
+		this->attackBehavior = new NormalAttack(*this);
+		// 給定 技能行為
+		this->skillBehavior = new Skill_Burning(*this);
+		// 給定 被攻擊後的行為
+		this->afterBeAttackedBehavior = new NoneBehavior(*this);
 	}
-	else if (property.getAbilityIdx() == skillType::COUNTER_ATTACK) {
-		this->skill = new SK_Counter_Attack(this->property);
+	else if (property.getAbilityIdx() == SkillBehavior::COUNTER_ATTACK) {
+		// 給定 攻擊行為
+		this->attackBehavior = new NormalAttack(*this);
+		// 給定 技能行為
+		this->skillBehavior = new NoneBehavior(*this); // 注意 反擊不是主動技能
+		// 給定 被攻擊後的行為
+		this->afterBeAttackedBehavior = new Skill_Counter_Attack(*this);
 	}
-	else if (property.getAbilityIdx() == skillType::IMMUNOLOGY) {
-		// 特殊能力
-		this->property.set_sk_Immun_propertyDebuff_isTrue();
-		this->skill = new SK_Immunology(this->property);
+	else if (property.getAbilityIdx() == SkillBehavior::IMMUNOLOGY) {
+		// 給定 攻擊行為
+		this->attackBehavior = new NormalAttack(*this);
+		// 給定 技能行為
+		this->skillBehavior = new Skill_Immunology(*this);
+		// 給定 被攻擊後的行為
+		this->afterBeAttackedBehavior = new NoneBehavior(*this);
 	}
-	else if (property.getAbilityIdx() == skillType::LEECH_LIFE) {
-		this->skill = new SK_Leech_Life(this->property);
+	else if (property.getAbilityIdx() == SkillBehavior::LEECH_LIFE) {
+		// 給定 攻擊行為
+		this->attackBehavior = new NormalAttack(*this);
+		// 給定 技能行為
+		this->skillBehavior = new Skill_Leech_Life(*this);
+		// 給定 被攻擊後的行為
+		this->afterBeAttackedBehavior = new NoneBehavior(*this);
 	}
-	else if (property.getAbilityIdx() == skillType::AVOID) {
-		this->skill = new SK_Avoid(this->property);
+	else if (property.getAbilityIdx() == SkillBehavior::AVOID) {
+		// 給定 攻擊行為
+		this->attackBehavior = new NormalAttack(*this);
+		// 給定 技能行為
+		this->skillBehavior = new Skill_Avoid(*this);
+		// 給定 被攻擊後的行為
+		this->afterBeAttackedBehavior = new NoneBehavior(*this);
 	}
-	else if (property.getAbilityIdx() == skillType::DOUBLE_ATTACK) {
-		this->skill = new SK_Double_Attack(this->property);
+	else if (property.getAbilityIdx() == SkillBehavior::DOUBLE_ATTACK) {
+		// 給定 攻擊行為
+		this->attackBehavior = new NormalAttack(*this);
+		// 給定 技能行為
+		this->skillBehavior = new Skill_Double_Attack(*this);
+		// 給定 被攻擊後的行為
+		this->afterBeAttackedBehavior = new NoneBehavior(*this);
 	}
-	else if (property.getAbilityIdx() == skillType::POISON) {
-		this->skill = new SK_Poison(this->property);
+	else if (property.getAbilityIdx() == SkillBehavior::POISON) {
+		// 給定 攻擊行為
+		this->attackBehavior = new NormalAttack(*this);
+		// 給定 技能行為
+		this->skillBehavior = new Skill_Poison(*this);
+		// 給定 被攻擊後的行為
+		this->afterBeAttackedBehavior = new NoneBehavior(*this);
 	}
-	else if (property.getAbilityIdx() == skillType::LOWER_SPEED) {
-		this->skill = new SK_Lower_Speed(this->property);
+	else if (property.getAbilityIdx() == SkillBehavior::LOWER_SPEED) {
+		// 給定 攻擊行為
+		this->attackBehavior = new NormalAttack(*this);
+		// 給定 技能行為
+		this->skillBehavior = new Skill_Lower_Speed(*this);
+		// 給定 被攻擊後的行為
+		this->afterBeAttackedBehavior = new NoneBehavior(*this);
 	}
-	else if (property.getAbilityIdx() == skillType::ROCK_SKIN) {
-		this->skill = new SK_Rock_Skin(this->property);
+	else if (property.getAbilityIdx() == SkillBehavior::ROCK_SKIN) {
+		// 給定 攻擊行為
+		this->attackBehavior = new NormalAttack(*this);
+		// 給定 技能行為
+		this->skillBehavior = new Skill_Rock_Skin(*this);
+		// 給定 被攻擊後的行為
+		this->afterBeAttackedBehavior = new NoneBehavior(*this);
 	}
-	else if (property.getAbilityIdx() == skillType::LOWER_DEFENCE) {
-		this->skill = new SK_Lower_Defence(this->property);
+	else if (property.getAbilityIdx() == SkillBehavior::LOWER_DEFENCE) {
+		// 給定 攻擊行為
+		this->attackBehavior = new NormalAttack(*this);
+		// 給定 技能行為
+		this->skillBehavior = new Skill_Lower_Defence(*this);
+		// 給定 被攻擊後的行為
+		this->afterBeAttackedBehavior = new NoneBehavior(*this);
 	}
-	else if (property.getAbilityIdx() == skillType::LOWER_ATTACK) {
-		this->skill = new SK_Lower_Attack(this->property);
+	else if (property.getAbilityIdx() == SkillBehavior::LOWER_ATTACK) {
+		// 給定 攻擊行為
+		this->attackBehavior = new NormalAttack(*this);
+		// 給定 技能行為
+		this->skillBehavior = new Skill_Lower_Attack(*this);
+		// 給定 被攻擊後的行為
+		this->afterBeAttackedBehavior = new NoneBehavior(*this);
 	}
 	else {
 		rlutil::anykey(" Err(Monster.cpp): wrong skill initialize : property.getAbilityIdx()=\'" + std::to_string(property.getAbilityIdx()) + "\'");
 		exit(887);
 	}
-	*/
+ 	//rlutil::anykey();
 }
 
 Monster::Monster(const Monster& mos)
@@ -553,3 +866,31 @@ void Monster::setAttackBehavior(AttackBehavior& AB)
 {
 	this->attackBehavior = &AB;
 }
+
+void Monster::exeAttackBehavior()
+{
+	this->attackBehavior->execute(this->getEnemyInstance());
+}
+
+void Monster::exeSkillBehavior()
+{
+	this->skillBehavior->execute(this->getEnemyInstance());
+}
+
+void Monster::exeAfterBeAttackedBehavior()
+{
+	this->afterBeAttackedBehavior->execute(this->getEnemyInstance());
+}
+std::string Monster::getExeAttackBehaviorMessage()
+{
+	return this->attackBehavior->getExecutedMsg();
+}
+std::string Monster::getExeSkillBehaviorMessage()
+{
+	return this->skillBehavior->getExecutedMsg();
+}
+std::string Monster::getExeAfterBeAttackedBehaviorMessage()
+{
+	return this->afterBeAttackedBehavior->getExecutedMsg();
+}
+//------------------------------------------------------

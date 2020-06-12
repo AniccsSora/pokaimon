@@ -154,10 +154,14 @@ void Jym::battle_start()
 		// 各 玩家 挑一隻出來
 		MonsterPtr p1CurrentMons = pickCanBattleMonster(P1);
 		MonsterPtr p2CurrentMons = pickCanBattleMonster(P2);
+
+		// 讓他們互相認親，知道要打的敵人是誰。
+		p1CurrentMons->setEnemy(*p2CurrentMons);
+		p2CurrentMons->setEnemy(*p1CurrentMons);
+
 		// 修改 battle_log_view
 		this->battleLog_view->print(1," ====================== BATTLE ROUND ====================== ");
-		this->battleLog_view->print(2, " P1: " + p1CurrentMons->getName());
-		this->battleLog_view->print(3, " P2: " + p2CurrentMons->getName());
+		
 		showlog();
 
 		// 初始化 陣列
@@ -169,18 +173,46 @@ void Jym::battle_start()
 		}
 
 		int round_cnt = 1;// 回合計數
+		// 如果雙方可以打架
 		while( bothMonsterCanFight(fight_list[0], fight_list[1]) ){
+			// 重新確認 兩者速度
+			if (fight_list[0]->property.getSpeed() >= fight_list[1]->property.getSpeed()) {
+				; // 保持原樣
+			}
+			else {
+				// 0: 給速度快的 monster;
+				MonsterPtr tmp = fight_list[1];
+				fight_list.at(0) = tmp;
+				tmp              = fight_list.at(1);
+				fight_list.at(1) = fight_list.at(0);
+			}
+
 			// 開始打架
-			this->battleLog_view->print(4, "    Battle "+ std::to_string(round_cnt) +" Start ");
+			this->battleLog_view->print(4, "    Round "+ std::to_string(round_cnt) +" Start, " + 
+				fight_list[0]->getName() + " first attack. ");
 			
 			// 打架摟~
 			// 速度高的怪獸 先攻擊
-			//SkillToken tk_0 = fight_list[0]->attack(*fight_list[1]);
-			
+
+			// 如果回合不等於 代表 剛剛 [1] 有執行攻擊 ，所以這邊要多叫被動
+			if (round_cnt != 1) {
+				fight_list[0]->exeAfterBeAttackedBehavior();
+				this->battleLog_view->print(4, fight_list[0]->getExeAfterBeAttackedBehaviorMessage());
+				showlog(); rlutil::anykey(" 4");
+			}
+			// 先攻擊
+			fight_list[0]->exeAttackBehavior();
+			this->battleLog_view->print(2, fight_list[0]->getExeAttackBehaviorMessage());
+			showlog(); rlutil::anykey(" 2");
+			// 使用技能
+			fight_list[0]->exeSkillBehavior();
+			this->battleLog_view->print(3, fight_list[0]->getExeSkillBehaviorMessage());
+			showlog(); rlutil::anykey(" 3");
+
 			//--------------------------
 			this->battleLog_view->print_c(9, margin + "  wait to update "+ fight_list[1]->getMasterName() +" Property View()...", rlutil::LIGHTCYAN);
-			showlog();
-			rlutil::anykey();
+			showlog(); rlutil::anykey(" 9");
+			
 			
 			// 更新 Property View
 			updatePropertyView();
@@ -191,9 +223,45 @@ void Jym::battle_start()
 			showlog();
 			rlutil::anykey(); 
 
+			// 如果有人葛屁
+			if (!bothMonsterCanFight(fight_list[0], fight_list[1])) {
+				// 更新參數, 確認有無人死亡
+				if (p1CurrentMons->getHp() <= 0) { P1_canBattle_mon_idx++; }
+				if (p2CurrentMons->getHp() <= 0) { P2_canBattle_mon_idx++; }
+				this->battleLog_view->print(9, margin + " wait to update log...");
+				showlog();
+				rlutil::anykey();
+
+				// 更新 log 並告訴戰鬥結果
+				this->battleLog_view->print(8, " Round " + std::to_string(round_cnt) + " finish! ");
+				this->battleLog_view->print(9, margin + " wait to next Round...");
+				showlog();
+				rlutil::anykey();
+				// 記得要清空 log View 訊息。
+				clearLog();
+				// 一輪提早結束
+				round_cnt++; //更新回合數
+				break;
+			}
+
+			// 繼續 下個人的回合----------------------------------
+
+
 			// -------- 後攻擊的人
 
-			//SkillToken tk_2 = fight_list[1]->attack(*fight_list[0]);
+			// 觸發 後攻擊的人被動
+			fight_list[1]->exeAfterBeAttackedBehavior();
+			this->battleLog_view->print(5, fight_list[1]->getExeAfterBeAttackedBehaviorMessage());
+			showlog(); rlutil::anykey(" 5");
+			
+			// 後攻擊的人 攻擊
+			fight_list[1]->exeAttackBehavior();
+			this->battleLog_view->print(6, fight_list[1]->getExeAttackBehaviorMessage());
+			showlog(); rlutil::anykey(" 6");
+			// 後攻擊的人 使用技能
+			fight_list[1]->exeSkillBehavior();
+			this->battleLog_view->print(7, fight_list[1]->getExeSkillBehaviorMessage());
+			showlog(); rlutil::anykey(" 7");
 
 			this->battleLog_view->print_c(9, margin + "  wait to update " + fight_list[0]->getMasterName() + " Property View()...", rlutil::LIGHTCYAN);
 			showlog();
@@ -226,6 +294,12 @@ void Jym::battle_start()
 			// 一輪正式結束
 			round_cnt++; //更新回合數
 		}
+
+		// 有一方 怪獸先死去。
+		// 取消認親
+		fight_list[0]->setNoEnemy();
+		fight_list[1]->setNoEnemy();
+
 		// 勝利的 monster idx
 		int winner_idx = fight_list[0]->getHp() <= 0 ? 1:0;
 		

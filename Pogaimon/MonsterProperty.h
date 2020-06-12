@@ -63,38 +63,79 @@ public:
 	// @ reduce_value: 要增加多少數值。
 	virtual void increaseAbility(propertyType type, int increase_value) = 0;
 
+	// 無視任何條件 就是直接降低指定數值，不會管你任何減傷
+	virtual void reduceDirectly(propertyType type, int increase_value) = 0;
+
 	// 使此怪獸不會被降能力
-	void set_sk_Immun_propertyDebuff_isTrue() {
+	virtual void set_sk_Immun_propertyDebuff_isTrue() {
 		this->sk_Immun_propertyDebuff = 1;
 	}
 
 	// 可以迴避下次攻擊
-	void setCanAvoidNextATK() {
+	virtual void setCanAvoidNextATK() {
 		this->can_avoid_next_attack_flg = 1;
 	}
 
 	// 不可迴避下次攻擊
-	void setCanAvoidNextATK_FALSE() {
+	virtual void setCanAvoidNextATK_FALSE() {
 		this->can_avoid_next_attack_flg = 0;
 	}
 
 	// 檢查是否可以迴避下次攻擊
-	bool canAvoidNextAtk() {
+	virtual bool canAvoidNextAtk() {
 		if (can_avoid_next_attack_flg > 0)
 			return true;
 		else
 			return false;
 	}
 
+	// 是否可以 double attack
+	virtual bool canDoubleAttackOnce() {
+		if (can_double_attack_flg > 0)
+			return true;
+		else
+			return false;
+	}
+
+	// 設定 double attack 旗標
+	virtual void setDoubleAttackOnce() {
+		can_double_attack_flg = 1;
+	}
+
+	// 取消 double attack 旗標
+	virtual void setDoubleAttackOnce_FALSE() {
+		can_double_attack_flg = 0;
+	}
+
+	// 是否擁有 免疫降低能力值 的 特殊能力(ATK,DEF,SPEED)
+	virtual bool canImmun_propertyDebuff() {
+		if (sk_Immun_propertyDebuff > 0)
+			return true;
+		else
+			return false;
+	}
+
+	// 設定 最終免疫傷害 量
+	virtual void setImmune_final_damage_amount(int value) {
+		this->immune_final_damage_amount = value;
+	}
+
 protected:
 	// 這邊的參數 是給 怪物與怪物 之間 技能互動所用到的私有變數，如果沒有用到 都會是 -1。
 	// 並且由多個 私有函式 幫助確認。(檢查 ability)
 
-	// 特殊狀態 抗性，免疫降低能力值的特殊能力(HP,ATK,DEF,SPEED, )
+	// 特殊狀態 抗性，免疫降低能力值的特殊能力(ATK,DEF,SPEED)
 	int sk_Immun_propertyDebuff = -1;
 
 	// 是否可以迴避下次攻擊? 0 不能 1 可以。
 	int can_avoid_next_attack_flg = 0;
+
+	// can double attack 旗標
+	int can_double_attack_flg = 0;
+
+	// 免疫 最終傷害 值，意旨當準備要扣下去時，它可以抵擋的傷害量。
+	int immune_final_damage_amount = 0;
+	
 
 	// 使否可以降低能力。
 	bool canReduceAbility() {
@@ -285,6 +326,9 @@ public:
 
 	// 增加指定數值
 	void  increaseAbility(propertyType type, int increase_value)override;
+
+	// 無視任何條件 就是直接降低指定數值
+	void reduceDirectly(propertyType type, int increase_value)override;
 
 private:
 	int idx = -1;

@@ -37,7 +37,16 @@ void MonsterProperty::reduceAbility(propertyType type, int reduce_value)
 				can_avoid_next_attack_flg = 0; //旗標重設為 0;
 			}
 			else {
-				this->hp -= reduce_value;
+				int actual_damage = reduce_value - this->immune_final_damage_amount;
+				if (canDoubleAttackOnce()) {
+					can_double_attack_flg = 0;
+					this->hp -= actual_damage;
+					this->hp -= actual_damage;
+				}
+				else {
+					this->hp -= actual_damage;
+				}
+				
 			}
 		}
 		else if (type == ATK){
@@ -78,6 +87,26 @@ void MonsterProperty::increaseAbility(propertyType type, int increase_value)
 	}
 	else if (type == SPEED) {
 		this->speed += increase_value;
+	}
+	else {
+		throw UNKNOW_propertyType(type);
+	}
+	return;
+}
+
+void MonsterProperty::reduceDirectly(propertyType type, int reduce_value)
+{
+	if (type == HP) {
+		this->hp -= reduce_value;
+	}
+	else if (type == ATK) {
+		this->atk -= reduce_value;
+	}
+	else if (type == DEF) {
+		this->def -= reduce_value;
+	}
+	else if (type == SPEED) {
+		this->speed -= reduce_value;
 	}
 	else {
 		throw UNKNOW_propertyType(type);
