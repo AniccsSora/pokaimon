@@ -89,5 +89,6 @@ private:
 	int logRowSize = 9;
 	int logColSize = 120;
 	MySpace::ViewPtr battleLog_view = myutil::createView('=', logRowSize, logColSize);
+	
 };
 

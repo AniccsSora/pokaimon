@@ -42,6 +42,7 @@ Jym::Jym(Player& P1, Player &P2)
 	// 上方有幫每個 P1 ,Displayer 註冊 ASCII View，這邊要註冊 Monster Propterty View.
 	for (size_t i = 0; i < this->P1_ASCII_DList.size(); ++i){
 		MySpace::ViewPtr property = myutil::createView('*', 13, 40);
+		property->setViewName("P1 's Monster Propterty View.的辣");
 		MonsterPtr mos = P1.getMonsterList().at(i);//取得一隻怪獸
 
 		// 資料寫入View
@@ -50,7 +51,8 @@ Jym::Jym(Player& P1, Player &P2)
 		property->print(5, "  Index - : " + std::to_string(mos->getIdx()));
 		property->print(6, "  Name -- : " + mos->getName());
 		property->print(7, "  Type -- : " + mos->getTypeStr());
-		property->print(8, "  HP ---- : " + std::to_string(mos->getHp()));
+		std::string HP_msg = std::to_string(mos->getHp()) + " / " + std::to_string(mos->getMAX_HP());
+		property->print(8, std::string("  HP ---- : " + HP_msg));
 		property->print(9, "  ATK --- : " + std::to_string(mos->getAtk()));
 		property->print(10, "  DEF --- : " + std::to_string(mos->getDef()));
 		property->print(11, "  SPEED - : " + std::to_string(mos->getSpeed()));
@@ -65,6 +67,7 @@ Jym::Jym(Player& P1, Player &P2)
 	// 上方有幫每個 P2 ,Displayer 註冊 ASCII View，這邊要註冊 Monster Propterty View.
 	for (size_t i = 0; i < this->P2_ASCII_DList.size(); ++i) {
 		MySpace::ViewPtr property = myutil::createView('*', 13, 40);
+		property->setViewName("P2 's Monster Propterty View.的辣");
 		MonsterPtr mos = P2.getMonsterList().at(i);//取得一隻怪獸
 
 		// 資料寫入View
@@ -73,7 +76,8 @@ Jym::Jym(Player& P1, Player &P2)
 		property->print(5, "  Index - : " + std::to_string(mos->getIdx()));
 		property->print(6, "  Name -- : " + mos->getName());
 		property->print(7, "  Type -- : " + mos->getTypeStr());
-		property->print(8, "  HP ---- : " + std::to_string(mos->getHp()));
+		std::string HP_msg = std::to_string(mos->getHp()) + " / " + std::to_string(mos->getMAX_HP());
+		property->print(8, std::string("  HP ---- : " + HP_msg));
 		property->print(9, "  ATK --- : " + std::to_string(mos->getAtk()));
 		property->print(10, "  DEF --- : " + std::to_string(mos->getDef()));
 		property->print(11, "  SPEED - : " + std::to_string(mos->getSpeed()));
@@ -105,7 +109,7 @@ Jym::Jym(Player& P1, Player &P2)
 	this->battleLog_view->print(2, " Nothing happens ");
 	this->battle_log.registerView(this->battleLog_view);
 	// ===================== 
-
+	battleLog_view->setViewName("Battle log view [這是一段隨機的中文]");
 }
 
 void Jym::battle_start()
@@ -188,7 +192,7 @@ void Jym::battle_start()
 			}
 
 			// 開始打架
-			this->battleLog_view->print(4, "    Round "+ std::to_string(round_cnt) +" Start, " + 
+			this->battleLog_view->print(4, "    Round "+ std::to_string(round_cnt)  + " ,  " +
 				fight_list[0]->getName() + " first attack. ");
 			
 			// 打架摟~
@@ -202,7 +206,7 @@ void Jym::battle_start()
 			}
 			// 先攻擊
 			fight_list[0]->exeAttackBehavior();
-			this->battleLog_view->print(2, fight_list[0]->getExeAttackBehaviorMessage());
+			this->battleLog_view->print(2, "     " + fight_list[0]->getExeAttackBehaviorMessage());
 			showlog(); rlutil::anykey(" 2");
 			// 使用技能
 			fight_list[0]->exeSkillBehavior();
@@ -252,7 +256,8 @@ void Jym::battle_start()
 			// 觸發 後攻擊的人被動
 			fight_list[1]->exeAfterBeAttackedBehavior();
 			this->battleLog_view->print(5, fight_list[1]->getExeAfterBeAttackedBehaviorMessage());
-			showlog(); rlutil::anykey(" 5");
+			showlog(); 
+			rlutil::anykey(" 5");
 			
 			// 後攻擊的人 攻擊
 			fight_list[1]->exeAttackBehavior();
@@ -359,7 +364,8 @@ void Jym::updatePropertyView(){
 	property1->print(5, "  Index - : " + std::to_string(mos1->getIdx()));
 	property1->print(6, "  Name -- : " + mos1->getName());
 	property1->print(7, "  Type -- : " + mos1->getTypeStr());
-	property1->print(8, "  HP ---- : " + std::to_string(mos1->getHp()));
+	std::string HP_msg1 = std::to_string(mos1->getHp()) + " / " + std::to_string(mos1->getMAX_HP());
+	property1->print(8, std::string("  HP ---- : " + HP_msg1));
 	property1->print(9, "  ATK --- : " + std::to_string(mos1->getAtk()));
 	property1->print(10, "  DEF --- : " + std::to_string(mos1->getDef()));
 	property1->print(11, "  SPEED - : " + std::to_string(mos1->getSpeed()));
@@ -381,7 +387,8 @@ void Jym::updatePropertyView(){
 	property2->print(5, "  Index - : " + std::to_string(mos2->getIdx()));
 	property2->print(6, "  Name -- : " + mos2->getName());
 	property2->print(7, "  Type -- : " + mos2->getTypeStr());
-	property2->print(8, "  HP ---- : " + std::to_string(mos2->getHp()));
+	std::string HP_msg2 = std::to_string(mos2->getHp()) + " / " + std::to_string(mos2->getMAX_HP());
+	property2->print(8,  std::string("  HP ---- : " + HP_msg2));
 	property2->print(9, "  ATK --- : " + std::to_string(mos2->getAtk()));
 	property2->print(10, "  DEF --- : " + std::to_string(mos2->getDef()));
 	property2->print(11, "  SPEED - : " + std::to_string(mos2->getSpeed()));

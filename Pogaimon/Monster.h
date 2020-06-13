@@ -17,8 +17,6 @@ class SkillBehavior;
 typedef IMonster* IMonsterPtr;
 typedef  Monster*  MonsterPtr;
 
-
-
 class AttackBehavior
 {
 public:
@@ -113,6 +111,7 @@ public:
 		ROCK_SKIN,
 		LOWER_DEFENCE,
 		LOWER_ATTACK
+		// 如果增加這邊個種類，要去修改 Monster.cpp::getSkillName().
 	};
 
 protected:
@@ -127,7 +126,7 @@ protected:
 	virtual std::string d2str(int d);
 
 	// 轉型用，如果轉型失敗直接跳例外。
-	virtual MonsterPtr trans2monsterPtr(IMonster input);
+	virtual MonsterPtr trans2monsterPtr(IMonster& input);
 
 	// 技能使用次數， execute() 時才會 +1。
 	int skillusedTimes = 0;
@@ -298,6 +297,8 @@ public:
 
 	int getAbilityIdx();
 
+	int getMAX_HP();
+
 	// 寵物是否死亡?
 	bool isDead();
 
@@ -367,10 +368,17 @@ private:
 	SkillBehavior *afterBeAttackedBehavior = nullptr;
 };
 
-
+// 對未指定的 enemy 做操作。
 struct NOT_EXIST_ENEMY : public std::exception {
 	std::string s;
 	NOT_EXIST_ENEMY(std::string ss) : s(ss) {}
 	const char* what() const throw() { return s.c_str(); }
+};
+
+// 造成 負的傷害
+struct CAUSE_MINUE_DAMAGE: public std::exception {
+	int s;
+	CAUSE_MINUE_DAMAGE(int ss) : s(ss) {}
+	const char* what() const throw() { return std::string("caused " + std::to_string(s) + "damage.").c_str(); }
 };
 

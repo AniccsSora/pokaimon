@@ -115,6 +115,11 @@ namespace MySpace {
 		// 在此 view 的 第 pos 行 插入 msg且該行會有特別顏色。(不會印在 console)
 		inline void print_c(short pos, std::string msg,int c);
 
+		// 設定 View Name
+		inline void setViewName(std::string name);
+
+		inline std::string getViewName();
+
 	}; typedef View*  ViewPtr;
 
 	inline View::View(const View& src) // copy constructor
@@ -204,6 +209,16 @@ namespace MySpace {
 				element.at(pos).at(view_col_idx + 1) = ' ';
 			}
 		}
+	}
+
+	inline void View::setViewName(std::string name)
+	{
+		this->viewName = name;
+	}
+
+	inline std::string View::getViewName()
+	{
+		return this->viewName;
 	}
 
 

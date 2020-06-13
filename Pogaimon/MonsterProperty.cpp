@@ -12,7 +12,21 @@ MonsterProperty* MonsterProperty::operator=(MonsterProperty& pp)
 	this->speed = pp.speed;
 	this->ability = pp.ability;
 	this->sk_Immun_propertyDebuff = pp.sk_Immun_propertyDebuff;
-	// this->sk_usedSkill_cnt = pp.sk_usedSkill_cnt; 改為 Skill類別 計算。
+	this->MAX_HP = pp.MAX_HP;
+
+	// 旗標設定
+	// 特殊狀態 抗性，免疫降低能力值的特殊能力(ATK,DEF,SPEED)
+	this->sk_Immun_propertyDebuff = pp.sk_Immun_propertyDebuff;
+
+	// 是否可以迴避下次攻擊? 0 不能 1 可以。
+	this->can_avoid_next_attack_flg = pp.can_avoid_next_attack_flg;
+
+	// can double attack 旗標
+	this->can_double_attack_flg = pp.can_double_attack_flg;
+
+	// 免疫 最終傷害 值，意旨當準備要扣下去時，它可以抵擋的傷害量。
+	this->immune_final_damage_amount = pp.immune_final_damage_amount;
+
 	return this;
 }
 
@@ -26,6 +40,20 @@ MonsterProperty::MonsterProperty(const MonsterProperty& mp){
 	this->def = mp.def;
 	this->speed = mp.speed;
 	this->ability = mp.ability;
+	this->MAX_HP = mp.MAX_HP;
+
+	// 旗標設定
+	// 特殊狀態 抗性，免疫降低能力值的特殊能力(ATK,DEF,SPEED)
+	this->sk_Immun_propertyDebuff = mp.sk_Immun_propertyDebuff;
+
+	// 是否可以迴避下次攻擊? 0 不能 1 可以。
+	this->can_avoid_next_attack_flg = mp.can_avoid_next_attack_flg;
+
+	// can double attack 旗標
+	this->can_double_attack_flg = mp.can_double_attack_flg;
+
+	// 免疫 最終傷害 值，意旨當準備要扣下去時，它可以抵擋的傷害量。
+	this->immune_final_damage_amount = mp.immune_final_damage_amount;
 }
 
 

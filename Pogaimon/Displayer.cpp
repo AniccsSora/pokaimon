@@ -88,6 +88,7 @@ void Displayer::showView(MySpace::ViewPtr view)
 void Displayer::showRegisteredView()
 {
 	for (size_t i = 0; i < viewList.size(); ++i) {
+		std::string ddd = viewList[i]->getViewName();
 		showView(viewList[i]);
 	}
 }

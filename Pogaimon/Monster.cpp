@@ -78,14 +78,22 @@ NormalAttack::NormalAttack(IMonster& im_attacker) :AttackBehavior(im_attacker)
 
 void NormalAttack::execute(IMonster& enemy)
 {
+	// 攻擊者
+	MonsterPtr atker = trans2monsterPtr(*attacker);
+	
 	// 敵人
 	MonsterPtr enemyMonsterPtr = trans2monsterPtr(enemy);
 
 	// 對敵人造成的傷害
-	int damage = enemyMonsterPtr->getDef() - this->attack_point;
+	int damage = this->attack_point - enemyMonsterPtr->getDef();
+
+	if (damage < 0) {
+		throw new CAUSE_MINUE_DAMAGE(damage);
+	}
+
 
 	// 造成 XXX ??? 傷害訊息。
-	this->atkMessage = "cause " + enemyMonsterPtr->getName() + d2str(damage);
+	this->atkMessage = atker->getName() + " causes " + enemyMonsterPtr->getName() + d2str(damage);
 
 	enemyMonsterPtr->property.reduceAbility(HP, damage);
 
@@ -127,34 +135,34 @@ std::string SkillBehavior::getSkillName()
 	else if (BURNING == mos.getAbilityIdx()) {
 		skName = "Burning";
 	}
-	else if (BURNING == mos.getAbilityIdx()) {
+	else if (COUNTER_ATTACK == mos.getAbilityIdx()) {
 		skName = "Counter Attack";
 	}
-	else if (BURNING == mos.getAbilityIdx()) {
+	else if (IMMUNOLOGY == mos.getAbilityIdx()) {
 		skName = "Immunology";
 	}
-	else if (BURNING == mos.getAbilityIdx()) {
+	else if (LEECH_LIFE == mos.getAbilityIdx()) {
 		skName = "Leech Life";
 	}
-	else if (BURNING == mos.getAbilityIdx()) {
+	else if (AVOID == mos.getAbilityIdx()) {
 		skName = "Avoid";
 	}
-	else if (BURNING == mos.getAbilityIdx()) {
+	else if (DOUBLE_ATTACK == mos.getAbilityIdx()) {
 		skName = "Double Attack";
 	}
-	else if (BURNING == mos.getAbilityIdx()) {
+	else if (POISON == mos.getAbilityIdx()) {
 		skName = "Poison";
 	}
-	else if (BURNING == mos.getAbilityIdx()) {
+	else if (LOWER_SPEED == mos.getAbilityIdx()) {
 		skName = "Lower Speed";
 	}
-	else if (BURNING == mos.getAbilityIdx()) {
+	else if (ROCK_SKIN == mos.getAbilityIdx()) {
 		skName = "Rock Skin";
 	}
-	else if (BURNING == mos.getAbilityIdx()) {
+	else if (LOWER_DEFENCE == mos.getAbilityIdx()) {
 		skName = "Lower Defence";
 	}
-	else if (BURNING == mos.getAbilityIdx()) {
+	else if (LOWER_ATTACK == mos.getAbilityIdx()) {
 		skName = "Lower Attack";
 	}
 	else {
@@ -183,18 +191,16 @@ std::string SkillBehavior::d2str(int d)
 		return " " + std::to_string(d) + " damage.";
 	}
 }
-#pragma warning(disable:4172)
-MonsterPtr SkillBehavior::trans2monsterPtr(IMonster input)
+
+MonsterPtr SkillBehavior::trans2monsterPtr(IMonster& input)
 {
-	MonsterPtr rtn = nullptr;
 	try {
-		rtn = static_cast<MonsterPtr>(&input);
+		MonsterPtr rtn = static_cast<MonsterPtr>(&input);
+		return rtn;
 	}
 	catch (...) {
 		std::cout << "\nbad_cast IMonster -> Monster cast failed." << std::endl;
 	}
-	return rtn;
-	#pragma warning(default:4172)
 }
 
 // ***********************************************************  
@@ -261,7 +267,7 @@ void Skill_Burning::execute(IMonster& enemy)
 
 	// 拼 使用技能後的字串
 	this->usedskillMsg = mos->getName() + " used skills \'" + getSkillName() +
-		"\' caused " + victim->getName() + std::to_string(ExDamage) + " extra damage.";
+		"\' caused " + victim->getName() + " " +std::to_string(ExDamage) + " extra damage.";
 
 	this->skillusedTimes++;
 }
@@ -621,7 +627,8 @@ Monster::Monster(int monsterIdx, MonsterPropertyList mstPropertyList)
 	property.setDef(mstPropertyList.at(monsterIdx)->getDef());
 	property.setSpeed(mstPropertyList.at(monsterIdx)->getSpeed());
 	property.setAbilityIdx(mstPropertyList.at(monsterIdx)->getAbilityIdx());
-	
+	property.setMAX_HP(mstPropertyList.at(monsterIdx)->getMAX_HP());
+
 	// 指定生成 何種 Skill 物件。
 	if (property.getAbilityIdx() == SkillBehavior::HEAL) {
 		// 給定 攻擊行為
@@ -786,6 +793,11 @@ int Monster::getSpeed() {
 
 int Monster::getAbilityIdx() {
 	return property.getAbilityIdx();
+}
+
+int Monster::getMAX_HP()
+{
+	return property.getMAX_HP();
 }
 
 bool Monster::isDead()

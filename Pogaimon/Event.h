@@ -34,7 +34,7 @@ public:
 
 private:
 	// 確認是否要抓怪
-	void showStartBattleDialog();
+	//void showStartBattleDialog();
 	Monster* encounterMonster =NULL; // EncounterMonsterEvent 建構子會給此數值
 	Displayer* eventViewList = NULL; // 遊戲畫面~~
 	Player* servicedPlayer = NULL;

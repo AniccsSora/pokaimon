@@ -136,6 +136,7 @@ protected:
 	// 免疫 最終傷害 值，意旨當準備要扣下去時，它可以抵擋的傷害量。
 	int immune_final_damage_amount = 0;
 	
+	// 如果有增加成員變數 要去 修改 operator=, copy constructor.
 
 	// 使否可以降低能力。
 	bool canReduceAbility() {
@@ -166,6 +167,7 @@ public:
 		this->def = def;
 		this->speed = speed;
 		this->ability = ability;
+		this->MAX_HP = hp;
 	}
 
 	MonsterProperty(const MonsterProperty& mp);
@@ -234,6 +236,13 @@ public:
 		this->ability = abilityIdx;
 	}
 
+	int getMAX_HP() {
+		return MAX_HP;
+	}
+	void setMAX_HP(int MAX_HP) {
+		this->MAX_HP = MAX_HP;
+	}
+
 	// debug 用的
 	void printALL() {
 		std::string msg = "idx:" + std::to_string(idx) +
@@ -243,7 +252,8 @@ public:
 			", atk: " + std::to_string(atk) +
 			", def: " + std::to_string(def) +
 			", speed: " + std::to_string(speed) +
-			", ability: " + std::to_string(ability);
+			", ability: " + std::to_string(ability) +
+			", MAX_HP: " + std::to_string(MAX_HP);
 		std::cout << msg << std::endl;
 	}
 
@@ -341,7 +351,10 @@ private:
 	int def = -1;
 	int speed = -1;
 	int ability = -1;
+	int MAX_HP = -1;
 
+	// 在這邊添加 多的成員變數時，記得要更新 copy cconstructor、get、set、printALL(), operator=,
+	// Monster(int monsterIdx, MonsterPropertyList mstPropertyList).
 };
 
 typedef MySpace::Vec_1D_<MonsterProperty*> MonsterPropertyList;

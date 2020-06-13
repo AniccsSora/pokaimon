@@ -21,6 +21,8 @@ Player::Player(std::string name, int x, int y)
 	monsterHold_Window->print(7, "  3. None");
 	// 賦予 player物件 初始化的 View。
 	this->monsterView = monsterHold_Window;
+	// 給個 view 的名字
+	this->monsterView->setViewName("玩家持有 寵物列表");
 
 	// 初始化 point 指標。
 	this->point = new int(0);
