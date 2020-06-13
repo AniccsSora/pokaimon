@@ -106,16 +106,23 @@ Jym::Jym(Player& P1, Player &P2)
 	// 對戰訊息, 給定成 Jym 的成員變數，以利之後做 View的更動。
 	// MySpace::ViewPtr battleLog_view = myutil::createView('=', 6, 100);
 	this->battleLog_view->setLeftTop(log_x, log_y);
-	this->battleLog_view->print(2, " Nothing happens ");
+	//this->battleLog_view->print(2, " Nothing happens ");
 	this->battle_log.registerView(this->battleLog_view);
 	// ===================== 
 	battleLog_view->setViewName("Battle log view [這是一段隨機的中文]");
+
+	// 屬性相剋提示表View, 設定 位置。
+	this->type_table_view->setLeftTop(type_table_x, type_table_y);
+	this->type_table_view->setframeColor(rlutil::LIGHTBLUE);
+	// 將屬性表 view 註冊進 他的 displayer.
+	this->type_table_displayer.registerView(this->type_table_view);
+
 }
 
 void Jym::battle_start()
 {
 	// 最後 log 的開頭空白。
-	std::string margin = std::string(50, ' ');
+	std::string margin_of_log = std::string(50, ' ');
 	if (P1 == nullptr || P2 == nullptr) {
 		return;
 	}
@@ -174,13 +181,6 @@ void Jym::battle_start()
 		p1CurrentMons->setEnemy(*p2CurrentMons);
 		p2CurrentMons->setEnemy(*p1CurrentMons);
 
-		// 修改 battle_log_view
-		std::string battle_log_title = "";
-		battle_log_title = std::string(3, ' ') + std::string(50, '=')+ " BATTLE LOG " + std::string(50, '=') + " ";
-		this->battleLog_view->print(1, battle_log_title);
-		
-		showlog();
-
 		// 初始化 陣列
 		if (p1CurrentMons->property->getSpeed() >= p2CurrentMons->property->getSpeed()) {
 			fight_list.push_back(p1CurrentMons); fight_list.push_back(p2CurrentMons);
@@ -194,7 +194,13 @@ void Jym::battle_start()
 		double atkRatio1x0 = .0;// 攻擊倍率 1 打 0 的
 		// 如果雙方可以打架
 		while( bothMonsterCanFight(fight_list[0], fight_list[1]) ){
-			// 重新確認 兩者速度
+			
+			// 清空 log View 訊息。
+			clearLog();
+			// 重設游標至可印訊息處。
+			resetlogCursor();
+			
+			// 確認 兩方怪物 速度
 			if (fight_list[0]->property->getSpeed() >= fight_list[1]->property->getSpeed()) {
 				; // 保持原樣
 			}
@@ -212,12 +218,6 @@ void Jym::battle_start()
 			// 取得 1 -> 0 的，攻擊比率。
 			atkRatio1x0 = lookup_AtkRatio(fight_list.at(1), fight_list.at(0), typeTable);
 			
-			// 在 setEenemy() 時 就可以設定倍率了。
-			//設定 0 的攻擊比率。
-			//fight_list.at(0)->setAtk_Ratio(atkRatio0x1);
-			// 設定 1 的攻擊比率。
-			//fight_list.at(1)->setAtk_Ratio(atkRatio1x0);
-			
 			// 0->1 、 1->0 字串的版本 變數宣告
 			std::string atkRatio0x1_str = std::to_string(atkRatio0x1);
 			std::string atkRatio1x0_str = std::to_string(atkRatio1x0);
@@ -228,16 +228,21 @@ void Jym::battle_start()
 			atkRatio1x0_str.erase(atkRatio1x0_str.find_last_not_of('0') + 1, std::string::npos);
 			atkRatio1x0_str.erase(atkRatio1x0_str.find_last_not_of('.') + 1, std::string::npos);
 
+			// 取用此變數是因為 P1 的怪物一定在左邊，不會因為 fight_list[0 1] 左邊改變。
+			updateTypeTable(p1CurrentMons, p2CurrentMons);
+			// 印出 屬性相剋表
+			this->type_table_displayer.showRegisteredView();
+
 			// 開始打架
+			// battle_log_title 訊息
+			std::string battle_log_title = "";
 			// 更新 title 訊息，告知誰先(0一定先，但是要拿到名字)攻擊。
 			battle_log_title = std::string(30, ' ') + "Round " + std::to_string(round_cnt) + " ,  " +
 				fight_list[0]->getName() + " first attack. ";
-			// 補上 0 -> 1 攻擊倍率訊息
-			battle_log_title += (std::string(5, ' ') + fight_list[0]->getName() + " -> " + fight_list[1]->getName() +
-				" [ attack ratio : " + atkRatio0x1_str + " ]");
-			// 更新 log 訊息
-			this->battleLog_view->print(1, battle_log_title);
-			
+			// 印 log 的 title 訊息
+			this->battleLog_view->print(log_title_idx, battle_log_title);
+			// 把 Title 印到 log View 上
+			showlog();
 			
 			// 打架摟~
 			// 速度高的怪獸 先攻擊
@@ -245,21 +250,22 @@ void Jym::battle_start()
 			// 如果回合不等於 代表 剛剛 [1] 有執行攻擊 ，所以這邊要多叫被動
 			if (round_cnt != 1) {
 				fight_list[0]->exeAfterBeAttackedBehavior();
-				this->battleLog_view->print(4, fight_list[0]->getExeAfterBeAttackedBehaviorMessage());
-				showlog(); rlutil::anykey(" 4");
+				this->battleLog_view->print(getNextlineIdx(), getMargin() + fight_list[0]->getExeAfterBeAttackedBehaviorMessage());
+				showlog(); rlutil::anykey("");
 			}
 			// 先攻擊
 			fight_list[0]->exeAttackBehavior();
-			this->battleLog_view->print(2, "     " + fight_list[0]->getExeAttackBehaviorMessage());
-			showlog(); rlutil::anykey(" 2");
+			this->battleLog_view->print(getNextlineIdx(), getMargin() + fight_list[0]->getExeAttackBehaviorMessage());
+			showlog(); rlutil::anykey();
 			// 使用技能
 			fight_list[0]->exeSkillBehavior();
-			this->battleLog_view->print(3, fight_list[0]->getExeSkillBehaviorMessage());
-			showlog(); rlutil::anykey(" 3");
+			this->battleLog_view->print(getNextlineIdx(), getMargin() + fight_list[0]->getExeSkillBehaviorMessage());
+			showlog(); rlutil::anykey();
 
 			//--------------------------
-			this->battleLog_view->print_c(9, margin + "  wait to update "+ fight_list[1]->getMasterName() +" Property View()...", rlutil::LIGHTCYAN);
-			showlog(); rlutil::anykey(" 9");
+			this->battleLog_view->print_c(log_end_idx, margin_of_log + " press anykey to update "+ fight_list[1]->getMasterName() +" Property View()...", rlutil::LIGHTCYAN);
+			showlog();
+			rlutil::anykey();
 			
 			
 			// 更新 Property View
@@ -267,30 +273,26 @@ void Jym::battle_start()
 			// Show PropertyView.
 			P1_MProperty_DList.at(P1_canBattle_mon_idx).showRegisteredView();
 			P2_MProperty_DList.at(P2_canBattle_mon_idx).showRegisteredView();
-			this->battleLog_view->print(9, margin +" Paramater " + fight_list[1]->getMasterName() + " view updated !");
+			this->battleLog_view->print(log_end_idx, margin_of_log +" Paramater " + fight_list[1]->getMasterName() + " view updated !");
 			showlog();
-			rlutil::anykey(); 
+			rlutil::anykey();
 
 			// 如果有人葛屁
 			if (!bothMonsterCanFight(fight_list[0], fight_list[1])) {
 				// 更新參數, 確認有無人死亡
 				if (p1CurrentMons->getHp() <= 0) { P1_canBattle_mon_idx++; }
 				if (p2CurrentMons->getHp() <= 0) { P2_canBattle_mon_idx++; }
-				this->battleLog_view->print(9, margin + " wait to update log...");
+				this->battleLog_view->print(log_end_idx, margin_of_log + " press anykey to update log...");
 				showlog();
 				rlutil::anykey();
 
 				// 更新 log 並告訴戰鬥結果
-				this->battleLog_view->print(8, " Round " + std::to_string(round_cnt) + " finish! ");
-				this->battleLog_view->print(9, margin + " wait to next Round...");
+				this->battleLog_view->print(getNextlineIdx(), getMargin() + " Round " + std::to_string(round_cnt) + " finish! ");
+				this->battleLog_view->print(log_end_idx, margin_of_log + " press anykey to next Round...");
 				showlog();
 				rlutil::anykey();
-				// 記得要清空 log View 訊息。
-				clearLog();
 				// 一輪提早結束
 				round_cnt++; //更新回合數
-				fight_list[0]->setAtk_Ratio_1();// 初始化 攻擊倍率
-				fight_list[1]->setAtk_Ratio_1();// 初始化 攻擊倍率
 				break;
 			}
 
@@ -301,20 +303,21 @@ void Jym::battle_start()
 
 			// 觸發 後攻擊的人被動
 			fight_list[1]->exeAfterBeAttackedBehavior();
-			this->battleLog_view->print(5, fight_list[1]->getExeAfterBeAttackedBehaviorMessage());
+			this->battleLog_view->print(getNextlineIdx(), getMargin() + fight_list[1]->getExeAfterBeAttackedBehaviorMessage());
 			showlog(); 
-			rlutil::anykey(" 5");
+			rlutil::anykey("");
 			
 			// 後攻擊的人 攻擊
 			fight_list[1]->exeAttackBehavior();
-			this->battleLog_view->print(6, fight_list[1]->getExeAttackBehaviorMessage());
-			showlog(); rlutil::anykey(" 6");
+			this->battleLog_view->print(getNextlineIdx(), getMargin() + fight_list[1]->getExeAttackBehaviorMessage());
+			showlog(); rlutil::anykey("");
 			// 後攻擊的人 使用技能
+			
 			fight_list[1]->exeSkillBehavior();
-			this->battleLog_view->print(7, fight_list[1]->getExeSkillBehaviorMessage());
-			showlog(); rlutil::anykey(" 7");
+			this->battleLog_view->print(getNextlineIdx(), getMargin() + fight_list[1]->getExeSkillBehaviorMessage());
+			showlog(); rlutil::anykey("");
 
-			this->battleLog_view->print_c(9, margin + "  wait to update " + fight_list[0]->getMasterName() + " Property View()...", rlutil::LIGHTCYAN);
+			this->battleLog_view->print_c(log_end_idx, margin_of_log + " press anykey to update " + fight_list[0]->getMasterName() + " Property View()...", rlutil::LIGHTCYAN);
 			showlog();
 			rlutil::anykey();
 			
@@ -323,7 +326,7 @@ void Jym::battle_start()
 			// Show PropertyView.
 			P1_MProperty_DList.at(P1_canBattle_mon_idx).showRegisteredView();
 			P2_MProperty_DList.at(P2_canBattle_mon_idx).showRegisteredView();
-			this->battleLog_view->print(9, margin + " Paramater " + fight_list[0]->getMasterName() + " view updated !");
+			this->battleLog_view->print(log_end_idx, margin_of_log + " Paramater " + fight_list[0]->getMasterName() + " view updated !");
 			showlog();
 			rlutil::anykey();
 
@@ -331,20 +334,16 @@ void Jym::battle_start()
 			// 更新參數, 確認有無人死亡
 			if (p1CurrentMons->getHp() <= 0) { P1_canBattle_mon_idx++; }
 			if (p2CurrentMons->getHp() <= 0) { P2_canBattle_mon_idx++; }
-			this->battleLog_view->print(9, margin + " wait to update log...");
+			this->battleLog_view->print(log_end_idx, margin_of_log + " press anykey to update log...");
 			showlog();
 			rlutil::anykey(); 
 			
 			// 更新 log 並告訴戰鬥結果
-			this->battleLog_view->print(8, " Round " + std::to_string(round_cnt) + " finish! ");
-			this->battleLog_view->print(9, margin + " wait to next Round...");
+			this->battleLog_view->print(getNextlineIdx(), getMargin() + " Round " + std::to_string(round_cnt) + " finish! ");
+			this->battleLog_view->print(log_end_idx, margin_of_log + " press anykey to next Round...");
 			showlog();
 			rlutil::anykey();
-			// 記得要清空 log View 訊息。
-			clearLog();
 			// 一輪正式結束
-			fight_list[0]->setAtk_Ratio_1();// 初始化 攻擊倍率
-			fight_list[1]->setAtk_Ratio_1();// 初始化 攻擊倍率
 			round_cnt++; //更新回合數
 		}
 
@@ -356,7 +355,7 @@ void Jym::battle_start()
 		// 勝利的 monster idx
 		int winner_idx = fight_list[0]->getHp() <= 0 ? 1:0;
 		
-		this->battleLog_view->print(9, std::string(10, ' ') +
+		this->battleLog_view->print(getNextlineIdx(), getMargin() +
 			fight_list[0]->getName() + " v.s. "+ fight_list[1]->getName() + " battle End.  " +
 			fight_list[winner_idx]->getMasterName() + "\'s Monster \"" + fight_list[winner_idx]->getName() + "\" is Winner");
 		showlog();
@@ -506,4 +505,90 @@ inline void Jym::clearLog()
 	{
 		this->battleLog_view->print(i, std::string(logColSize, ' '));
 	}
+}
+
+std::string Jym::getMargin()
+{
+	return std::string(log_margin_f, ' ');
+}
+
+int Jym::getNextlineIdx()
+{
+	// 如果未初始化則代表第一次呼叫
+	if (log_row_cursor < 0) { 
+
+		log_row_cursor = log_start_row;
+		return log_row_cursor;
+
+	}
+	else {
+
+		// 指標先移動
+		log_row_cursor += (log_stride + 1);
+		// 防止 游標超出 logRowSize。
+		int next = log_row_cursor % logRowSize;
+		// 如果小於 起始位置，則一律回到起始位置。
+		next = next < log_start_row ? 4 : next;
+		// 回傳
+		return next;
+	}
+
+}
+
+void Jym::resetlogCursor()
+{
+	log_row_cursor = -1;
+}
+
+void Jym::updateTypeTable(MonsterPtr L, MonsterPtr R)
+{
+	// 先清乾淨
+	for (size_t i = 1; i < type_table_h+1; ++i) {
+		this->type_table_view->print(i, std::string(type_table_w,' '));
+	}
+	// 取得屬性相剋表，屬性的 攻擊倍率就是用這個表查表找的。
+	// 取得相剋表
+	TypeTable typeTable = myutil::getDamageRatioTable();
+	// 查表語法 。A -> B， A打B時的倍率。
+	// typeTable.at(A->getType()).at(B->getType());
+
+	// 簡化查表 呼叫，at 來 at 去太複雜了。lambda function.
+	auto lookup_AtkRatio = [](MonsterPtr A, MonsterPtr B, TypeTable t) {
+		return t.at(A->getType()).at(B->getType());
+	};
+	
+	// 取得 0 -> 1 的，攻擊比率。
+	double atkRatioLxR = lookup_AtkRatio(L, R, typeTable);
+	// 取得 1 -> 0 的，攻擊比率。
+	double atkRatioRxL = lookup_AtkRatio(R, L, typeTable);
+
+	// 0->1 、 1->0 字串的版本 變數宣告
+	std::string atkRatioLxR_str = std::to_string(atkRatioLxR);
+	std::string atkRatioRxL_str = std::to_string(atkRatioRxL);
+	// 消除 字串版本的 0 尾數。 "1.00000" -> "1"
+	atkRatioLxR_str.erase(atkRatioLxR_str.find_last_not_of('0') + 1, std::string::npos);
+	atkRatioLxR_str.erase(atkRatioLxR_str.find_last_not_of('.') + 1, std::string::npos);
+	// 消除 字串版本的 0 尾數。 "1.00000" -> "1"
+	atkRatioRxL_str.erase(atkRatioRxL_str.find_last_not_of('0') + 1, std::string::npos);
+	atkRatioRxL_str.erase(atkRatioRxL_str.find_last_not_of('.') + 1, std::string::npos);
+
+	// 準備要印上去的 資訊
+	std::string msg1 = "  " + L->getTypeStr() + " --- " + atkRatioLxR_str + " ---> " + R->getTypeStr();
+	std::string msg2 = "  " + L->getTypeStr() + " <--- " + atkRatioRxL_str + " --- " + R->getTypeStr();
+
+	// 不同倍率給予不同顏色
+	if (atkRatioLxR > 1.0)
+		this->type_table_view->print_c(2, msg1, rlutil::LIGHTGREEN);
+	else if (atkRatioLxR < 1.0)
+		this->type_table_view->print_c(2, msg1, rlutil::LIGHTRED);
+	else
+		this->type_table_view->print(2, msg1); // 預設白
+
+	if (atkRatioRxL > 1.0)
+		this->type_table_view->print_c(4, msg2, rlutil::LIGHTGREEN);
+	else if (atkRatioRxL < 1.0)
+		this->type_table_view->print_c(4, msg2, rlutil::LIGHTRED);
+	else
+		this->type_table_view->print(4, msg2); // 預設白
+	
 }

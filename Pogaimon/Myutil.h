@@ -57,9 +57,11 @@ namespace myutil {
 	// 給 idx，送你 ASCII 2D vec。(他只幫你給 element 的內容而已)
 	MySpace::ViewPtr inline getMonsterASCIIViewPtrbyIdx(int monsterIdx);
 
-
 	// 有 X 的機率回傳 True
 	bool inline X_Probability_get_True(double x);
+
+	// 取得 A 打 B 的 攻擊比率
+	inline double getRatio_AfuckB(MonsterPtr A, MonsterPtr B);
 	
 }
 
@@ -462,5 +464,22 @@ bool myutil::X_Probability_get_True(double x)
 		}
 	}
 	return flag;
+}
+
+double myutil::getRatio_AfuckB(MonsterPtr A, MonsterPtr B)
+{
+	// 取得屬性相剋表，屬性的 攻擊倍率就是用這個表查表找的。
+	// 取得相剋表
+	TypeTable typeTable = myutil::getDamageRatioTable();
+	// 查表語法 。A -> B， A打B時的倍率。
+	// typeTable.at(A->getType()).at(B->getType());
+
+	// 簡化查表 呼叫，at 來 at 去太複雜了。lambda function.
+	auto lookup_AtkRatio = [](MonsterPtr A, MonsterPtr B, TypeTable t) {
+		return t.at(A->getType()).at(B->getType());
+	};
+
+	// 取得 A -> B 的，攻擊比率。
+	return lookup_AtkRatio(A, B, typeTable);
 }
 

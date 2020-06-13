@@ -153,8 +153,14 @@ public:
 	// Jym 需要直接做 參數操作。
 	friend class Jym;
 
+	// 賦值建構子
 	MonsterProperty* operator=(MonsterProperty& pp);
+	
 	MonsterProperty() = default; // compile 說我沒寫預設建構子，好 我寫給他。
+	
+	// copy constructor
+	MonsterProperty(const MonsterProperty& mp);
+	
 	MonsterProperty(int idx, std::string name, std::string type, int hp, int atk, int def, int speed, int ability) 
 		:Property (){
 		// 這裡沒 this 就是吃屎。直接不會動。
@@ -168,11 +174,8 @@ public:
 		this->speed = speed;
 		this->ability = ability;
 		this->MAX_HP = hp;
-		this->setATK_RATIO_1();
+		
 	}
-
-	// copy constructor
-	MonsterProperty(const MonsterProperty& mp);
 
 	int getIdx() {
 		return idx;
@@ -255,8 +258,7 @@ public:
 			", def: " + std::to_string(def) +
 			", speed: " + std::to_string(speed) +
 			", ability: " + std::to_string(ability) +
-			", MAX_HP: " + std::to_string(MAX_HP) +
-			", atk ratio: " + std::to_string(atk_ratio);
+			", MAX_HP: " + std::to_string(MAX_HP);
 		std::cout << msg << std::endl;
 	}
 
@@ -343,15 +345,6 @@ public:
 	// 無視任何條件 就是直接降低指定數值
 	void reduceDirectly(propertyType type, int increase_value)override;
 
-	// 設定現在的攻擊倍率
-	void setATK_RATIO(double r);
-
-	// 設定攻擊倍率為 1。
-	void setATK_RATIO_1();
-
-	// 取得現在攻擊倍率。
-	double getATK_RATIO();
-
 private:
 	int idx = -1;
 	std::string name = "";
@@ -364,8 +357,6 @@ private:
 	int speed = -1;
 	int ability = -1;
 	int MAX_HP = -1;
-	double tmp = -1; // 左值(tmp)，才能初始化參照。
-	double &atk_ratio = tmp;
 
 	// 在這邊添加 多的成員變數時，記得要更新 copy constructor, operator=, ** 重要
 	// {get、set}[MonsterProperty]、{get}[Monster]、printALL(), 

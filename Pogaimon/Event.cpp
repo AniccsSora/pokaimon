@@ -5,7 +5,7 @@
 // 建構子
 EncounterMonsterEvent::EncounterMonsterEvent(MonsterPropertyList mstPropertyList,Player* servicedPlayer):Event(){
 	// 隨便生一個怪物~~
-	this->encounterMonster = new Monster(rand(), mstPropertyList);
+	this->encounterMonster = new Monster(2, mstPropertyList);
 	
 	// 給 display 物件
 	this->eventViewList = new Displayer();
@@ -81,15 +81,13 @@ EncounterMonsterEvent::EncounterMonsterEvent(MonsterPropertyList mstPropertyList
 
 // 遭遇到 monster 的實作
 void EncounterMonsterEvent::touchOff(){
+	
 	// 遇到 怪拉ㄚㄚㄚㄚㄚ
-	// this->encounterMonster;
-	
-	
 	rlutil::cls();
 
 	this->eventViewList->showRegisteredView();
 	
-	//this->monster
+	// 定位游標
 	rlutil::locate(84, 41);
 	rlutil::showcursor();
 
@@ -105,14 +103,13 @@ void EncounterMonsterEvent::touchOff(){
 				}
 				else { // Hardcode 修改 Message View 的訊息。 就是這麼難看XD。
 					int view_x_ptr, view_y_ptr;
-					view_x_ptr = this->log_content_view->status.lefttop.x+1; 
-					view_y_ptr = this->log_content_view->status.lefttop.y + 2;//
+					view_x_ptr = this->log_content_view->status.lefttop.x + 1; 
+					view_y_ptr = this->log_content_view->status.lefttop.y + 2;
 					rlutil::locate(view_x_ptr, view_y_ptr);//locate到 第一行 開頭位置
 					cout << std::string(40, ' ');//清空該區
 					rlutil::locate(view_x_ptr, view_y_ptr);//再次回到 第一行 開頭位置，此時是空白的。
 					cout << std::string("  Press \"ESC\" to abort the crawl.");
 					// 接下來去改第二行 msg "Press " C " try catch..."
-					// logger->print(4, "  Press \" C \" try catch monster.");
 					rlutil::locate(view_x_ptr, view_y_ptr+2);//到 第二行 開頭位置
 					cout << std::string(40, ' '); //清空該區
 					rlutil::locate(view_x_ptr, view_y_ptr + 2);//回到 第二行 開頭位置

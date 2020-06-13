@@ -261,6 +261,9 @@ public:
 
 	IMonster() = default;
 	
+	// 有請子類別實作此方法
+	virtual void plsDerivedClassImpThisFunction() = 0;
+
 protected:
 	
 	MonsterProperty* property = NULL;
@@ -268,6 +271,8 @@ protected:
 
 class Monster : public IMonster {
 public:
+	// 子類別實作
+	virtual void plsDerivedClassImpThisFunction();
 
 	// 指定 monsterIdx 的怪物生成, 超出的去 idx 照樣生給你，就亂生。
 	Monster(int monsterIdx, MonsterPropertyList mstPropertyList);
@@ -295,12 +300,6 @@ public:
 	int getAbilityIdx();
 
 	int getMAX_HP();
-
-	double getAtk_Ratio();
-
-	void setAtk_Ratio(double r);
-
-	void setAtk_Ratio_1();
 
 	// 寵物是否死亡?
 	bool isDead();

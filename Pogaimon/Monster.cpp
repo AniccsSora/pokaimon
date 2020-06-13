@@ -70,7 +70,7 @@ const int NormalAttack::getFinalAtkByRatio(IMonster& enemy)
 	MonsterPtr m_enemy = trans2monsterPtr(enemy);
 
 	// 取得攻擊倍率
-	double r = mos->getAtk_Ratio();
+	double r = myutil::getRatio_AfuckB(mos, m_enemy);
 	// 原始攻擊白值
 	int atk = mos->getAtk();
 	// 四捨五入最終結果
@@ -236,7 +236,9 @@ Skill_Heal::Skill_Heal(IMonster& im_attacker) :SkillBehavior(im_attacker)
 void Skill_Heal::execute(IMonster& enemy)
 {
 	// 技能使用者
-	MonsterPtr mos = trans2monsterPtr(*attacker);
+	//MonsterPtr mos = trans2monsterPtr(*attacker);
+	MonsterPtr mos = dynamic_cast<MonsterPtr>(attacker);
+
 
 	// 要是 IMonster 的 friend 才能直接更動 property。
 
@@ -331,7 +333,7 @@ void Skill_Immunology::execute(IMonster& enemy)
 
 	// 拼 使用技能後的字串
 	this->usedskillMsg = mos->getName() + " used skills \'" + getSkillName() +
-		"\' it have immunity of " + victim->getName() + " reduction attribute skill";
+		"\' it have immunity of reduced attribute skill";
 
 	this->skillusedTimes++;
 }
@@ -612,6 +614,11 @@ void Skill_Lower_Attack::execute(IMonster& enemy)
 
 // ***********************************************************
 
+void Monster::plsDerivedClassImpThisFunction()
+{
+	;// 實作
+}
+
 Monster::Monster(int monsterIdx, MonsterPropertyList mstPropertyList)
 {
 	
@@ -750,8 +757,8 @@ Monster::Monster(const Monster& mos)
 	if (this != &mos) {
 		this->masterName = mos.masterName;
 
-		//MonsterProperty* mp = new MonsterProperty(*(mos.property));
-		this->property = mos.property;
+		//             = mos.property;
+		this->property = new MonsterProperty(*(mos.property));
 
 		this->encounterEnemy = mos.encounterEnemy;
 
@@ -810,21 +817,6 @@ int Monster::getAbilityIdx() {
 int Monster::getMAX_HP()
 {
 	return property->getMAX_HP();
-}
-
-double Monster::getAtk_Ratio()
-{
-	return property->getATK_RATIO();
-}
-
-void Monster::setAtk_Ratio(double r)
-{
-	property->setATK_RATIO(r);
-}
-
-void Monster::setAtk_Ratio_1()
-{
-	property->setATK_RATIO(1.0);
 }
 
 bool Monster::isDead()
@@ -897,23 +889,6 @@ void Monster::setMasterName(std::string masterName)
 void Monster::setEnemy(IMonster& enemy)
 {
 	this->encounterEnemy = &enemy;
-	// 在知道敵人是誰 就可以知道自己的倍率。
-	
-	// 取得相剋表
-	TypeTable typeTable = myutil::getDamageRatioTable();
-	// 取得屬性相剋表後，屬性的攻擊倍率就是用這個表查表找的。
-
-	// 查表語法 。A -> B， A打B時的倍率。
-	// typeTable.at(A->getType()).at(B->getType());
-
-	// 簡化查表 呼叫，at 來 at 去太複雜了。lambda function.
-	auto lookup_AtkRatio = [](MonsterPtr A, MonsterPtr B, TypeTable t) {
-		return t.at(A->getType()).at(B->getType());
-	};
-	// 向下轉型 
-	MonsterPtr m_enemy = static_cast<MonsterPtr>(&enemy);
-	// 設定攻擊倍率
-	this->setAtk_Ratio( lookup_AtkRatio(this, m_enemy, typeTable) );
 }
 
 void Monster::setNoEnemy()

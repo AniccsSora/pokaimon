@@ -31,11 +31,15 @@ private:
 	int P2_pp_view_X = 134, P2_pp_view_Y = 5;
 
 	// P1，P2 開始印 持有寵物 View 的座標
-	int P1_ViewHoldMos_X = P1_pp_view_X, P1_ViewHoldMos_Y = 26;
-	int P2_ViewHoldMos_X = P2_pp_view_X, P2_ViewHoldMos_Y = 26;
+	int P1_ViewHoldMos_X = P1_pp_view_X, P1_ViewHoldMos_Y = 21;
+	int P2_ViewHoldMos_X = P2_pp_view_X, P2_ViewHoldMos_Y = 21;
 
 	// Log 開始印的高度
-	int log_x = 40, log_y = 37;
+	int log_x = 40, log_y = 32;
+
+	// 屬性相剋表 位置，大小
+	int type_table_x = 5, type_table_y = 32;
+	int type_table_w = 28, type_table_h = 5;
 	// ===================== </對戰畫面 View 參數設定區>
 
 	PlayerPtr P1 = NULL;
@@ -86,9 +90,46 @@ private:
 	// 戰鬥訊息總是會更新，所以不必不同怪獸不同 Displayer。											
 	Displayer battle_log;
 	// 放到 battle_log 的 View, 因為放入的指標，所以直接修改battleLog_view 就可以影響到 Displayer.
-	int logRowSize = 9;
+	int logRowSize = 18;
 	int logColSize = 134;
+	// 可自由使用 log 區域 -> 1~8。
+	// 最後一行 : 固定提示使用者操作。
 	MySpace::ViewPtr battleLog_view = myutil::createView('=', logRowSize, logColSize);
 	
+	// 屬性相剋提示表 displayer
+	Displayer type_table_displayer;
+	// 屬性相剋提示表
+	MySpace::ViewPtr type_table_view = myutil::createView('*', type_table_h, type_table_w);
+
+	// 決定要log印在哪行用的 變數
+	int log_row_cursor = -1;
+
+	// 印 title 的位置。
+	const int log_title_idx = 2;
+
+	// 開始印 log 的參數
+	const int log_start_row = 4;
+
+	//
+	const int log_end_idx = logRowSize;
+
+	// 空幾格印 log, 0 代表不空白
+	int log_stride = 1;
+
+	// 與左邊框的間隔
+	int log_margin_f = 5;
+
+	// 依照 log_margin_f 取得間隔空白字串
+	std::string getMargin();
+
+	// 管理log用，依照 log_row_cursor 來決定下一個log要印的地方
+	int getNextlineIdx();
+
+	// 復原至 log 指標至預設的位置
+	void resetlogCursor();
+
+	// 更新屬性相剋表的 View
+	void updateTypeTable(MonsterPtr L,MonsterPtr R);
+
 };
 

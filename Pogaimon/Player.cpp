@@ -35,7 +35,7 @@ Player::Player(const Player& p)
 		this->playerName = p.playerName;
 		this->notation = p.notation;
 		this->color = p.color;
-		MySpace::Vec_1D_<MonsterPtr> aaa(p.monsterList);//Vector copy constructor. 根本沒有做動。
+		
 		for (MonsterPtr m: p.monsterList) { // 手動 COPY～
 			// 用 Monster copy constructor
 			Monster *tmpMonster = new Monster(*m);
@@ -90,7 +90,8 @@ Player::Player(int number_of_monster, std::string npc_name){
 	MonsterPropertyList mstPropertyList = myutil::loadMonsterFile();
 	// 生成怪物
 	for (size_t i = 0; i < number_of_monster; ++i) {
-		MonsterPtr tmpM = new Monster(rand(), mstPropertyList);
+		MonsterPtr tmpM = new Monster(5, mstPropertyList); // DEBUG用
+	    //		MonsterPtr tmpM = new Monster(rand(), mstPropertyList); //DEGUG 完取消此註解
 		tmpM->setMasterName(npc_name);
 		monsterList.push_back(tmpM);
 	}
@@ -168,10 +169,7 @@ void Player::addMonster(MonsterPtr monsterCaught) throw(OverThreeMonsterUNHANDLE
 	if (this->monsterList.size() >= 3) {
 		int last_x = -1, last_y;
 		int x = -1, y = -1; // console 游標定位用。
-		// TODO : 要讓玩家可以選擇要汰換哪一隻 Monster.
-		/*cout << " Over than three monster\n";
-		throw OverThreeMonsterUNHANDLE("TODO : 要讓玩家可以選擇要汰換哪一隻 Monster.");*/
-
+		
 		// 游標 跳到 player monster View 的 第一行(1-base:4) 的最尾端 (基本上 monsterList 跟 monsterView 的數值要一樣)
 		int locate_View_X_idx = -1; // 以此 View的LF為基準，我們要locate 的 X 位置。
 		char previous_char = ' ';// 紀錄上一個 char
