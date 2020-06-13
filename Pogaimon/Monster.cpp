@@ -98,11 +98,11 @@ SkillBehavior::SkillBehavior(IMonster& attacker)
 {
 	this->attacker = &attacker;
 }
-
+/*
 SkillBehavior::SkillBehavior()
 {
 }
-
+*/
 void SkillBehavior::execute(IMonster& enemy)
 {
 	;// 預設 SkillBehavior 是不執行任何動作的。
@@ -201,7 +201,7 @@ MonsterPtr SkillBehavior::trans2monsterPtr(IMonster input)
 
 // *********************  NoneBehavior ****************** 
 
-NoneBehavior::NoneBehavior(IMonster& im_attacker)
+NoneBehavior::NoneBehavior(IMonster& im_attacker) : SkillBehavior(im_attacker)
 {
 	;// 用父建構 初始化即可
 }
@@ -369,7 +369,7 @@ void Skill_Leech_Life::execute(IMonster& enemy)
 
 // *********************  Skill_Avoid ****************** 
 
-Skill_Avoid::Skill_Avoid(IMonster& im_attacker)
+Skill_Avoid::Skill_Avoid(IMonster& im_attacker) : SkillBehavior(im_attacker)
 {
 	;// 用父建構 初始化即可
 }
@@ -403,7 +403,7 @@ void Skill_Avoid::execute(IMonster& enemy)
 
 // *********************  Double_Attack ****************** 
 
-Skill_Double_Attack::Skill_Double_Attack(IMonster& im_attacker)
+Skill_Double_Attack::Skill_Double_Attack(IMonster& im_attacker) : SkillBehavior(im_attacker)
 {
 	;// 用父建構 初始化即可
 }
@@ -437,7 +437,7 @@ void Skill_Double_Attack::execute(IMonster& enemy)
 // *******************************************************
 
 // *********************  Skill_Poison ****************** 
-Skill_Poison::Skill_Poison(IMonster& im_attacker)
+Skill_Poison::Skill_Poison(IMonster& im_attacker) : SkillBehavior(im_attacker)
 {
 	;// 用父建構 初始化即可
 }
@@ -467,7 +467,7 @@ void Skill_Poison::execute(IMonster& enemy)
 // *******************************************************
 
 // *********************  Skill_Lower_Speed ****************** 
-Skill_Lower_Speed::Skill_Lower_Speed(IMonster& im_attacker)
+Skill_Lower_Speed::Skill_Lower_Speed(IMonster& im_attacker) : SkillBehavior(im_attacker)
 {
 	;// 用父建構 初始化即可
 }
@@ -503,7 +503,7 @@ void Skill_Lower_Speed::execute(IMonster& enemy)
 // *******************************************************
 
 // *********************  Skill_Rock_Skin ****************** 
-Skill_Rock_Skin::Skill_Rock_Skin(IMonster& im_attacker)
+Skill_Rock_Skin::Skill_Rock_Skin(IMonster& im_attacker) : SkillBehavior(im_attacker)
 {
 	;// 用父建構 初始化即可
 }
@@ -527,7 +527,7 @@ void Skill_Rock_Skin::execute(IMonster& enemy)
 // *******************************************************
 
 // *********************  Skill_Lower_Defence ****************** 
-Skill_Lower_Defence::Skill_Lower_Defence(IMonster& im_attacker)
+Skill_Lower_Defence::Skill_Lower_Defence(IMonster& im_attacker): SkillBehavior(im_attacker)
 {
 	;// 用父建構 初始化即可
 }
@@ -563,7 +563,7 @@ void Skill_Lower_Defence::execute(IMonster& enemy)
 // ********************************************************** 
 
 // *********************  Skill_Lower_Attack ****************** 
-Skill_Lower_Attack::Skill_Lower_Attack(IMonster& im_attacker)
+Skill_Lower_Attack::Skill_Lower_Attack(IMonster& im_attacker) : SkillBehavior(im_attacker)
 {
 	;// 用父建構 初始化即可
 }
@@ -733,6 +733,17 @@ Monster::Monster(const Monster& mos)
 		this->masterName = mos.masterName;
 		MonsterProperty* mp = new MonsterProperty(mos.property);
 		this->property = *mp;
+
+		this->encounterEnemy = mos.encounterEnemy;
+
+		// 複製 平A攻擊行為。
+		this->attackBehavior = mos.attackBehavior;
+
+		// 複製 技能行為。
+		this->skillBehavior = mos.skillBehavior;
+
+		// 複製  被攻擊(attack)後的行為
+		this->afterBeAttackedBehavior = mos.afterBeAttackedBehavior;
 	}
 }
 

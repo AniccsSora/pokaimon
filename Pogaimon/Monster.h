@@ -82,7 +82,7 @@ class SkillBehavior
 public:
 	// 建構子
 	SkillBehavior(IMonster& attacker);
-	SkillBehavior();
+	SkillBehavior() = delete;
 	// ****************** 子類別可取用方法 *********************
 
 	// 執行此技能，注意不是每個 怪物的技能都有傷害。所以預設不動作。
@@ -303,16 +303,7 @@ public:
 
 	// 將 monster ability idx 轉成他的名字。
 	std::string getAbilityNameByAbliIdx(int idx);
-/*
-	// 普通攻擊
-	SkillToken attack(Monster& beAttactedMonster);
 
-	// 使用技能
-	SkillToken useSkill();
-	
-	// 處理敵人的攻擊，扣除自己的屬性 or 做 相對應的動作
-	SkillToken processEnemyToken(SkillToken emyTk);
-*/
 	// 取得主人名
 	std::string getMasterName();
 

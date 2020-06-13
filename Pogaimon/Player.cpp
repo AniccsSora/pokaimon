@@ -76,6 +76,7 @@ Player::Player(const Player& p)
 
 		// 即使是複製 point 指標 依然唯一。
 		this->point = p.point;
+
 		cout << "";
 	}
 }
