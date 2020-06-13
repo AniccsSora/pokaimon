@@ -87,7 +87,7 @@ private:
 	Displayer battle_log;
 	// 放到 battle_log 的 View, 因為放入的指標，所以直接修改battleLog_view 就可以影響到 Displayer.
 	int logRowSize = 9;
-	int logColSize = 120;
+	int logColSize = 134;
 	MySpace::ViewPtr battleLog_view = myutil::createView('=', logRowSize, logColSize);
 	
 };

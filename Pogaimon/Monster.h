@@ -26,26 +26,17 @@ public:
 	AttackBehavior();
 	// ****************** 子類別可取用方法 *********************
 
-	// 取得攻擊點數字串
-	virtual const std::string getAtkStr();
-
-	// 取得攻擊點數
-	virtual const int getAtk();
-
-	// 設定攻擊數值
-	virtual void setAttack_point(int atkPoint);
-
 	// 執行此攻擊，注意不是每個 怪物的攻擊都可以附加傷害。所以預設不動作。
 	virtual void execute(IMonster& enemy);
 
 	// 取得攻擊完成後的 資訊。
 	virtual const std::string getExecutedMsg();
 
+	// 設定此行為的行動者
+	virtual void setAttacker(IMonster& attacker);
+
 	// ******************************************************
 protected:
-
-	// 攻擊白值，沒有被防禦降低過的
-	int attack_point = 0;
 
 	// 攻擊 訊息。
 	std::string atkMessage = "";
@@ -68,6 +59,9 @@ public:
 	// 建構子
 	// 擁有基礎攻擊，im_attacker 代表攻擊者
 	NormalAttack(IMonster& im_attacker);
+
+	// 取得最終攻擊數值，根據敵人的屬性，將自己的 攻擊白值 乘上 屬性相剋倍率。
+	virtual const int getFinalAtkByRatio(IMonster& enemy);
 
 	// 攻擊動作，會更新 atkMessage。
 	virtual void execute(IMonster& enemy)override;
@@ -94,6 +88,9 @@ public:
 
 	// 技能 "已經" 使用的次數。
 	virtual int useTimes();
+
+	// 設定此行為的行動者
+	virtual void setAttacker(IMonster& attacker);
 
 	virtual bool is_attribute_defuff();
 	// ******************************************************
@@ -266,7 +263,7 @@ public:
 	
 protected:
 	
-	MonsterProperty property;
+	MonsterProperty* property = NULL;
 };
 
 class Monster : public IMonster {
@@ -299,6 +296,12 @@ public:
 
 	int getMAX_HP();
 
+	double getAtk_Ratio();
+
+	void setAtk_Ratio(double r);
+
+	void setAtk_Ratio_1();
+
 	// 寵物是否死亡?
 	bool isDead();
 
@@ -317,7 +320,7 @@ public:
 	// 將敵人設定為 NULL 
 	void setNoEnemy();
 
-	// 取得敵人，如果沒有敵人，直接跳例外，阻止接下來的執行。
+	// 取得敵人(IMonster)，如果沒有敵人，直接跳例外，阻止接下來的執行。
 	IMonster& getEnemyInstance();
 
 	// 修改 攻擊行為

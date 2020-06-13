@@ -142,6 +142,8 @@ namespace MySpace {
 	}
 
 	inline void View::print(short pos, std::string msg){
+		// 根本沒有要插入東西的話 就直接返回
+		if (msg.size() <= 0) { return; }
 
 		short max_idx = status.size_w_h.h - 2;
 
@@ -165,13 +167,33 @@ namespace MySpace {
 
 		// 覆寫該 view, 第 pos 行的所有字元如果超出 msg 則補 ' '。
 		for (size_t view_col_idx = 0; view_col_idx < status.size_w_h.w-2; ++view_col_idx) {
-			if ( (int)msg.size()-1 >= view_col_idx ) {
-				// (i + 1): 因為有左邊邊框; (i - 1):msg是 0-base.
-				element.at(pos).at(view_col_idx + 1) = msg.at(view_col_idx);
+			try
+			{
+				if ((int)msg.size() - 1 >= view_col_idx) {
+					// (i + 1): 因為有左邊邊框; (i - 1):msg是 0-base.
+					element.at(pos).at(view_col_idx + 1) = msg.at(view_col_idx);
+				}
+				else {  // .at(pos) 0-base, 跟多出的 上框剛好 計數抵銷 (-1 + 1) = 0。
+					element.at(pos).at(view_col_idx + 1) = ' ';
+				}
 			}
-			else {  // .at(pos) 0-base, 跟多出的 上框剛好 計數抵銷 (-1 + 1) = 0。
-				element.at(pos).at(view_col_idx + 1) = ' ';
-			} 
+			catch (std::out_of_range& oor) {
+				std::cout << "\nout_of_range, what(): \"" << oor.what() <<"\", " 
+					<< "view_col_idx=" << std::to_string(view_col_idx) << ", "
+					<< "pos="<< std::to_string(pos) << ", " 
+					<< "msg.size()=" << std::to_string(msg.size()) << ", "
+					<< "element.szie()=" << std::to_string(element.size())  << std::endl;
+				throw std::exception();//中斷時要跳到這邊用的
+			}
+			catch (std::exception& e) {
+				std::cout << "\nexception, what(): \"" << e.what() << "\", "
+					<< "view_col_idx=" << std::to_string(view_col_idx) << ", "
+					<< "pos=" << std::to_string(pos) << ", "
+					<< "msg.size()=" << std::to_string(msg.size()) << ", "
+					<< "element.szie()=" << std::to_string(element.size()) << std::endl;
+				throw std::exception();//中斷時要跳到這邊用的
+			}
+
 		}
 	}
 

@@ -136,6 +136,17 @@ void Jym::battle_start()
 	// 決定誰先後攻擊，把變數放到 list 而已，0 數字越小越先攻擊。
 	MySpace::Vec_1D_<MonsterPtr> fight_list;
 
+	// 取得屬性相剋表，屬性的 攻擊倍率就是用這個表查表找的。
+	// 取得相剋表
+	TypeTable typeTable = myutil::getDamageRatioTable();
+	// 查表語法 。A -> B， A打B時的倍率。
+	// typeTable.at(A->getType()).at(B->getType());
+	
+	// 簡化查表 呼叫，at 來 at 去太複雜了。lambda function.
+	auto lookup_AtkRatio = [](MonsterPtr A, MonsterPtr B, TypeTable t) {
+		return t.at(A->getType()).at(B->getType());
+	};
+
 	// ------------------------------------------
 
 	// P1_canBattle_mon_idx 要更動。
@@ -164,12 +175,14 @@ void Jym::battle_start()
 		p2CurrentMons->setEnemy(*p1CurrentMons);
 
 		// 修改 battle_log_view
-		this->battleLog_view->print(1," ====================== BATTLE ROUND ====================== ");
+		std::string battle_log_title = "";
+		battle_log_title = std::string(3, ' ') + std::string(50, '=')+ " BATTLE LOG " + std::string(50, '=') + " ";
+		this->battleLog_view->print(1, battle_log_title);
 		
 		showlog();
 
 		// 初始化 陣列
-		if (p1CurrentMons->property.getSpeed() >= p2CurrentMons->property.getSpeed()) {
+		if (p1CurrentMons->property->getSpeed() >= p2CurrentMons->property->getSpeed()) {
 			fight_list.push_back(p1CurrentMons); fight_list.push_back(p2CurrentMons);
 		}
 		else {
@@ -177,10 +190,12 @@ void Jym::battle_start()
 		}
 
 		int round_cnt = 1;// 回合計數
+		double atkRatio0x1 = .0;// 攻擊倍率 0 打 1 的
+		double atkRatio1x0 = .0;// 攻擊倍率 1 打 0 的
 		// 如果雙方可以打架
 		while( bothMonsterCanFight(fight_list[0], fight_list[1]) ){
 			// 重新確認 兩者速度
-			if (fight_list[0]->property.getSpeed() >= fight_list[1]->property.getSpeed()) {
+			if (fight_list[0]->property->getSpeed() >= fight_list[1]->property->getSpeed()) {
 				; // 保持原樣
 			}
 			else {
@@ -190,10 +205,39 @@ void Jym::battle_start()
 				tmp              = fight_list.at(1);
 				fight_list.at(1) = fight_list.at(0);
 			}
+			
+			// 關於 比率攻擊，在對打時 無視任何防禦減免、技能免疫，攻擊都先相乘到 atk上面。
+			// 取得 0 -> 1 的，攻擊比率。
+			atkRatio0x1 = lookup_AtkRatio(fight_list.at(0), fight_list.at(1), typeTable);
+			// 取得 1 -> 0 的，攻擊比率。
+			atkRatio1x0 = lookup_AtkRatio(fight_list.at(1), fight_list.at(0), typeTable);
+			
+			// 在 setEenemy() 時 就可以設定倍率了。
+			//設定 0 的攻擊比率。
+			//fight_list.at(0)->setAtk_Ratio(atkRatio0x1);
+			// 設定 1 的攻擊比率。
+			//fight_list.at(1)->setAtk_Ratio(atkRatio1x0);
+			
+			// 0->1 、 1->0 字串的版本 變數宣告
+			std::string atkRatio0x1_str = std::to_string(atkRatio0x1);
+			std::string atkRatio1x0_str = std::to_string(atkRatio1x0);
+			// 消除 字串版本的 0 尾數。 "1.00000" -> "1"
+			atkRatio0x1_str.erase(atkRatio0x1_str.find_last_not_of('0') + 1, std::string::npos);
+			atkRatio0x1_str.erase(atkRatio0x1_str.find_last_not_of('.') + 1, std::string::npos);
+			// 消除 字串版本的 0 尾數。 "1.00000" -> "1"
+			atkRatio1x0_str.erase(atkRatio1x0_str.find_last_not_of('0') + 1, std::string::npos);
+			atkRatio1x0_str.erase(atkRatio1x0_str.find_last_not_of('.') + 1, std::string::npos);
 
 			// 開始打架
-			this->battleLog_view->print(4, "    Round "+ std::to_string(round_cnt)  + " ,  " +
-				fight_list[0]->getName() + " first attack. ");
+			// 更新 title 訊息，告知誰先(0一定先，但是要拿到名字)攻擊。
+			battle_log_title = std::string(30, ' ') + "Round " + std::to_string(round_cnt) + " ,  " +
+				fight_list[0]->getName() + " first attack. ";
+			// 補上 0 -> 1 攻擊倍率訊息
+			battle_log_title += (std::string(5, ' ') + fight_list[0]->getName() + " -> " + fight_list[1]->getName() +
+				" [ attack ratio : " + atkRatio0x1_str + " ]");
+			// 更新 log 訊息
+			this->battleLog_view->print(1, battle_log_title);
+			
 			
 			// 打架摟~
 			// 速度高的怪獸 先攻擊
@@ -245,10 +289,12 @@ void Jym::battle_start()
 				clearLog();
 				// 一輪提早結束
 				round_cnt++; //更新回合數
+				fight_list[0]->setAtk_Ratio_1();// 初始化 攻擊倍率
+				fight_list[1]->setAtk_Ratio_1();// 初始化 攻擊倍率
 				break;
 			}
 
-			// 繼續 下個人的回合----------------------------------
+			// 繼續 P2 的回合----------------------------------
 
 
 			// -------- 後攻擊的人
@@ -297,6 +343,8 @@ void Jym::battle_start()
 			// 記得要清空 log View 訊息。
 			clearLog();
 			// 一輪正式結束
+			fight_list[0]->setAtk_Ratio_1();// 初始化 攻擊倍率
+			fight_list[1]->setAtk_Ratio_1();// 初始化 攻擊倍率
 			round_cnt++; //更新回合數
 		}
 
@@ -407,7 +455,7 @@ void Jym::fight(MonsterPtr M1, MonsterPtr M2)
 	// 決定誰先後攻擊，把變數放到 list 而已，0 數字越小越先攻擊。
 	MySpace::Vec_1D_<MonsterPtr> fight_list;
 
-	if (M1->property.getSpeed() >= M2->property.getSpeed()) {
+	if (M1->property->getSpeed() >= M2->property->getSpeed()) {
 		fight_list.push_back(M1); fight_list.push_back(M2);
 	}
 	else {

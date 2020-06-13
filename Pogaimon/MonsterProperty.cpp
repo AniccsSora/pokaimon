@@ -13,6 +13,7 @@ MonsterProperty* MonsterProperty::operator=(MonsterProperty& pp)
 	this->ability = pp.ability;
 	this->sk_Immun_propertyDebuff = pp.sk_Immun_propertyDebuff;
 	this->MAX_HP = pp.MAX_HP;
+	this->atk_ratio = pp.atk_ratio;
 
 	// 旗標設定
 	// 特殊狀態 抗性，免疫降低能力值的特殊能力(ATK,DEF,SPEED)
@@ -41,6 +42,7 @@ MonsterProperty::MonsterProperty(const MonsterProperty& mp){
 	this->speed = mp.speed;
 	this->ability = mp.ability;
 	this->MAX_HP = mp.MAX_HP;
+	this->atk_ratio = mp.atk_ratio;
 
 	// 旗標設定
 	// 特殊狀態 抗性，免疫降低能力值的特殊能力(ATK,DEF,SPEED)
@@ -140,4 +142,19 @@ void MonsterProperty::reduceDirectly(propertyType type, int reduce_value)
 		throw UNKNOW_propertyType(type);
 	}
 	return;
+}
+
+void MonsterProperty::setATK_RATIO(double r)
+{
+	this->atk_ratio = r;
+}
+
+void MonsterProperty::setATK_RATIO_1()
+{
+	this->atk_ratio = 1;
+}
+
+double MonsterProperty::getATK_RATIO()
+{
+	return atk_ratio;
 }

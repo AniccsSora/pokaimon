@@ -37,8 +37,7 @@ int main() {
 
 	//================ test~~
 	while (0) {
-
-		MySpace::ViewPtr tv = myutil::createView('X', 5, 3);
+		/*MySpace::ViewPtr tv = myutil::createView('X', 5, 3);
 		Displayer dd;
 		tv->setLeftTop(1,1);
 		dd.registerView(tv);
@@ -49,18 +48,21 @@ int main() {
 		dd.showRegisteredView();
 		tv->print_c(4, "444", rlutil::CYAN);
 		tv->print(5, "555");
-		dd.showRegisteredView();
+		dd.showRegisteredView();*/
 		// 取得寵物參數圖鑑
 		//MonsterPropertyList mstPropertyList = myutil::loadMonsterFile();
-		//// 取得相剋表
-		//TypeTable typeTable = myutil::getDamageRatioTable();
+		
 
 		//int idx = 1;
 		//MonsterPtr DAJJ = new Monster(rand(), mstPropertyList);
 		//MonsterPtr DAGG = new Monster(rand(), mstPropertyList);
 
+		//// 取得相剋表
+		//TypeTable typeTable = myutil::getDamageRatioTable();
 		//cout << typeTable.at(DAJJ->getType()).at(DAGG->getType()) << endl;
 		//MySpace::ViewPtr ascii =  myutil::getMonsterASCII(5);
+		// 簡化查表 呼叫，at 來 at 去太複雜了。
+		
 		
 		rlutil::anykey("test end...");
 	}
