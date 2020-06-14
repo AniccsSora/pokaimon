@@ -28,11 +28,23 @@ Event* GameService::getEvent(Player* player)
 	char playerStandCube = this->map->returnCubeBy(player->getPlayerPosition());
 
 	// 遇到到草叢 ';'，是有機率觸發的~~ 
-	if ( ';' == playerStandCube ){
-		if ( 1 ) { //myutil::X_Probability_get_True(ENCOUBTER_MONSTER_P)
+	if ( ';' == playerStandCube || '~' == playerStandCube || ' ' == playerStandCube){
+		if (myutil::X_Probability_get_True(ENCOUBTER_MONSTER_P)) { //myutil::X_Probability_get_True(ENCOUBTER_MONSTER_P)
 
-			// 生 Event , 要包 monster 物件所以要傳 寵物數值 參考表。
-			rtnEvent = new EncounterMonsterEvent(this->mstPropertyList, player);
+		    // 生成 Event , 要包 monster 物件所以要傳 寵物數值 參考表。
+		
+			// 0 1 2 草 0-Base, 強制生草怪物 給此玩家 10% 上升 40% ~= 0.14.
+			if (';' == playerStandCube && myutil::X_Probability_get_True(0.14)) {
+				rtnEvent = new EncounterMonsterEvent(this->mstPropertyList, player, 1);
+			}
+			// 6 7 8 水 0-Base, 強制生水怪物 給此玩家 10% 上升 40% ~= 0.14.
+			else if ('~' == playerStandCube && myutil::X_Probability_get_True(0.14)) {
+				rtnEvent = new EncounterMonsterEvent(this->mstPropertyList, player, 2);
+			}
+			else { // 預設機率
+				rtnEvent = new EncounterMonsterEvent(this->mstPropertyList, player, 0);
+			}
+
 		}
 		else {
 			rtnEvent = new NoneEvent();

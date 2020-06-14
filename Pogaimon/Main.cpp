@@ -149,7 +149,7 @@ int main() {
 					x = tony->getPlayerPosition().x; y = tony->getPlayerPosition().y;
 					
 					// 如果玩家站的不是空 字元。
-					if (' ' != map->returnCubeBy(x,y)
+					if ( true
 						//&& myutil::X_Probability_get_True(0.1)
 						){
 						// 由 gameService 回報玩家現在的 Event

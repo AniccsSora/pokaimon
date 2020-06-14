@@ -3,9 +3,27 @@
 
 
 // 建構子
-EncounterMonsterEvent::EncounterMonsterEvent(MonsterPropertyList mstPropertyList,Player* servicedPlayer):Event(){
-	// 隨便生一個怪物~~
-	this->encounterMonster = new Monster(2, mstPropertyList);
+EncounterMonsterEvent::EncounterMonsterEvent(MonsterPropertyList mstPropertyList,Player* servicedPlayer, int createStrategyCode):Event(){
+	// 隨便生一個怪物代號~~ 0-base
+	int monsCode = rand();
+
+	switch (createStrategyCode) {
+	case 0: // 預設隨機
+		this->encounterMonster = new Monster(monsCode, mstPropertyList);
+		break;
+	case 1: // 強制草屬性 // 0~2
+		monsCode = rand() % 3; 
+		this->encounterMonster = new Monster(monsCode, mstPropertyList);
+		break;
+	case 2: // 強制水屬性 // 6~8
+		monsCode = rand() % 3 + 6;
+		this->encounterMonster = new Monster(monsCode, mstPropertyList);
+		break;
+	default: // 預設隨機
+		this->encounterMonster = new Monster(monsCode, mstPropertyList);
+		break;
+	}
+	
 	
 	// 給 display 物件
 	this->eventViewList = new Displayer();

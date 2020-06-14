@@ -343,6 +343,15 @@ public:
 	// 取得 敵人攻擊後的被動技能的 回傳訊息。
 	std::string getExeAfterBeAttackedBehaviorMessage();
 
+	// 取得技能名字串
+	std::string getSkName();
+
+	// 是否可以迴避普通攻擊
+	bool canAvoidNormalAttack();
+
+	// 是否可以 2 回攻擊
+	bool canDoubleAttackOnce();
+
 private:
 	
 	// 主人的名稱
@@ -376,11 +385,3 @@ struct NOT_EXIST_ENEMY : public std::exception {
 	NOT_EXIST_ENEMY(std::string ss) : s(ss) {}
 	const char* what() const throw() { return s.c_str(); }
 };
-
-// 造成 負的傷害
-struct CAUSE_MINUE_DAMAGE: public std::exception {
-	int s;
-	CAUSE_MINUE_DAMAGE(int ss) : s(ss) {}
-	const char* what() const throw() { return std::string("caused " + std::to_string(s) + "damage.").c_str(); }
-};
-

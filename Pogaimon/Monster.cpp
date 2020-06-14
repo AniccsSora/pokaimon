@@ -4,6 +4,9 @@
 #include <ctime>
 #include <cmath>
 
+// 技能成功率
+constexpr double skill_success_probability = 0.7;
+
 // *********************  AttackBehavior(父) ******************  
 
 AttackBehavior::AttackBehavior(IMonster& attacker)
@@ -89,12 +92,20 @@ void NormalAttack::execute(IMonster& enemy)
 	int damage = getFinalAtkByRatio(enemy) - enemyMonsterPtr->getDef();
 
 	if (damage < 0) {
-		throw new CAUSE_MINUE_DAMAGE(damage);
+		damage = 0; // 有可能有 防禦過高的怪物。 //throw new CAUSE_MINUE_DAMAGE(damage);
 	}
-
-
-	// 造成 XXX ??? 傷害訊息。
-	this->atkMessage = atker->getName() + " causes " + enemyMonsterPtr->getName() + d2str(damage);
+	
+	if (enemyMonsterPtr->canAvoidNormalAttack()) {
+		this->atkMessage = enemyMonsterPtr->getName() + " avoid " + atker->getName() + d2str(damage);
+	}
+	else if (atker->canDoubleAttackOnce()) {
+		this->atkMessage = atker->getName() + " Double Attack causes " + enemyMonsterPtr->getName() + d2str(damage*2);
+	}
+	else {
+		// 造成 XXX ??? 傷害訊息。
+		this->atkMessage = atker->getName() + " causes " + enemyMonsterPtr->getName() + d2str(damage);
+	}
+	
 
 	enemyMonsterPtr->property->reduceAbility(HP, damage);
 
@@ -300,6 +311,9 @@ void Skill_Counter_Attack::execute(IMonster& enemy)
 	// 實作技能
 	// 製造 被攻擊的 1/5(4捨5入).
 	int damage = round((mos->getDef() - victim->getAtk()) / 5);
+	// 攻擊實際上有可能會是0的，打到防禦過高的就會。
+	damage = damage < 0 ? 0 : damage;
+	// 降低 HP 摟
 	victim->property->reduceAbility(HP, damage);
 
 	// 拼 使用技能後的字串
@@ -398,7 +412,7 @@ void Skill_Avoid::execute(IMonster& enemy)
 	// 要是 IMonster 的 friend 才能直接更動 property。
 
 	// 實作技能
-	if ( myutil::X_Probability_get_True(0.2) ) {
+	if ( myutil::X_Probability_get_True(skill_success_probability) ) {
 		mos->property->setCanAvoidNextATK();
 
 		// 拼 使用技能後的字串
@@ -432,7 +446,7 @@ void Skill_Double_Attack::execute(IMonster& enemy)
 	// 要是 IMonster 的 friend 才能直接更動 property。
 
 	// 實作技能
-	if (myutil::X_Probability_get_True(0.2)) {
+	if (myutil::X_Probability_get_True(skill_success_probability)) {
 		mos->property->setDoubleAttackOnce();
 
 		// 拼 使用技能後的字串
@@ -744,10 +758,10 @@ Monster::Monster(int monsterIdx, MonsterPropertyList mstPropertyList)
 		exit(887);
 	}
 
-	// 幫所有行為的 attacker 都註冊為自己。
-	this->attackBehavior->setAttacker(*this);
+	// 幫所有行為的 attacker 都註冊為自己。 這邊的註冊在 exeXXXBehavior 會在重新註冊，這邊至註冊的會跑掉
+	/*this->attackBehavior->setAttacker(*this);
 	this->skillBehavior->setAttacker(*this);
-	this->afterBeAttackedBehavior->setAttacker(*this);
+	this->afterBeAttackedBehavior->setAttacker(*this);*/
 
  	//rlutil::anykey();
 }
@@ -912,11 +926,13 @@ void Monster::setAttackBehavior(AttackBehavior& AB)
 
 void Monster::exeAttackBehavior()
 {
+	this->attackBehavior->setAttacker(*this);
 	this->attackBehavior->execute(this->getEnemyInstance());
 }
 
 void Monster::exeSkillBehavior()
 {
+	this->skillBehavior->setAttacker(*this);
 	this->skillBehavior->execute(this->getEnemyInstance());
 }
 
@@ -935,5 +951,17 @@ std::string Monster::getExeSkillBehaviorMessage()
 std::string Monster::getExeAfterBeAttackedBehaviorMessage()
 {
 	return this->afterBeAttackedBehavior->getExecutedMsg();
+}
+std::string Monster::getSkName()
+{
+	return this->skillBehavior->getSkillName();
+}
+bool Monster::canAvoidNormalAttack()
+{
+	return this->property->canAvoidNextAtk();
+}
+bool Monster::canDoubleAttackOnce()
+{
+	return this->property->canDoubleAttackOnce();
 }
 //------------------------------------------------------

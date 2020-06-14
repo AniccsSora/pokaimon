@@ -56,9 +56,12 @@ MonsterProperty::MonsterProperty(const MonsterProperty& mp){
 	this->immune_final_damage_amount = mp.immune_final_damage_amount;
 }
 
-
+// 旗標一律在這邊做給定。
 void MonsterProperty::reduceAbility(propertyType type, int reduce_value)
 {
+	if (reduce_value < 0)
+		throw new CAUSE_MINUE_Ability_Variety(reduce_value);
+
 	if ( canReduceAbility() ) {
 		if (type == HP ) {
 			if (canAvoidNextAtk()) { 
@@ -76,6 +79,8 @@ void MonsterProperty::reduceAbility(propertyType type, int reduce_value)
 				}
 				
 			}
+			// 防止 hp < 0
+			this->hp = this->hp < 0 ? 0 : this->hp;
 		}
 		else if (type == ATK){
 			this->atk -= reduce_value;
@@ -94,6 +99,8 @@ void MonsterProperty::reduceAbility(propertyType type, int reduce_value)
 	else {// 即使擁有 免疫降低能力值 之技能，HP 仍要可以被扣。
 		if (type == HP) {
 			this->hp -= reduce_value;
+			// 防止 hp < 0
+			this->hp = this->hp < 0 ? 0 : this->hp;
 		}
 		else {
 			// 欲降低 HP以外的 指令都不會被執行...
@@ -104,8 +111,14 @@ void MonsterProperty::reduceAbility(propertyType type, int reduce_value)
 
 void MonsterProperty::increaseAbility(propertyType type, int increase_value)
 {
+
+	if (increase_value < 0)
+		throw new CAUSE_MINUE_Ability_Variety(increase_value);
+
 	if (type == HP) {
 		this->hp += increase_value;
+		// 防止 hp > 自身極限
+		this->hp = this->hp > this->MAX_HP ? this->MAX_HP : this->hp;
 	}
 	else if (type == ATK) {
 		this->atk += increase_value;
@@ -124,8 +137,12 @@ void MonsterProperty::increaseAbility(propertyType type, int increase_value)
 
 void MonsterProperty::reduceDirectly(propertyType type, int reduce_value)
 {
+	if (reduce_value < 0)
+		throw new CAUSE_MINUE_Ability_Variety(reduce_value);
 	if (type == HP) {
 		this->hp -= reduce_value;
+		// 防止 hp < 0
+		this->hp = this->hp < 0 ? 0 : this->hp;
 	}
 	else if (type == ATK) {
 		this->atk -= reduce_value;

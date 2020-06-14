@@ -27,7 +27,7 @@ class EncounterMonsterEvent : public Event {
 
 public:
 	// 建構子
-	EncounterMonsterEvent(MonsterPropertyList mstPropertyList, Player* servicedPlayer);
+	EncounterMonsterEvent(MonsterPropertyList mstPropertyList, Player* servicedPlayer,int createStrategyCode);
 
 	// 實作 父類別的 pure virtual function...(必須加上 virtual 關鍵字)
 	virtual void touchOff();

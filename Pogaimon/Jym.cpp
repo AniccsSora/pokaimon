@@ -154,9 +154,8 @@ void Jym::battle_start()
 		return t.at(A->getType()).at(B->getType());
 	};
 
-	// ------------------------------------------
-
-	// P1_canBattle_mon_idx 要更動。
+	// ------------------------------------------ 
+	// 雙方玩家都擁有可以戰鬥的寵物。
 	while (bothPlayerCanFight()){
 		// 清空怪獸暫存。
 		fight_list.clear();
@@ -173,7 +172,7 @@ void Jym::battle_start()
 		// 印出 Battle log, 這是簡化呼叫。因為log 會常常更新。
 		showlog();
 		
-		// 各 玩家 挑一隻出來
+		// 雙方 挑一隻出來
 		MonsterPtr p1CurrentMons = pickCanBattleMonster(P1);
 		MonsterPtr p2CurrentMons = pickCanBattleMonster(P2);
 
@@ -181,7 +180,7 @@ void Jym::battle_start()
 		p1CurrentMons->setEnemy(*p2CurrentMons);
 		p2CurrentMons->setEnemy(*p1CurrentMons);
 
-		// 初始化 陣列
+		// 初始化 陣列，由速度值高的先攻擊，所以放置到 陣列[0] 的位置。
 		if (p1CurrentMons->property->getSpeed() >= p2CurrentMons->property->getSpeed()) {
 			fight_list.push_back(p1CurrentMons); fight_list.push_back(p2CurrentMons);
 		}
@@ -197,10 +196,10 @@ void Jym::battle_start()
 			
 			// 清空 log View 訊息。
 			clearLog();
-			// 重設游標至可印訊息處。
+			// 重設游標至可印訊息處。 For log control.
 			resetlogCursor();
 			
-			// 確認 兩方怪物 速度
+			// 每個小回合確認 兩方怪物 速度
 			if (fight_list[0]->property->getSpeed() >= fight_list[1]->property->getSpeed()) {
 				; // 保持原樣
 			}
@@ -212,13 +211,13 @@ void Jym::battle_start()
 				fight_list.at(1) = fight_list.at(0);
 			}
 			
-			// 關於 比率攻擊，在對打時 無視任何防禦減免、技能免疫，攻擊都先相乘到 atk上面。
+			// 關於屬性相剋計算:，在對打時 一律無視任何防禦減免、技能免疫，攻擊都先相乘到 atk上面。
 			// 取得 0 -> 1 的，攻擊比率。
 			atkRatio0x1 = lookup_AtkRatio(fight_list.at(0), fight_list.at(1), typeTable);
 			// 取得 1 -> 0 的，攻擊比率。
 			atkRatio1x0 = lookup_AtkRatio(fight_list.at(1), fight_list.at(0), typeTable);
 			
-			// 0->1 、 1->0 字串的版本 變數宣告
+			// 0->1 、 1->0， 倍率值 字串版本 變數宣告
 			std::string atkRatio0x1_str = std::to_string(atkRatio0x1);
 			std::string atkRatio1x0_str = std::to_string(atkRatio1x0);
 			// 消除 字串版本的 0 尾數。 "1.00000" -> "1"
@@ -249,48 +248,107 @@ void Jym::battle_start()
 
 			// 如果回合不等於 代表 剛剛 [1] 有執行攻擊 ，所以這邊要多叫被動
 			if (round_cnt != 1) {
-				fight_list[0]->exeAfterBeAttackedBehavior();
-				this->battleLog_view->print(getNextlineIdx(), getMargin() + fight_list[0]->getExeAfterBeAttackedBehaviorMessage());
-				showlog(); rlutil::anykey("");
+				// 觸發後攻擊的人被動 (如果該怪物沒有被動技能，則他的 被動執行完時 msg 將會是空的)
+				if ("" != fight_list[0]->getExeAfterBeAttackedBehaviorMessage()) {
+					fight_list[0]->exeAfterBeAttackedBehavior();
+					this->battleLog_view->print(getNextlineIdx(), getMargin() + fight_list[0]->getExeAfterBeAttackedBehaviorMessage());
+					// 印 log 的 title 訊息
+					this->battleLog_view->print_c(log_end_idx, margin_of_log +
+						fight_list[0]->getName() + " triggered it passive " + fight_list[0]->getSkName()+ ".", rlutil::LIGHTGREEN);
+					showlog(); rlutil::anykey("");
+				}
 			}
-			// 先攻擊
-			fight_list[0]->exeAttackBehavior();
-			this->battleLog_view->print(getNextlineIdx(), getMargin() + fight_list[0]->getExeAttackBehaviorMessage());
-			showlog(); rlutil::anykey();
-			// 使用技能
-			fight_list[0]->exeSkillBehavior();
-			this->battleLog_view->print(getNextlineIdx(), getMargin() + fight_list[0]->getExeSkillBehaviorMessage());
-			showlog(); rlutil::anykey();
 
-			//--------------------------
-			this->battleLog_view->print_c(log_end_idx, margin_of_log + " press anykey to update "+ fight_list[1]->getMasterName() +" Property View()...", rlutil::LIGHTCYAN);
+			// 提示區域 提醒使用者 [0] 要先攻擊 [1]
+			this->battleLog_view->print_c(log_end_idx, margin_of_log + 
+				" Press anykey let " + 
+				            fight_list[0]->getMasterName() + "'s " + fight_list[0]->getName() + " attack " +
+							fight_list[1]->getMasterName() + "'s " + fight_list[1]->getName()+".", rlutil::LIGHTCYAN);
+			// 顯示 log
 			showlog();
+			// 等待 使用者反應
 			rlutil::anykey();
 			
+			// 怪獸[0]攻擊
+			fight_list[0]->exeAttackBehavior();
+			
+			// 更新 log 資料。
+			this->battleLog_view->print(getNextlineIdx(), getMargin() + fight_list[0]->getExeAttackBehaviorMessage());
+			// 顯示 log
+			showlog();
 			
 			// 更新 Property View
 			updatePropertyView();
 			// Show PropertyView.
 			P1_MProperty_DList.at(P1_canBattle_mon_idx).showRegisteredView();
 			P2_MProperty_DList.at(P2_canBattle_mon_idx).showRegisteredView();
-			this->battleLog_view->print(log_end_idx, margin_of_log +" Paramater " + fight_list[1]->getMasterName() + " view updated !");
+
+			// 提示區域 提醒使用者 [1] 被攻擊了
+			this->battleLog_view->print_c(log_end_idx, margin_of_log + fight_list[1]->getName() +
+				" is attacked by " + fight_list[0]->getName(), rlutil::LIGHTRED);
+			// 顯示 log
+			showlog();
+			
+			// 等待 使用者反應
+			rlutil::anykey();
+			
+			// 提示區域 提醒使用者 [0] 要對 [1] 使用技能。
+			this->battleLog_view->print_c(log_end_idx, margin_of_log + " Press anykey let " + fight_list[0]->getName() +
+				" use skills against " + fight_list[1]->getName() + ".", rlutil::LIGHTCYAN);
+			// 顯示 log
+			showlog();
+			
+			// 等待 使用者反應
+			rlutil::anykey();
+			
+			// 怪獸[0]使用技能
+			fight_list[0]->exeSkillBehavior();
+			
+			// 更新 log 資料。
+			this->battleLog_view->print(getNextlineIdx(), getMargin() + fight_list[0]->getExeSkillBehaviorMessage());
+			// 更新 log 顯示
+			showlog(); 
+			
+			// 更新 Property View
+			updatePropertyView();
+			// Show PropertyView.
+			P1_MProperty_DList.at(P1_canBattle_mon_idx).showRegisteredView();
+			P2_MProperty_DList.at(P2_canBattle_mon_idx).showRegisteredView();
+
+			// 提示區域 提醒使用者 [1] 被 [0] 的技能影響了。
+			this->battleLog_view->print_c(log_end_idx, margin_of_log + fight_list[1]->getName() +
+				" is affected by " + fight_list[0]->getName() + "'s skill: " + fight_list[0]->getSkName() +".", rlutil::LIGHTRED);
+			// 更新 log 顯示
+			showlog();
+			// 等待 使用者反應
+			rlutil::anykey();
+
+			//--------------------------
+			// 提示區域 提醒使用者
+			this->battleLog_view->print_c(log_end_idx, margin_of_log + " The next monster "+ fight_list[1]->getName() +
+				" is about to attack.", rlutil::LIGHTCYAN);
 			showlog();
 			rlutil::anykey();
+			
+			// ==================== 因為 有一方打完了，要確定另一方沒有死才繼續戰鬥 ===================
 
 			// 如果有人葛屁
 			if (!bothMonsterCanFight(fight_list[0], fight_list[1])) {
-				// 更新參數, 確認有無人死亡
-				if (p1CurrentMons->getHp() <= 0) { P1_canBattle_mon_idx++; }
-				if (p2CurrentMons->getHp() <= 0) { P2_canBattle_mon_idx++; }
-				this->battleLog_view->print(log_end_idx, margin_of_log + " press anykey to update log...");
+				// 死掉的那方
+				MonsterPtr deadOne = nullptr;
+				//  更新參數
+				if (p1CurrentMons->getHp() <= 0) {
+					P1_canBattle_mon_idx++; 
+					deadOne = p1CurrentMons;
+				}
+				if (p2CurrentMons->getHp() <= 0) { 
+					P2_canBattle_mon_idx++; 
+					deadOne = p2CurrentMons;
+				}
+				this->battleLog_view->print(log_end_idx, margin_of_log + deadOne->getName() + " is dead, press anykey to continue...");
 				showlog();
 				rlutil::anykey();
 
-				// 更新 log 並告訴戰鬥結果
-				this->battleLog_view->print(getNextlineIdx(), getMargin() + " Round " + std::to_string(round_cnt) + " finish! ");
-				this->battleLog_view->print(log_end_idx, margin_of_log + " press anykey to next Round...");
-				showlog();
-				rlutil::anykey();
 				// 一輪提早結束
 				round_cnt++; //更新回合數
 				break;
@@ -298,49 +356,116 @@ void Jym::battle_start()
 
 			// 繼續 P2 的回合----------------------------------
 
-
-			// -------- 後攻擊的人
-
-			// 觸發 後攻擊的人被動
+			// 觸發 後攻擊的人被動 (如果該怪物沒有被動技能，則他的 被動執行完時 msg 將會是空的)
 			fight_list[1]->exeAfterBeAttackedBehavior();
-			this->battleLog_view->print(getNextlineIdx(), getMargin() + fight_list[1]->getExeAfterBeAttackedBehaviorMessage());
-			showlog(); 
-			rlutil::anykey("");
+			if ("" != fight_list[1]->getExeAfterBeAttackedBehaviorMessage()) {
+				this->battleLog_view->print(getNextlineIdx(), getMargin() + fight_list[1]->getExeAfterBeAttackedBehaviorMessage());
+				this->battleLog_view->print_c(log_end_idx, margin_of_log +
+				fight_list[1]->getName() + " triggered it passive " + fight_list[1]->getSkName() + ".", rlutil::LIGHTGREEN);
+				// 印出 log
+				showlog();
+				// 等待使用者反應
+				rlutil::anykey("");
+			}
 			
-			// 後攻擊的人 攻擊
-			fight_list[1]->exeAttackBehavior();
-			this->battleLog_view->print(getNextlineIdx(), getMargin() + fight_list[1]->getExeAttackBehaviorMessage());
-			showlog(); rlutil::anykey("");
-			// 後攻擊的人 使用技能
-			
-			fight_list[1]->exeSkillBehavior();
-			this->battleLog_view->print(getNextlineIdx(), getMargin() + fight_list[1]->getExeSkillBehaviorMessage());
-			showlog(); rlutil::anykey("");
-
-			this->battleLog_view->print_c(log_end_idx, margin_of_log + " press anykey to update " + fight_list[0]->getMasterName() + " Property View()...", rlutil::LIGHTCYAN);
+			//----------------------------------------
+			/*
+			// 提示區域 提醒使用者 [1] 要攻擊 [0]
+			this->battleLog_view->print_c(log_end_idx, margin_of_log +
+				" Press anykey let " +
+				fight_list[1]->getMasterName() + "'s " + fight_list[1]->getName() + " attack " +
+				fight_list[0]->getMasterName() + "'s " + fight_list[0]->getName() + ".", rlutil::LIGHTCYAN);
+			// 顯示 log
 			showlog();
+			// 等待 使用者反應
 			rlutil::anykey();
-			
+			*/
+
+			// 怪獸[1]攻擊
+			fight_list[1]->exeAttackBehavior();
+
+			// 更新 log 資料。
+			this->battleLog_view->print(getNextlineIdx(), getMargin() + fight_list[1]->getExeAttackBehaviorMessage());
+			// 顯示 log
+			showlog();
+
 			// 更新 Property View
 			updatePropertyView();
 			// Show PropertyView.
 			P1_MProperty_DList.at(P1_canBattle_mon_idx).showRegisteredView();
 			P2_MProperty_DList.at(P2_canBattle_mon_idx).showRegisteredView();
-			this->battleLog_view->print(log_end_idx, margin_of_log + " Paramater " + fight_list[0]->getMasterName() + " view updated !");
+
+			// 提示區域 提醒使用者 [0] 被攻擊了
+			this->battleLog_view->print_c(log_end_idx, margin_of_log + fight_list[0]->getName() +
+				" is attacked by " + fight_list[1]->getName(), rlutil::LIGHTRED);
+			// 顯示 log
 			showlog();
+
+			// 等待 使用者反應
 			rlutil::anykey();
 
+			// 提示區域 提醒使用者 [1] 要對 [0] 使用技能。
+			this->battleLog_view->print_c(log_end_idx, margin_of_log + " Press anykey let " + fight_list[1]->getName() +
+				" use skills against " + fight_list[0]->getName() + ".", rlutil::LIGHTCYAN);
+			// 顯示 log
+			showlog();
+
+			// 等待 使用者反應
+			rlutil::anykey();
+
+			// 怪獸[1]使用技能
+			fight_list[1]->exeSkillBehavior();
+
+			// 更新 log 資料。
+			this->battleLog_view->print(getNextlineIdx(), getMargin() + fight_list[1]->getExeSkillBehaviorMessage());
+			// 更新 log 顯示
+			showlog();
+
+			// 更新 Property View
+			updatePropertyView();
+			// Show PropertyView.
+			P1_MProperty_DList.at(P1_canBattle_mon_idx).showRegisteredView();
+			P2_MProperty_DList.at(P2_canBattle_mon_idx).showRegisteredView();
+
+			// 提示區域 提醒使用者 [1] 使用了技能
+			this->battleLog_view->print_c(log_end_idx, margin_of_log + fight_list[1]->getName() +
+				" used the skill " +  fight_list[1]->getSkName() + ".", rlutil::LIGHTRED);
+			// 更新 log 顯示
+			showlog();
+			// 等待 使用者反應
+			rlutil::anykey();
+			//----------
+			
 			// ------------ 一輪打完了
 			// 更新參數, 確認有無人死亡
-			if (p1CurrentMons->getHp() <= 0) { P1_canBattle_mon_idx++; }
-			if (p2CurrentMons->getHp() <= 0) { P2_canBattle_mon_idx++; }
-			this->battleLog_view->print(log_end_idx, margin_of_log + " press anykey to update log...");
-			showlog();
-			rlutil::anykey(); 
-			
+
+			// ==================== 兩方打完了，要確定另一方沒有死才繼續戰鬥 ===================
+
+			// 如果有人葛屁
+			if (!bothMonsterCanFight(fight_list[0], fight_list[1])) {
+				// 死掉的那方
+				MonsterPtr deadOne = nullptr;
+				//  更新參數
+				if (p1CurrentMons->getHp() <= 0) {
+					P1_canBattle_mon_idx++;
+					deadOne = p1CurrentMons;
+				}
+				if (p2CurrentMons->getHp() <= 0) {
+					P2_canBattle_mon_idx++;
+					deadOne = p2CurrentMons;
+				}
+				this->battleLog_view->print(log_end_idx, margin_of_log + deadOne->getName() + " is dead, press anykey to continue...");
+				showlog();
+				rlutil::anykey();
+
+				// 一輪提早結束
+				round_cnt++; //更新回合數
+				break;
+			}
+
 			// 更新 log 並告訴戰鬥結果
 			this->battleLog_view->print(getNextlineIdx(), getMargin() + " Round " + std::to_string(round_cnt) + " finish! ");
-			this->battleLog_view->print(log_end_idx, margin_of_log + " press anykey to next Round...");
+			this->battleLog_view->print(log_end_idx, margin_of_log + " Press anykey to next Round...");
 			showlog();
 			rlutil::anykey();
 			// 一輪正式結束
@@ -352,7 +477,7 @@ void Jym::battle_start()
 		fight_list[0]->setNoEnemy();
 		fight_list[1]->setNoEnemy();
 
-		// 勝利的 monster idx
+		// 勝利的 monster idx，判斷 其中一位的 HP 即可
 		int winner_idx = fight_list[0]->getHp() <= 0 ? 1:0;
 		
 		this->battleLog_view->print(getNextlineIdx(), getMargin() +
@@ -367,13 +492,17 @@ void Jym::battle_start()
 	// 已有其中一方 不能戰鬥。
 	// 決定誰獲勝? 隨便判定 P1 or P2 的參數就可以。 這邊用 P1判斷。
 	// if 可以戰鬥的 monster idx < 持有總數 。 EX: 2 < 3。 
+	std::string whoWin = "";
 	if (P1_canBattle_mon_idx < P1_hold_mosterN) {
-		// 勝利數量 ++, 注意 這邊的是 Player 副本。
+		// 勝利數量 ++。
 		P1->addPoint();
+		whoWin = P1->getName(); // P1 是玩家
 	}
-
+	else {
+		whoWin = P2->getName(); // P1 是玩家
+	}
 	std::cout.flush();
-	rlutil::anykey(" Who win?? wait... P1's Point: " + std::to_string(P1->getPoint()) + ".");
+	rlutil::anykey( whoWin + " is winner , P1's Point: " + std::to_string(P1->getPoint()) + ".");
 }
 
 bool Jym::bothPlayerCanFight()
@@ -572,9 +701,18 @@ void Jym::updateTypeTable(MonsterPtr L, MonsterPtr R)
 	atkRatioRxL_str.erase(atkRatioRxL_str.find_last_not_of('0') + 1, std::string::npos);
 	atkRatioRxL_str.erase(atkRatioRxL_str.find_last_not_of('.') + 1, std::string::npos);
 
+	std::string  LtypeOrigin = L->getTypeStr();
+	std::string  RtypeOrigin = R->getTypeStr();
+	// 固定取前三個英文字當作 屬性字串
+	std::string Ltype = std::string(LtypeOrigin.begin(), LtypeOrigin.begin() + 3);
+	std::string Rtype = std::string(RtypeOrigin.begin(), RtypeOrigin.begin() + 3);
+	// 開頭轉大寫
+	Ltype[0] = std::toupper(Ltype[0]);
+	Rtype[0] = std::toupper(Rtype[0]);
+
 	// 準備要印上去的 資訊
-	std::string msg1 = "  " + L->getTypeStr() + " --- " + atkRatioLxR_str + " ---> " + R->getTypeStr();
-	std::string msg2 = "  " + L->getTypeStr() + " <--- " + atkRatioRxL_str + " --- " + R->getTypeStr();
+	std::string msg1 = "    " + Ltype + " --- " + atkRatioLxR_str  + " ---> " + Rtype;
+	std::string msg2 = "    " + Ltype + " <--- " + atkRatioRxL_str + " --- " + Rtype;
 
 	// 不同倍率給予不同顏色
 	if (atkRatioLxR > 1.0)

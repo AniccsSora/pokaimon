@@ -90,8 +90,8 @@ Player::Player(int number_of_monster, std::string npc_name){
 	MonsterPropertyList mstPropertyList = myutil::loadMonsterFile();
 	// 生成怪物
 	for (size_t i = 0; i < number_of_monster; ++i) {
-		MonsterPtr tmpM = new Monster(5, mstPropertyList); // DEBUG用
-	    //		MonsterPtr tmpM = new Monster(rand(), mstPropertyList); //DEGUG 完取消此註解
+		//MonsterPtr tmpM = new Monster(15, mstPropertyList); // DEBUG用
+	    MonsterPtr tmpM = new Monster(rand(), mstPropertyList); //DEGUG 完取消此註解
 		tmpM->setMasterName(npc_name);
 		monsterList.push_back(tmpM);
 	}

@@ -365,3 +365,19 @@ private:
 
 typedef MySpace::Vec_1D_<MonsterProperty*> MonsterPropertyList;
 
+// 造成 負的傷害
+struct CAUSE_MINUE_DAMAGE : public std::exception {
+	int s;
+	CAUSE_MINUE_DAMAGE(int ss) : s(ss) {}
+	const char* what() const throw() { return std::string("caused " + std::to_string(s) + "damage.").c_str(); }
+};
+
+// 造成 負的能力值變動，需使用相應的函式。
+struct CAUSE_MINUE_Ability_Variety : public std::exception {
+	int s;
+	CAUSE_MINUE_Ability_Variety(int ss) : s(ss) {}
+	const char* what() const throw() { 
+		return std::string(" Please use appropriate function to change ability. \
+							 Your value=\"" + std::to_string(s)+"\"\n").c_str();
+	}
+};
