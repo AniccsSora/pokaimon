@@ -139,12 +139,6 @@
     <ClCompile Include="Myutil.h">
       <Filter>來源檔案</Filter>
     </ClCompile>
-    <ClCompile Include="example.c">
-      <Filter>來源檔案</Filter>
-    </ClCompile>
-    <ClCompile Include="test.cpp">
-      <Filter>來源檔案</Filter>
-    </ClCompile>
     <ClCompile Include="GameMap.cpp">
       <Filter>來源檔案</Filter>
     </ClCompile>
@@ -170,15 +164,6 @@
       <Filter>來源檔案</Filter>
     </ClCompile>
     <ClCompile Include="Jym.cpp">
-      <Filter>來源檔案</Filter>
-    </ClCompile>
-    <ClCompile Include="Skill.cpp">
-      <Filter>來源檔案</Filter>
-    </ClCompile>
-    <ClCompile Include="AttackBehavior.cpp">
-      <Filter>來源檔案</Filter>
-    </ClCompile>
-    <ClCompile Include="SkillBehavior.cpp">
       <Filter>來源檔案</Filter>
     </ClCompile>
   </ItemGroup>
@@ -217,15 +202,6 @@
       <Filter>標頭檔</Filter>
     </ClInclude>
     <ClInclude Include="Jym.h">
-      <Filter>標頭檔</Filter>
-    </ClInclude>
-    <ClInclude Include="Skill.h">
-      <Filter>標頭檔</Filter>
-    </ClInclude>
-    <ClInclude Include="AttackBehavior.h">
-      <Filter>標頭檔</Filter>
-    </ClInclude>
-    <ClInclude Include="SkillBehavior.h">
       <Filter>標頭檔</Filter>
     </ClInclude>
   </ItemGroup>
